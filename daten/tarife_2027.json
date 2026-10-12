@@ -75,6 +75,18 @@
     "max_ohne_pensionskasse": 36864,
     "ohne_pensionskasse_prozent_vom_erwerbseinkommen": 20
   },
+  "fristen": {
+    "einreichefrist": {
+      "datum": "2028-03-31",
+      "status": "verifiziert",
+      "_quelle": "zh.ch Zürcher Steuerbuch ZStB-Nr. 132.3: ordentliche Frist 31. März (2025 ausnahmsweise bis 30. April erstreckt). Massgebend ist die Frist im Brief vom Steueramt."
+    },
+    "fristerstreckung_max_ohne_begruendung": {
+      "datum": "2028-11-30",
+      "status": "zu_pruefen",
+      "_quelle": "Gemeinde Grüningen ZH (grueningen.ch). Für die Stadt Zürich noch nicht amtlich bestätigt. Gesuch muss vor dem 31. März eingehen."
+    }
+  },
   "kanton_zh": {
     "steuerfuss_staat": {
       "wert_prozent": 95,

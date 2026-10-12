@@ -7,6 +7,7 @@ Das Resultat ist eine Schaetzung. Verbindlich ist nur die Veranlagung des Steuer
 """
 
 import json
+from datetime import date
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP
 from pathlib import Path
 
@@ -286,3 +287,20 @@ def berechne(eingaben, tarife):
     resultat["total"] = chf(sum(v for k, v in resultat["teile"].items()
                                 if not k.startswith("Einfache")))
     return resultat
+
+
+def frist_info(tarife, heute, eigene=None):
+    """Einreichefrist fuer die Steuererklaerung, verbleibende Tage und Dringlichkeit.
+
+    eigene: ISO-Datum der eigenen Frist (z.B. nach Fristerstreckung), gilt statt der Standardfrist.
+    stufe: 'normal', 'bald' (hoechstens 30 Tage), 'dringend' (hoechstens 7 Tage oder ueberschritten).
+    Gibt None zurueck, wenn weder eine eigene noch eine Standardfrist vorhanden ist.
+    """
+    standard = (tarife.get("fristen") or {}).get("einreichefrist", {}).get("datum")
+    iso = eigene or standard
+    if not iso:
+        return None
+    frist = date.fromisoformat(iso)
+    tage = (frist - heute).days
+    stufe = "dringend" if tage <= 7 else "bald" if tage <= 30 else "normal"
+    return {"frist": frist, "tage": tage, "stufe": stufe, "eigene": bool(eigene)}

@@ -113,6 +113,47 @@ class TestVergleichSteuerberechnung2025(unittest.TestCase):
         self.assertEqual(res["teile"][name], Decimal(d["erwartet"][name]))
 
 
+class TestFristen(unittest.TestCase):
+    """Fristen laut Zuercher Steuerbuch ZStB-Nr. 132.3 (Einreichung 31.03. des Folgejahres)."""
+
+    def test_daten_pro_jahr(self):
+        from datetime import date
+        for jahr in (2025, 2026, 2027):
+            with self.subTest(jahr=jahr):
+                f = rechner.lade_tarife(jahr)["fristen"]
+                e, x = f["einreichefrist"], f["fristerstreckung_max_ohne_begruendung"]
+                self.assertEqual(date.fromisoformat(e["datum"]), date(jahr + 1, 3, 31))
+                self.assertEqual(date.fromisoformat(x["datum"]), date(jahr + 1, 11, 30))
+                self.assertEqual(e["status"], "verifiziert")
+                self.assertEqual(x["status"], "zu_pruefen")
+                self.assertTrue(e["_quelle"] and x["_quelle"])
+                self.assertGreater(x["datum"], e["datum"])
+
+    def test_stufen(self):
+        from datetime import date
+        t = rechner.lade_tarife(2026)   # Frist 31.03.2027
+        frist = date(2027, 3, 31)
+        from datetime import timedelta
+        for tage, stufe in [(200, "normal"), (31, "normal"), (30, "bald"), (8, "bald"), (7, "dringend"), (0, "dringend"), (-3, "dringend")]:
+            with self.subTest(tage=tage):
+                info = rechner.frist_info(t, frist - timedelta(days=tage))
+                self.assertEqual(info["tage"], tage)
+                self.assertEqual(info["stufe"], stufe)
+
+    def test_eigene_frist_gilt_statt_standard(self):
+        from datetime import date
+        t = rechner.lade_tarife(2026)
+        info = rechner.frist_info(t, date(2027, 3, 1), eigene="2027-04-30")
+        self.assertEqual(info["frist"], date(2027, 4, 30))
+        self.assertEqual(info["tage"], 60)
+        self.assertTrue(info["eigene"])
+        self.assertFalse(rechner.frist_info(t, date(2027, 3, 1))["eigene"])
+
+    def test_ohne_fristen_keine_info(self):
+        from datetime import date
+        self.assertIsNone(rechner.frist_info({}, date(2027, 3, 1)))
+
+
 class TestJahr2027(unittest.TestCase):
     """Bundestarif 2027 gegen die Stufen im ESTV Rundschreiben 2-220-D-2026."""
     def test_stufen(self):

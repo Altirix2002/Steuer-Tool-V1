@@ -25,6 +25,8 @@ Gleiche Daten und gleiche Rechnung wie das Python-Programm. Eingaben bleiben nur
 
 **PDFs zu Belegen:** Bei jedem Beleg und jeder Position lassen sich PDFs anhängen (höchstens 10 MB pro Datei). Sie liegen in IndexedDB nur auf dem Gerät und werden nie hochgeladen. Aus der Mail-App geht es über «Teilen» → «Steuern ZH» (Web Share Target der installierten App). Nach einem Update des Manifests kann es etwas dauern, bis der Eintrag im Teilen-Menü erscheint, im Zweifel die App einmal neu installieren.
 
+**Frist und Kalender:** Oben bei den Belegen zeigt eine Karte die Einreichefrist, die verbleibenden Tage und die offenen Belege (Bernstein ab 30 Tagen, Rot ab 7 Tagen oder überschritten). Eine eigene Frist (z.B. nach Fristerstreckung) gilt statt der Standardfrist, wird pro Steuerjahr gespeichert und mitgesichert. «In Kalender eintragen» erzeugt eine `.ics`-Datei mit Erinnerung 14 Tage vorher und der Frist selbst.
+
 **Sichern und Laden:** Unter «Info» wählst du zwischen «Nur Eingaben» (JSON) und «Alles mit PDFs» (ZIP). Laden versteht beides und auch ältere Sicherungen mit einem einzelnen Betrag pro Beleg (wird zur ersten Position).
 
 Lokal bauen und ansehen (erzeugt den Ordner `site/`, der nicht ins Repository kommt):
@@ -73,6 +75,8 @@ Bei neuen Rechenregeln (z.B. ein neuer Abzug) werden beide Rechnungen nachgefüh
 | Kirchensteuer ref. 10 %, kath. 10 %, christkath. 14 % | geprüft | **prüfen** | zh.ch/steuerfuesse |
 | Personalsteuer CHF 24 | geprüft | geprüft | StG ZH § 200 |
 | Säule 3a Maximum 7'258 (2026), 7'373 (2027) | geprüft | geprüft | BSV Medienmitteilung vom 02.10.2026 (Bundesratsbeschluss) |
+| Einreichefrist 31. März des Folgejahres | geprüft | geprüft | Zürcher Steuerbuch ZStB-Nr. 132.3 (massgebend ist der Brief vom Steueramt) |
+| Fristerstreckung ohne Begründung bis 30. November | **prüfen** | **prüfen** | Gemeinde Grüningen ZH, für die Stadt Zürich nicht amtlich bestätigt |
 
 **Steuerjahr 2025** (nur für den Vergleich mit der Steuererklärung 2025): Bundestarif geprüft (ESTV), Kantonstarif aus einer Tabelle des Regierungsrats (stimmt mit der Steuerberechnung 2025 überein). Vermögenstarif und Abzüge 2025 fehlen.
 

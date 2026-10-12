@@ -331,6 +331,24 @@ dialog.blatt ul { margin: 0 0 6px; padding-left: 18px; font-size: 14px; color: v
 .knopf.zweizeilig { flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; }
 .knopf.zweizeilig small { font-size: 13px; font-weight: 500; opacity: .85; }
 
+/* ---------- Frist ---------- */
+.frist { background: var(--flaeche); border: 1.5px solid var(--linie); border-radius: 24px; padding: 18px; margin-bottom: 14px; box-shadow: var(--schatten); --fk: var(--petrol); }
+.frist[hidden] { display: none; }
+.frist.bald { background: var(--bernstein-grund); border-color: var(--bernstein); --fk: var(--bernstein); }
+.frist.dringend { background: var(--ziegel-grund); border-color: var(--ziegel); --fk: var(--ziegel); }
+.frist-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 14px; font-weight: 600; color: var(--tinte-2); }
+.frist-tage { font-variation-settings: "wdth" 125; font-weight: 800; font-size: 34px; line-height: 1.1; letter-spacing: -.02em; color: var(--fk); margin-top: 6px; }
+.frist-datum { font-size: 15px; font-weight: 600; margin-top: 2px; }
+.frist p { margin: 8px 0 0; font-size: 14px; color: var(--tinte-2); }
+.frist .knopf { margin-top: 14px; width: 100%; }
+.frist details { margin-top: 14px; border-top: 1px solid color-mix(in srgb, var(--tinte-2) 25%, transparent); padding-top: 12px; }
+.frist summary { font-weight: 700; font-size: 15px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.frist summary::-webkit-details-marker { display: none; }
+.frist summary svg { width: 18px; height: 18px; flex: none; transition: transform .3s var(--kurve); }
+.frist details[open] summary svg { transform: rotate(180deg); }
+.frist .reihe-knoepfe { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.frist .meldung { margin-top: 12px; }
+
 /* ---------- Daten ---------- */
 .wert { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 16px; padding: 14px; margin-top: 10px; }
 .wert-kopf { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
@@ -591,6 +609,26 @@ dialog.blatt ul { margin: 0 0 6px; padding-left: 18px; font-size: 14px; color: v
 
     <!-- BELEGE -->
     <section class="ansicht" id="v-belege" aria-label="Belege">
+      <div class="frist" id="fristKarte" hidden>
+        <div class="frist-kopf"><span id="fristTitel">Frist Steuererklärung</span><span id="fristArt"></span></div>
+        <div class="frist-tage" id="fristTage"></div>
+        <div class="frist-datum" id="fristDatum"></div>
+        <p id="fristOffen"></p>
+        <button type="button" class="knopf zweit" id="kalenderKnopf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>In Kalender eintragen</button>
+        <details id="fristMehr">
+          <summary>Meine Frist und Fristerstreckung<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="feld">
+            <label for="eigeneFrist">Meine Frist</label>
+            <div class="eingabe"><input type="date" id="eigeneFrist"></div>
+            <div class="tipp">Trag hier die Frist ein, die dir das Steueramt bestätigt hat (z.B. nach einer Fristerstreckung). Sie gilt dann statt der Standardfrist, nur für das gewählte Steuerjahr.</div>
+          </div>
+          <div class="reihe-knoepfe">
+            <button type="button" class="klein-knopf" id="eigeneFristWeg">Standardfrist verwenden</button>
+            <button type="button" class="klein-knopf" id="eigeneFristErstreckung"></button>
+          </div>
+          <div class="meldung pruefen" id="fristHinweis"></div>
+        </details>
+      </div>
       <div class="fortschritt">
         <div class="bruch"><span id="belegeZahl">0</span><small> von <span id="belegeTotal">0</span></small></div>
         <p id="belegeText">Belege beisammen</p>
@@ -859,7 +897,7 @@ const STANDARD = {
   jahr: JAHRE.find((j) => Number(j) <= HEUTE) || JAHRE[0], zivil: "ledig", kinder: 0, kirche: "keine", modus: "direkt",
   einkBund: "", einkKanton: "", gleich: true, vermoegen: "",
   lohn: { netto: "", neben: "", andere: "", fahr: "", verpf: "", pk: true, s3a: "", kk: "", wb: "", zinsen: "", krankheit: "", spenden: "" },
-  s3aZusatz: 0, belegeAnsicht: "liste",
+  s3aZusatz: 0, belegeAnsicht: "liste", fristen: {},
   belege: {}, offen: {}, thema: "auto", ansicht: "rechner"
 };
 let MIGRIERT = false;
@@ -879,6 +917,7 @@ function belegeMigrieren(b) {
 function zustandAus(d) {
   const z = { ...STANDARD, ...d, lohn: { ...STANDARD.lohn, ...(d.lohn || {}) } };
   z.belege = belegeMigrieren(z.belege && typeof z.belege === "object" ? z.belege : {});
+  z.fristen = { ...(z.fristen && typeof z.fristen === "object" ? z.fristen : {}) };
   return z;
 }
 function laden() {
@@ -1317,6 +1356,7 @@ function belegeAktualisieren() {
   });
   $("belegeZahl").textContent = fertig; $("belegeTotal").textContent = total;
   $("belegeBalken").style.width = (fertig / total * 100) + "%";
+  OFFEN.offen = total - fertig; OFFEN.total = total; fristZeichnen();
   eintragenZeichnen();
   $("belegeText").textContent = fertig === total ? "Alle Belege beisammen. Bereit für ZHprivateTax." : fertig === 0 ? "Belege beisammen. Tipp auf einen Punkt für Details." : "Belege beisammen. Noch " + (total - fertig) + " offen.";
 }
@@ -1333,6 +1373,7 @@ function datenAufbauen() {
   const t = tarife(), zh = t.kanton_zh, b = t.bund, a = b.abzuege;
   const s1 = b.tarif_alleinstehend.stufen;
   const za = zh.abzuege || {};
+  const fr = t.fristen || {}, fe = fr.einreichefrist, fx = fr.fristerstreckung_max_ohne_begruendung;
   const sz = a.schuldzinsen_max_ohne_vermoegensertrag != null && za.schuldzinsen_max_ohne_vermoegensertrag != null;
   const eintraege = [
     ["Bundessteuer: Tarif Alleinstehende", b.status, `Steuerfrei bis ${F.chf0(s1[0].ab)} Fr., ab ${F.chf0(s1[s1.length - 1].ab)} Fr. ${s1[s1.length - 1].satz_pro_100} %`, b._quelle],
@@ -1349,7 +1390,9 @@ function datenAufbauen() {
     ["Staatssteuerfuss", zh.steuerfuss_staat.status, zh.steuerfuss_staat.wert_prozent + " %", zh.steuerfuss_staat._quelle],
     ["Gemeindesteuerfuss Stadt Zürich", zh.steuerfuss_gemeinde.status, zh.steuerfuss_gemeinde.wert_prozent + " %", zh.steuerfuss_gemeinde._quelle],
     ["Kirchensteuerfuss", zh.steuerfuss_kirche.status, `Reformiert ${zh.steuerfuss_kirche.reformiert} %, katholisch ${zh.steuerfuss_kirche.roemisch_katholisch} %, christkatholisch ${zh.steuerfuss_kirche.christkatholisch} %`, zh.steuerfuss_kirche._quelle],
-    ["Personalsteuer", zh.personalsteuer.status, "CHF " + zh.personalsteuer.wert + " pro Person", zh.personalsteuer._quelle]
+    ["Personalsteuer", zh.personalsteuer.status, "CHF " + zh.personalsteuer.wert + " pro Person", zh.personalsteuer._quelle],
+    ["Frist: Steuererklärung einreichen", fe ? fe.status : "fehlt", fe ? datumText(fe.datum) : "Noch nicht eingetragen", fe && fe._quelle],
+    ["Frist: Erstreckung ohne Begründung (höchstens)", fx ? fx.status : "fehlt", fx ? datumText(fx.datum) : "Noch nicht eingetragen", fx && fx._quelle]
   ];
   const namen = { verifiziert: "geprüft", zu_pruefen: "prüfen", fehlt: "fehlt" };
   const zahl = (s) => eintraege.filter((e) => e[1] === s).length;
@@ -1359,6 +1402,106 @@ function datenAufbauen() {
     <div class="wert"><div class="wert-kopf"><h4>${esc(titel)}</h4><span class="status ${status}">${namen[status] || status}</span></div>
       <p class="zahl">${esc(wert)}</p>${quelle ? `<p class="quelle">${esc(quelle)}</p>` : ""}</div>`).join("");
 }
+
+/* =========================================================
+   Fristen und Kalender
+   ========================================================= */
+const OFFEN = { offen: 0, total: 0 };
+function datumAus(iso) { const [j, m, t] = iso.split("-").map(Number); return new Date(j, m - 1, t); }
+function fristGueltig(iso) { return /^\d{4}-\d{2}-\d{2}$/.test(iso || "") && !isNaN(datumAus(iso)); }
+function datumText(iso, kurz) {
+  return datumAus(iso).toLocaleDateString("de-CH", kurz ? { day: "numeric", month: "long" } : { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+}
+function tageBis(iso, jetzt = new Date()) {
+  return Math.round((datumAus(iso) - new Date(jetzt.getFullYear(), jetzt.getMonth(), jetzt.getDate())) / 86400000);
+}
+// ab 30 Tagen vorher "bald" (Bernstein), ab 7 Tagen oder überschritten "dringend" (Ziegelrot)
+function fristStufe(tage) { return tage <= 7 ? "dringend" : tage <= 30 ? "bald" : "normal"; }
+function tageText(tage) {
+  return tage > 1 ? "Noch " + tage + " Tage" : tage === 1 ? "Noch 1 Tag" : tage === 0 ? "Heute fällig" : "Seit " + (-tage) + (tage === -1 ? " Tag" : " Tagen") + " überschritten";
+}
+function fristAktuell() {
+  const f = (tarife().fristen || {}).einreichefrist;
+  const standard = f && fristGueltig(f.datum) ? f.datum : null;
+  const eigene = fristGueltig(Z.fristen && Z.fristen[Z.jahr]) ? Z.fristen[Z.jahr] : null;
+  const iso = eigene || standard;
+  return iso ? { iso, eigene: !!eigene, standard, status: f ? f.status : "fehlt" } : null;
+}
+function fristZeichnen() {
+  const karte = $("fristKarte"), fr = tarife().fristen || {}, f = fristAktuell();
+  karte.hidden = !f;
+  if (!f) return;
+  const tage = tageBis(f.iso), stufe = fristStufe(tage);
+  karte.className = "frist" + (stufe === "normal" ? "" : " " + stufe);
+  $("fristTitel").textContent = "Frist Steuererklärung " + Z.jahr;
+  $("fristArt").textContent = f.eigene ? "Meine Frist" : f.status === "verifiziert" ? "Standardfrist" : "Standardfrist (prüfen)";
+  $("fristTage").textContent = tageText(tage);
+  $("fristDatum").textContent = datumText(f.iso);
+  $("fristOffen").textContent = OFFEN.total && OFFEN.offen === 0 ? "Alle Belege sind abgehakt." : OFFEN.offen === 1 ? "Noch 1 Beleg offen." : "Noch " + OFFEN.offen + " von " + OFFEN.total + " Belegen offen.";
+  const eingabe = $("eigeneFrist");
+  if (document.activeElement !== eingabe) eingabe.value = f.eigene ? f.iso : "";
+  $("eigeneFristWeg").hidden = !f.eigene;
+  const x = fr.fristerstreckung_max_ohne_begruendung, std = f.standard;
+  $("eigeneFristErstreckung").hidden = !x || !fristGueltig(x.datum);
+  if (x && fristGueltig(x.datum)) $("eigeneFristErstreckung").textContent = datumText(x.datum, true) + " als meine Frist übernehmen";
+  const hinweis = $("fristHinweis");
+  hinweis.className = "meldung " + (x && x.status === "verifiziert" ? "info" : "pruefen");
+  hinweis.innerHTML = SYMBOL[x && x.status === "verifiziert" ? "info" : "pruefen"] + "<span>" + esc(
+    "Fristerstreckung: Das Gesuch muss vor dem " + (std ? datumText(std, true) : "Ablauf der Frist") + " beim Steueramt eingehen. " +
+    (x && fristGueltig(x.datum) ? "Ohne Begründung ist meist eine Erstreckung bis " + datumText(x.datum, true) + " möglich" +
+      (x.status === "verifiziert" ? ". " : " (für die Stadt Zürich noch nicht amtlich bestätigt). ") : "") +
+    "Massgebend ist immer die Frist im Brief vom Steueramt.") + "</span>";
+}
+function frist_setzen(iso) {
+  if (fristGueltig(iso)) Z.fristen[Z.jahr] = iso; else delete Z.fristen[Z.jahr];
+  speichern(); fristZeichnen();
+}
+$("eigeneFrist").addEventListener("change", (e) => frist_setzen(e.target.value));
+$("eigeneFristWeg").onclick = () => { frist_setzen(""); toast("Standardfrist gilt wieder"); };
+$("eigeneFristErstreckung").onclick = () => {
+  const x = (tarife().fristen || {}).fristerstreckung_max_ohne_begruendung;
+  if (x && fristGueltig(x.datum)) { frist_setzen(x.datum); toast("Als meine Frist übernommen"); }
+};
+
+// Kalenderdatei (.ics): Erinnerung 14 Tage vorher und die Frist selbst
+const icsText = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+function icsFalten(zeile) {
+  const enc = new TextEncoder(); let aus = "", n = 0;
+  for (const z of zeile) {
+    const b = enc.encode(z).length;
+    if (n + b > 74) { aus += "\r\n "; n = 1; }
+    aus += z; n += b;
+  }
+  return aus;
+}
+const icsDatum = (d) => d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+function kalenderInhalt() {
+  const f = fristAktuell(); if (!f) return null;
+  const frist = datumAus(f.iso), erinnerung = new Date(frist); erinnerung.setDate(frist.getDate() - 14);
+  const offen = DATEN.checkliste.kategorien.flatMap((k) => k.punkte).filter((p) => !(Z.belege[p.id] || {}).erledigt);
+  const liste = offen.length ? "Noch offene Belege (" + offen.length + "):\n" + offen.map((p) => "- " + p.text).join("\n") : "Alle Belege sind abgehakt.";
+  const stempel = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
+  const ereignis = (id, tag, titel, text, ausloeser) => {
+    const ende = new Date(tag); ende.setDate(tag.getDate() + 1);
+    return ["BEGIN:VEVENT", `UID:steuern-zh-${Z.jahr}-${id}@steuern-zh`, `DTSTAMP:${stempel}`,
+      `DTSTART;VALUE=DATE:${icsDatum(tag)}`, `DTEND;VALUE=DATE:${icsDatum(ende)}`,
+      `SUMMARY:${icsText(titel)}`, `DESCRIPTION:${icsText(text)}`, "TRANSP:TRANSPARENT",
+      "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${icsText(titel)}`, `TRIGGER:${ausloeser}`, "END:VALARM", "END:VEVENT"];
+  };
+  const fusszeile = "Massgebend ist die Frist im Brief vom Steueramt.";
+  const zeilen = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Steuern Zuerich//DE", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+    ...ereignis("erinnerung", erinnerung, `Erinnerung: Steuererklärung ${Z.jahr} in 14 Tagen fällig`,
+      `Die Frist für die Steuererklärung ${Z.jahr} ist am ${datumText(f.iso)}.\n${liste}\n${fusszeile}`, "PT9H"),
+    ...ereignis("frist", frist, `Frist: Steuererklärung ${Z.jahr} einreichen`,
+      `Heute ist die Frist für die Steuererklärung ${Z.jahr}.\n${liste}\n${fusszeile}`, "-PT15H"),
+    "END:VCALENDAR"];
+  return zeilen.map(icsFalten).join("\r\n") + "\r\n";
+}
+$("kalenderKnopf").onclick = () => {
+  const inhalt = kalenderInhalt(); if (!inhalt) return;
+  dateiSpeichern(new Blob([inhalt], { type: "text/calendar;charset=utf-8" }), `steuererklaerung-${Z.jahr}-frist.ics`);
+  toast("Kalenderdatei gespeichert. Öffne sie, um die Termine zu übernehmen.", 5000);
+};
 
 /* =========================================================
    Navigation, Jahr, Thema, Sicherung
@@ -1673,6 +1816,10 @@ function hilfeInhalt(t) {
       ["Mehrere Positionen", "Gehören mehrere Zahlungen zu einem Punkt (z.B. jede Schulgeld-Rate einzeln), tippe auf «Position hinzufügen». Jede Position hat einen Betrag und eine kurze Bezeichnung, z.B. «WISS Rate März». Das Tool zählt die Beträge zur Summe zusammen. Mit dem Kreuz löschst du eine einzelne Position. Unter «Eintragen» siehst du die Summe.", ""],
       ["PDF anhängen", "Mit «PDF anhängen» wählst du ein oder mehrere PDFs von deinem Handy, z.B. aus «Downloads». Du kannst sie an eine einzelne Position oder an den ganzen Beleg hängen. Tipp auf den Dateinamen öffnet das PDF, das Kreuz daneben löscht es. Pro Datei sind höchstens 10 MB erlaubt. Die PDFs bleiben nur auf diesem Gerät und werden nie hochgeladen. Wie viel Platz sie brauchen, steht unter «Info».", ""],
       ["PDF aus der Mail-App teilen", "Hast du die App auf dem Startbildschirm installiert, kannst du ein PDF in der Mail-App öffnen, auf «Teilen» tippen und «Steuern ZH» wählen. Dann fragt dich das Tool, zu welchem Beleg das PDF gehört. Nach einem Update der App kann es etwas dauern, bis «Steuern ZH» im Teilen-Menü erscheint.", ""],
+      ["Frist (Karte oben)", "Zeigt, bis wann du die Steuererklärung einreichen musst, wie viele Tage noch bleiben und wie viele Belege noch offen sind. Die Karte wird bernstein, wenn es noch höchstens 30 Tage sind, und rot ab 7 Tagen oder wenn die Frist vorbei ist.", ""],
+      ["Meine Frist", "Hast du vom Steueramt eine verlängerte Frist bekommen, trag sie unter «Meine Frist und Fristerstreckung» ein. Sie gilt dann statt der Standardfrist und wird für jedes Steuerjahr einzeln gespeichert und mitgesichert. Mit «Standardfrist verwenden» setzt du sie zurück.", ""],
+      ["Fristerstreckung", "Eine Erstreckung musst du beantragen, bevor die Frist abläuft: Das Gesuch muss vor dem 31. März beim Steueramt eingehen. Ohne Begründung ist meist eine Erstreckung bis Ende November möglich, für die Stadt Zürich ist das noch nicht amtlich bestätigt. Massgebend ist immer die Frist im Brief vom Steueramt.", ""],
+      ["In Kalender eintragen", "Erstellt eine Kalenderdatei (.ics) mit zwei Terminen: eine Erinnerung 14 Tage vor der Frist und die Frist selbst, jeweils mit der Liste der noch offenen Belege. Öffne die Datei nach dem Speichern (auf Android z.B. mit Google Kalender). Ändert sich die Frist oder die Liste, erstelle die Datei neu.", ""],
       ["Eintragen", "Zeigt alle Belege sortiert nach Ziffer, so wie die Steuererklärung aufgebaut ist. Damit gehst du in ZHprivateTax von oben nach unten durch.", ""]
     ]},
     { titel: "Daten und Info", unter: "Quellen, Sicherung", felder: [
@@ -1707,7 +1854,7 @@ function hilfeAufbauen() {
 function jahrWechsel(v) {
   Z.jahr = v; speichern();
 
-  rechne(); datenAufbauen(); hilfeAufbauen();
+  rechne(); datenAufbauen(); hilfeAufbauen(); fristZeichnen();
 }
 
 /* ---------- Glas-Labor ---------- */
