@@ -99,8 +99,40 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+// PDFs aus dem Teilen-Menue (Web Share Target): nur auf dem Geraet in IndexedDB ablegen, nichts wird hochgeladen
+function dbOeffnen() {
+  return new Promise((ok, fehler) => {
+    const r = indexedDB.open("steuertool-pdf", 1);
+    r.onupgradeneeded = () => {
+      const db = r.result;
+      if (!db.objectStoreNames.contains("pdf")) db.createObjectStore("pdf", { keyPath: "id" });
+      if (!db.objectStoreNames.contains("eingang")) db.createObjectStore("eingang", { keyPath: "id" });
+    };
+    r.onsuccess = () => ok(r.result);
+    r.onerror = () => fehler(r.error);
+  });
+}
+async function teilenAnnehmen(req) {
+  try {
+    const fd = await req.formData();
+    const dateien = fd.getAll("pdf").filter((f) => f && typeof f !== "string" && f.size > 0);
+    const db = await dbOeffnen();
+    await new Promise((ok, fehler) => {
+      const t = db.transaction("eingang", "readwrite"), o = t.objectStore("eingang");
+      dateien.forEach((f, i) => o.put({ id: Date.now().toString(36) + "-" + i + "-" + Math.random().toString(36).slice(2, 8), name: f.name || "Dokument.pdf", groesse: f.size, zeit: Date.now(), blob: f.slice(0, f.size, "application/pdf") }));
+      t.oncomplete = ok; t.onerror = t.onabort = () => fehler(t.error);
+    });
+    db.close();
+  } catch (err) { /* App zeigt dann einfach nichts an */ }
+  return Response.redirect(new URL("./?geteilt=1", self.registration.scope).href, 303);
+}
+
 self.addEventListener("fetch", (e) => {
   const req = e.request;
+  if (req.method === "POST" && new URL(req.url).pathname === new URL("teilen", self.registration.scope).pathname) {
+    e.respondWith(teilenAnnehmen(req));
+    return;
+  }
   if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
   const istSeite = req.mode === "navigate" || (req.headers.get("accept") || "").includes("text/html");
   if (istSeite) {
@@ -211,6 +243,12 @@ def manifest():
         "orientation": "portrait",
         "theme_color": "#028090",
         "background_color": HINTERGRUND,
+        "share_target": {
+            "action": "./teilen",
+            "method": "POST",
+            "enctype": "multipart/form-data",
+            "params": {"files": [{"name": "pdf", "accept": ["application/pdf", ".pdf"]}]},
+        },
         "icons": [
             {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
             {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},

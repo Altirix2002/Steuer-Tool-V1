@@ -297,6 +297,36 @@ button { cursor: pointer; }
 .posten-detail { padding: 0 14px 14px 56px; font-size: 14px; }
 .posten-detail .wo { color: var(--tinte-2); margin: 0 0 10px; }
 .posten-detail .wo b { color: var(--tinte); font-weight: 600; }
+.positionen { display: grid; gap: 10px; }
+.pos { background: var(--flaeche-2); border: 1px solid var(--linie); border-radius: 14px; padding: 10px; display: grid; gap: 8px; }
+.pos-zeile { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.pos-zeile .pos-text { grid-column: 1 / -1; }
+.pos .eingabe input { padding: 10px 12px; font-size: 16px; }
+.pos-summe { display: flex; justify-content: space-between; align-items: baseline; padding: 2px 4px; font-size: 15px; font-variant-numeric: tabular-nums; }
+.pos-summe b { font-size: 17px; color: var(--petrol); }
+.icon-knopf { width: 42px; height: 42px; flex: none; border-radius: 12px; border: 1.5px solid var(--linie); background: var(--flaeche); color: var(--tinte-2); display: grid; place-items: center; padding: 0; transition: transform .15s var(--feder); }
+.icon-knopf:active { transform: scale(.9); }
+.icon-knopf svg { width: 18px; height: 18px; }
+.klein-knopf { border: 1.5px solid var(--linie); background: var(--flaeche); color: var(--tinte); border-radius: 12px; padding: 9px 12px; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: transform .15s var(--feder); }
+.klein-knopf:active { transform: scale(.96); }
+.klein-knopf svg { width: 16px; height: 16px; flex: none; }
+.klein-knopf.plus { color: var(--petrol); justify-self: start; }
+.pdfliste { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pdf-chip { display: inline-flex; align-items: stretch; max-width: 100%; border: 1.5px solid color-mix(in srgb, var(--petrol) 40%, var(--linie)); border-radius: 12px; background: var(--gut-grund); overflow: hidden; }
+.pdf-chip .auf { border: 0; background: none; padding: 8px 10px; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: center; min-width: 0; text-align: left; }
+.pdf-chip .auf svg { width: 16px; height: 16px; flex: none; color: var(--petrol); }
+.pdf-chip .auf .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.pdf-chip .auf small { color: var(--tinte-2); font-weight: 500; white-space: nowrap; }
+.pdf-chip .weg { border: 0; border-left: 1px solid color-mix(in srgb, var(--petrol) 25%, var(--linie)); background: none; width: 38px; color: var(--tinte-2); display: grid; place-items: center; padding: 0; }
+.pdf-chip .weg svg { width: 16px; height: 16px; }
+dialog.blatt { border: 0; border-radius: 24px; padding: 20px; width: min(92vw, 420px); background: var(--flaeche); color: var(--tinte); box-shadow: var(--glas-schatten); }
+dialog.blatt::backdrop { background: rgba(15, 42, 46, .5); }
+dialog.blatt h3 { margin: 0 0 6px; font-size: 18px; }
+dialog.blatt p { margin: 0 0 6px; font-size: 15px; color: var(--tinte-2); }
+dialog.blatt ul { margin: 0 0 6px; padding-left: 18px; font-size: 14px; color: var(--tinte-2); overflow-wrap: anywhere; }
+.auswahl { width: 100%; padding: 12px; font-size: 16px; border: 1.5px solid var(--linie); border-radius: 12px; background: var(--flaeche); }
+.knopf.zweizeilig { flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; }
+.knopf.zweizeilig small { font-size: 13px; font-weight: 500; opacity: .85; }
 
 /* ---------- Daten ---------- */
 .wert { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 16px; padding: 14px; margin-top: 10px; }
@@ -607,11 +637,13 @@ button { cursor: pointer; }
       </div>
       <div class="text">
         <h3>Deine Daten</h3>
-        <p>Alles, was du eingibst, bleibt nur in diesem Browser auf diesem Gerät. Deine Eingaben werden nicht ins Internet geschickt. Wenn du den Browserverlauf löschst, sind die Eingaben weg. Sichere sie darum ab und zu als Datei.</p>
+        <p>Alles, was du eingibst, bleibt nur in diesem Browser auf diesem Gerät. Deine Eingaben werden nicht ins Internet geschickt. Wenn du den Browserverlauf löschst, sind die Eingaben weg. Sichere sie darum ab und zu als Datei. Angehängte PDFs bleiben ebenfalls nur auf diesem Gerät und werden nie hochgeladen.</p>
+        <p id="pdfSpeicher"></p>
         <div class="knoepfe">
           <button type="button" class="knopf" id="exportKnopf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Daten als Datei sichern</button>
           <button type="button" class="knopf zweit" id="importKnopf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3m0 0L8 7m4-4 4 4M5 21h14"/></svg>Gesicherte Datei laden</button>
-          <input type="file" id="importDatei" accept="application/json,.json" class="versteckt">
+          <input type="file" id="importDatei" accept="application/json,.json,application/zip,.zip" class="versteckt">
+          <input type="file" id="pdfDatei" accept="application/pdf,.pdf" multiple class="versteckt">
           <button type="button" class="knopf gefahr" id="loeschKnopf">Alle Eingaben löschen</button>
         </div>
       </div>
@@ -667,6 +699,7 @@ button { cursor: pointer; }
   <button type="button" data-ziel="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Info</button>
 </nav>
 <div class="toast" id="toast" role="status"></div>
+<dialog class="blatt" id="blatt"></dialog>
 
 <script>
 const DATEN = /*__DATEN__*/null;
@@ -826,11 +859,29 @@ const STANDARD = {
   s3aZusatz: 0, belegeAnsicht: "liste",
   belege: {}, offen: {}, thema: "auto", ansicht: "rechner"
 };
+let MIGRIERT = false;
 let Z = laden();
+function neueId() { return crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+// Alte Fassung: ein Betrag pro Beleg (belege[id].betrag). Neu: Liste "positionen". Der alte Betrag wird die erste Position.
+function belegeMigrieren(b) {
+  for (const id of Object.keys(b)) {
+    const d = b[id];
+    if (!d || typeof d !== "object" || Array.isArray(d.positionen)) continue;
+    d.positionen = [];
+    if (d.betrag != null && String(d.betrag).trim() !== "") d.positionen.push({ id: neueId(), betrag: String(d.betrag), text: "" });
+    delete d.betrag; MIGRIERT = true;
+  }
+  return b;
+}
+function zustandAus(d) {
+  const z = { ...STANDARD, ...d, lohn: { ...STANDARD.lohn, ...(d.lohn || {}) } };
+  z.belege = belegeMigrieren(z.belege && typeof z.belege === "object" ? z.belege : {});
+  return z;
+}
 function laden() {
   try {
     const roh = localStorage.getItem(SPEICHER);
-    if (roh) { const d = JSON.parse(roh); return { ...STANDARD, ...d, lohn: { ...STANDARD.lohn, ...(d.lohn || {}) } }; }
+    if (roh) return zustandAus(JSON.parse(roh));
   } catch (e) {}
   return structuredClone(STANDARD);
 }
@@ -840,6 +891,7 @@ function speichern() {
   speicherTimer = setTimeout(() => { try { localStorage.setItem(SPEICHER, JSON.stringify(Z)); } catch (e) {} }, 200);
 }
 if (!DATEN.tarife[Z.jahr]) Z.jahr = JAHRE[0];
+if (MIGRIERT) speichern();
 
 /* =========================================================
    Hilfen für die Oberfläche
@@ -865,7 +917,7 @@ function kipp(el, an, beiWechsel) {
   el.addEventListener("click", () => { const neu = el.getAttribute("aria-checked") !== "true"; el.setAttribute("aria-checked", neu); beiWechsel(neu); });
 }
 function klapp(el, offen) { el.classList.toggle("offen", offen); el.querySelectorAll("input,button").forEach((i) => (i.tabIndex = offen ? 0 : -1)); }
-function toast(text) { const t = $("toast"); t.textContent = text; t.classList.add("zeigen"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("zeigen"), 2200); }
+function toast(text, ms = 2200) { const t = $("toast"); t.textContent = text; t.classList.add("zeigen"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("zeigen"), ms); }
 
 function zaehle(el, ziel) {
   const start = el._jetzt || 0; el._jetzt = ziel;
@@ -1026,15 +1078,155 @@ function modusZeigen() {
 /* =========================================================
    Belege
    ========================================================= */
+/* ---------- PDF-Speicher (IndexedDB, nur auf diesem Gerät) ---------- */
+const MAX_PDF = 10 * 1024 * 1024;
+const PDFDB = (() => {
+  let dbp;
+  const oeffnen = () => dbp || (dbp = new Promise((ok, fehler) => {
+    if (!window.indexedDB) return fehler(new Error("kein IndexedDB"));
+    const r = indexedDB.open("steuertool-pdf", 1);
+    r.onupgradeneeded = () => {
+      const db = r.result;
+      if (!db.objectStoreNames.contains("pdf")) db.createObjectStore("pdf", { keyPath: "id" });
+      if (!db.objectStoreNames.contains("eingang")) db.createObjectStore("eingang", { keyPath: "id" });
+    };
+    r.onsuccess = () => ok(r.result);
+    r.onerror = () => fehler(r.error);
+  }));
+  const tx = (store, modus, fn) => oeffnen().then((db) => new Promise((ok, fehler) => {
+    const t = db.transaction(store, modus), q = fn(t.objectStore(store));
+    t.oncomplete = () => ok(q && q.result);
+    t.onerror = t.onabort = () => fehler(t.error);
+  }));
+  return {
+    alle: (s = "pdf") => tx(s, "readonly", (o) => o.getAll()),
+    setze: (rec, s = "pdf") => tx(s, "readwrite", (o) => o.put(rec)),
+    loesche: (id, s = "pdf") => tx(s, "readwrite", (o) => o.delete(id)),
+    leere: (s = "pdf") => tx(s, "readwrite", (o) => o.clear())
+  };
+})();
+let PDFS = [];   // alle angehängten PDFs: { id, belegId, posId, name, groesse, zeit, blob }
+const IK = {
+  weg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>'
+};
+function groesseText(b) { return b < 1048576 ? Math.max(1, Math.round(b / 1024)) + " KB" : (b / 1048576).toFixed(1).replace(/\.0$/, "") + " MB"; }
+function chfBetrag(n) { return Number.isInteger(n) ? F.chf0(n) : F.rp(Math.round(n * 100)); }
+function pdfAnzahl(n) { return n === 1 ? "1 PDF" : n + " PDFs"; }
+function dateiSpeichern(blob, name) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function blattZeigen(html) { const d = $("blatt"); d.innerHTML = html; if (!d.open) d.showModal(); return d; }
+function blattZu() { const d = $("blatt"); if (d.open) d.close(); }
+
+function belegDaten(id) {
+  const d = (Z.belege[id] = Z.belege[id] || {});
+  if (!Array.isArray(d.positionen)) d.positionen = [];
+  if (!d.positionen.length) d.positionen.push({ id: neueId(), betrag: "", text: "" });
+  return d;
+}
+function belegSumme(id) {
+  const d = Z.belege[id];
+  const s = d && Array.isArray(d.positionen) ? d.positionen.reduce((t, p) => t + F.zahl(p.betrag), 0) : 0;
+  return Math.round(s * 100) / 100;
+}
+function pdfChips(liste) {
+  return liste.map((r) => `<span class="pdf-chip"><button type="button" class="auf" data-pdf="${esc(r.id)}" title="${esc(r.name)}">${IK.pdf}<span class="n">${esc(r.name)}</span><small>${groesseText(r.groesse)}</small></button><button type="button" class="weg" data-pdfweg="${esc(r.id)}" aria-label="${esc(r.name)} löschen">${IK.weg}</button></span>`).join("");
+}
+function summeZeigen(el, id) {
+  const d = belegDaten(id), n = belegSumme(id), mehr = d.positionen.filter((p) => F.zahl(p.betrag)).length > 1;
+  const z = el.querySelector(".pos-summe");
+  z.hidden = !mehr; z.querySelector("b").textContent = "CHF " + chfBetrag(n);
+}
+function positionenZeichnen(el, id) {
+  const d = belegDaten(id), pids = new Set(d.positionen.map((p) => p.id));
+  const box = el.querySelector(".positionen");
+  box.innerHTML = d.positionen.map((p, i) => `
+    <div class="pos" data-pid="${esc(p.id)}">
+      <div class="pos-zeile">
+        <div class="eingabe"><span>CHF</span><input data-pbetrag inputmode="decimal" placeholder="0" aria-label="Betrag Position ${i + 1}"></div>
+        <button type="button" class="icon-knopf" data-pweg aria-label="Position ${i + 1} löschen">${IK.weg}</button>
+        <div class="eingabe pos-text"><input data-ptext maxlength="80" placeholder="z.B. WISS Rate März" aria-label="Bezeichnung Position ${i + 1}"></div>
+      </div>
+      <div class="pdfliste">${pdfChips(PDFS.filter((r) => r.belegId === id && r.posId === p.id))}<button type="button" class="klein-knopf" data-pneu>${IK.pdf}PDF anhängen</button></div>
+    </div>`).join("") +
+    `<button type="button" class="klein-knopf plus" data-padd>${IK.plus}Position hinzufügen</button>
+     <div class="pos-summe" hidden><span>Summe</span><b></b></div>`;
+  box.querySelectorAll(".pos").forEach((z, i) => {
+    const p = d.positionen[i], betrag = z.querySelector("[data-pbetrag]"), text = z.querySelector("[data-ptext]");
+    betrag.value = p.betrag || ""; text.value = p.text || "";
+    betrag.addEventListener("input", () => { p.betrag = betrag.value; speichern(); summeZeigen(el, id); belegeAktualisieren(); });
+    betrag.addEventListener("blur", () => { const n = F.zahl(betrag.value); if (n) betrag.value = chfBetrag(n); });
+    text.addEventListener("input", () => { p.text = text.value; speichern(); });
+  });
+  // PDFs, die zum ganzen Beleg gehören (oder zu einer gelöschten Position)
+  el.querySelector(".bpdf").innerHTML = pdfChips(PDFS.filter((r) => r.belegId === id && !pids.has(r.posId))) +
+    `<button type="button" class="klein-knopf" data-bneu>${IK.pdf}PDF anhängen</button>`;
+  summeZeigen(el, id);
+  klapp(el.querySelector(".klapp"), el.classList.contains("offen"));
+}
+function pdfSpeicherZeigen() {
+  const n = PDFS.length, g = PDFS.reduce((t, r) => t + (r.groesse || 0), 0);
+  $("pdfSpeicher").textContent = n ? `Angehängte PDFs: ${pdfAnzahl(n)}, zusammen ${groesseText(g)} auf diesem Gerät.` : "Noch keine PDFs angehängt.";
+}
+function pdfAnsichtAktualisieren() {
+  document.querySelectorAll("#belegeListe .posten").forEach((el) => positionenZeichnen(el, el.dataset.id));
+  pdfSpeicherZeigen(); belegeAktualisieren();
+}
+async function pdfsLaden() {
+  try { PDFS = await PDFDB.alle(); } catch (e) { PDFS = []; }
+  if (document.querySelector("#belegeListe .posten")) pdfAnsichtAktualisieren(); else pdfSpeicherZeigen();
+}
+async function pdfsAnhaengen(dateien, belegId, posId) {
+  const probleme = []; let ok = 0;
+  for (const f of dateien) {
+    const istPdf = f.type === "application/pdf" || /\.pdf$/i.test(f.name);
+    if (!istPdf) { probleme.push(`«${f.name}» ist kein PDF.`); continue; }
+    if (f.size > MAX_PDF) { probleme.push(`«${f.name}» ist ${groesseText(f.size)} gross. Erlaubt sind höchstens ${groesseText(MAX_PDF)} pro Datei.`); continue; }
+    if (!f.size) { probleme.push(`«${f.name}» ist leer.`); continue; }
+    const rec = { id: neueId(), belegId, posId: posId || "", name: f.name, groesse: f.size, zeit: Date.now(), blob: f.slice(0, f.size, "application/pdf") };
+    try { await PDFDB.setze(rec); PDFS.push(rec); ok++; }
+    catch (e) { probleme.push(`«${f.name}» konnte nicht gespeichert werden (Speicher voll oder nicht erlaubt).`); }
+  }
+  if (ok) { speichern(); try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {} }
+  pdfAnsichtAktualisieren();
+  if (probleme.length) toast((ok ? ok + " angehängt. " : "") + probleme.join(" "), 6500);
+  else if (ok) toast(ok === 1 ? "PDF angehängt" : ok + " PDFs angehängt");
+}
+let PDF_ZIEL = null;
+function pdfWaehlen(belegId, posId) { PDF_ZIEL = { belegId, posId }; $("pdfDatei").click(); }
+function pdfOeffnen(r) {
+  const url = URL.createObjectURL(r.blob);
+  if (!window.open(url, "_blank")) dateiSpeichern(r.blob, r.name);
+  setTimeout(() => URL.revokeObjectURL(url), 120000);
+}
+async function pdfLoeschen(id) {
+  const r = PDFS.find((x) => x.id === id); if (!r) return;
+  if (!confirm(`«${r.name}» löschen?`)) return;
+  try { await PDFDB.loesche(id); PDFS = PDFS.filter((x) => x.id !== id); pdfAnsichtAktualisieren(); toast("PDF gelöscht"); }
+  catch (e) { toast("PDF konnte nicht gelöscht werden"); }
+}
+async function positionLoeschen(el, belegId, pid) {
+  const d = belegDaten(belegId), i = d.positionen.findIndex((p) => p.id === pid); if (i < 0) return;
+  const pdfs = PDFS.filter((r) => r.belegId === belegId && r.posId === pid);
+  if (pdfs.length && !confirm(`Zu dieser Position gehören ${pdfAnzahl(pdfs.length)}. Position und PDF${pdfs.length === 1 ? "" : "s"} löschen?`)) return;
+  try { for (const r of pdfs) await PDFDB.loesche(r.id); } catch (e) { toast("PDF konnte nicht gelöscht werden"); return; }
+  PDFS = PDFS.filter((r) => !pdfs.includes(r));
+  d.positionen.splice(i, 1);   // bleibt keine übrig, legt belegDaten() eine leere an
+  speichern(); positionenZeichnen(el, belegId); pdfSpeicherZeigen(); belegeAktualisieren(); toast("Position gelöscht");
+}
+
 function eintragenZeichnen() {
   const punkte = DATEN.checkliste.kategorien.flatMap((k) => k.punkte).filter((p) => p.ziffer);
   punkte.sort((a, b) => { const x = a.ziffer.split(".").map(Number), y = b.ziffer.split(".").map(Number); return (x[0] - y[0]) || ((x[1] || 0) - (y[1] || 0)); });
   $("eintragListe").innerHTML = `<p class="ziffer-hinweis">So trägst du deine Belege in ZHprivateTax ein, sortiert nach Ziffer. ${esc(DATEN.checkliste._ziffern || "")}</p>` +
     punkte.map((p, i) => {
-      const d = Z.belege[p.id] || {}, b = F.zahl(d.betrag);
+      const d = Z.belege[p.id] || {}, b = belegSumme(p.id);
       return `<div class="ziffer-zeile${d.erledigt ? " erledigt" : ""}" style="animation-delay:${i * 35}ms"><div class="ziffer">${esc(p.ziffer)}</div>
         <div class="zt">${esc(p.text)}<span>${esc(p.ziffer_text)}</span></div>
-        <div class="zb${b ? "" : " offen"}">${b ? "CHF " + F.chf0(b) : d.erledigt ? "Beleg da" : "offen"}</div></div>`;
+        <div class="zb${b ? "" : " offen"}">${b ? "CHF " + chfBetrag(b) : d.erledigt ? "Beleg da" : "offen"}</div></div>`;
     }).join("");
 }
 
@@ -1055,24 +1247,42 @@ function belegeAufbauen() {
           <p class="wo"><b>Wo bekommen:</b> ${esc(p.wo)}</p>
           ${p.ziffer ? `<p class="wo"><b>In der Steuererklärung:</b> Ziffer ${esc(p.ziffer)}, ${esc(p.ziffer_text)}</p>` : ""}
           ${p.abklaeren ? '<div class="meldung pruefen" style="margin-bottom:10px">' + SYMBOL.pruefen + '<span>Ob und wie das für dich gilt, ist nicht sicher. Beim Steueramt nachfragen.</span></div>' : ""}
-          <div class="feld" style="margin-top:0"><label for="b_${p.id}">Betrag</label><div class="eingabe"><span>CHF</span><input id="b_${p.id}" data-betrag inputmode="decimal" placeholder="0"></div></div>
+          <div class="feld" style="margin-top:0"><span class="lbl">Beträge</span><div class="positionen"></div></div>
           <div class="feld"><label for="n_${p.id}">Notiz</label><div class="eingabe"><input id="n_${p.id}" data-notiz placeholder="z.B. kommt im Januar"></div></div>
+          <div class="feld"><span class="lbl">PDF zum ganzen Beleg</span><div class="pdfliste bpdf"></div></div>
         </div></div></div>
       </div>`).join("")}
     </div>`).join("");
 
   liste.querySelectorAll(".posten").forEach((el) => {
     const id = el.dataset.id, d = () => (Z.belege[id] = Z.belege[id] || {});
-    const betrag = el.querySelector("[data-betrag]"), notiz = el.querySelector("[data-notiz]");
-    betrag.value = (Z.belege[id] || {}).betrag || ""; notiz.value = (Z.belege[id] || {}).notiz || "";
+    const notiz = el.querySelector("[data-notiz]");
+    notiz.value = (Z.belege[id] || {}).notiz || "";
     const offen = (an) => { el.classList.toggle("offen", an); klapp(el.querySelector(".klapp"), an); el.querySelector(".posten-text").setAttribute("aria-expanded", an); Z.offen[id] = an; };
+    positionenZeichnen(el, id);
     offen(!!Z.offen[id]);
     el.querySelector(".haken").onclick = () => { d().erledigt = !d().erledigt; speichern(); belegeAktualisieren(); if (d().erledigt) toast("Beleg abgehakt"); };
     el.querySelector(".posten-text").onclick = () => { offen(!el.classList.contains("offen")); speichern(); };
     el.querySelector(".pfeil").onclick = () => { offen(!el.classList.contains("offen")); speichern(); };
-    betrag.addEventListener("input", () => { d().betrag = betrag.value; speichern(); belegeAktualisieren(false); });
-    betrag.addEventListener("blur", () => { const n = F.zahl(betrag.value); if (n) betrag.value = F.chf0(n); });
-    notiz.addEventListener("input", () => { d().notiz = notiz.value; speichern(); belegeAktualisieren(false); });
+    notiz.addEventListener("input", () => { d().notiz = notiz.value; speichern(); belegeAktualisieren(); });
+    el.addEventListener("click", (ev) => {
+      const k = ev.target.closest("button"); if (!k || !el.contains(k)) return;
+      const pos = k.closest(".pos"), pid = pos ? pos.dataset.pid : "";
+      if (k.dataset.pdf) { const r = PDFS.find((x) => x.id === k.dataset.pdf); if (r) pdfOeffnen(r); }
+      else if (k.dataset.pdfweg) pdfLoeschen(k.dataset.pdfweg);
+      else if (k.hasAttribute("data-pneu")) pdfWaehlen(id, pid);
+      else if (k.hasAttribute("data-bneu")) pdfWaehlen(id, "");
+      else if (k.hasAttribute("data-pweg")) positionLoeschen(el, id, pid);
+      else if (k.hasAttribute("data-padd")) {
+        const neu = { id: neueId(), betrag: "", text: "" };
+        belegDaten(id).positionen.push(neu); speichern(); positionenZeichnen(el, id);
+        const f = el.querySelector(`.pos[data-pid="${CSS.escape(neu.id)}"] [data-pbetrag]`); if (f) f.focus();
+      }
+    });
+  });
+  $("pdfDatei").addEventListener("change", (e) => {
+    const dateien = [...e.target.files], z = PDF_ZIEL; e.target.value = "";
+    if (z && dateien.length) pdfsAnhaengen(dateien, z.belegId, z.posId);
   });
   belegeAktualisieren();
 }
@@ -1091,7 +1301,9 @@ function belegeAktualisieren() {
       el.classList.toggle("erledigt", !!d.erledigt);
       el.querySelector(".haken").setAttribute("aria-pressed", !!d.erledigt);
       const teile = [];
-      if (d.betrag && F.zahl(d.betrag)) teile.push("CHF " + F.chf0(F.zahl(d.betrag)));
+      const summe = belegSumme(p.id), npos = (d.positionen || []).filter((x) => F.zahl(x.betrag)).length, npdf = PDFS.filter((r) => r.belegId === p.id).length;
+      if (summe) teile.push("CHF " + chfBetrag(summe) + (npos > 1 ? " (" + npos + " Positionen)" : ""));
+      if (npdf) teile.push(pdfAnzahl(npdf));
       if (d.notiz) teile.push(esc(d.notiz));
       if (p.abklaeren) teile.push('<span class="abkl">abklären</span>');
       el.querySelector(".klein").innerHTML = teile.join(", ");
@@ -1253,29 +1465,162 @@ function markerSetzen(animiert) {
 
 function thema(v) { if (v === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", v); }
 
+/* ---------- Sicherung: JSON (nur Eingaben) oder ZIP (mit PDFs) ---------- */
+const CRC_TAB = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(u8) { let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC_TAB[(c ^ u8[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+// ZIP ohne Kompression ("stored"): PDFs sind schon komprimiert, die Datei bleibt mit jedem Entpackprogramm lesbar.
+async function zipBauen(eintraege) {
+  const enc = new TextEncoder(), teile = [], zentral = [], jetzt = new Date();
+  const zeit = (jetzt.getHours() << 11) | (jetzt.getMinutes() << 5) | (jetzt.getSeconds() >> 1);
+  const datum = ((jetzt.getFullYear() - 1980) << 9) | ((jetzt.getMonth() + 1) << 5) | jetzt.getDate();
+  let pos = 0;
+  for (const e of eintraege) {
+    const daten = typeof e.inhalt === "string" ? enc.encode(e.inhalt) : new Uint8Array(await e.inhalt.arrayBuffer());
+    const name = enc.encode(e.name), crc = crc32(daten);
+    const k = new DataView(new ArrayBuffer(30));
+    k.setUint32(0, 0x04034b50, true); k.setUint16(4, 20, true); k.setUint16(6, 0x0800, true); k.setUint16(8, 0, true);
+    k.setUint16(10, zeit, true); k.setUint16(12, datum, true); k.setUint32(14, crc, true);
+    k.setUint32(18, daten.length, true); k.setUint32(22, daten.length, true); k.setUint16(26, name.length, true); k.setUint16(28, 0, true);
+    teile.push(k.buffer, name, daten);
+    zentral.push({ name, crc, laenge: daten.length, offset: pos });
+    pos += 30 + name.length + daten.length;
+  }
+  let zGroesse = 0;
+  for (const z of zentral) {
+    const k = new DataView(new ArrayBuffer(46));
+    k.setUint32(0, 0x02014b50, true); k.setUint16(4, 20, true); k.setUint16(6, 20, true); k.setUint16(8, 0x0800, true); k.setUint16(10, 0, true);
+    k.setUint16(12, zeit, true); k.setUint16(14, datum, true); k.setUint32(16, z.crc, true);
+    k.setUint32(20, z.laenge, true); k.setUint32(24, z.laenge, true); k.setUint16(28, z.name.length, true);
+    k.setUint32(42, z.offset, true);
+    teile.push(k.buffer, z.name); zGroesse += 46 + z.name.length;
+  }
+  const e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, zentral.length, true); e.setUint16(10, zentral.length, true);
+  e.setUint32(12, zGroesse, true); e.setUint32(16, pos, true);
+  teile.push(e.buffer);
+  return new Blob(teile, { type: "application/zip" });
+}
+async function zipLesen(datei) {
+  const buf = new Uint8Array(await datei.arrayBuffer()), dv = new DataView(buf.buffer), dec = new TextDecoder();
+  let e = buf.length - 22;
+  while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
+  if (e < 0) throw new Error("kein ZIP");
+  const n = dv.getUint16(e + 10, true), out = {};
+  let p = dv.getUint32(e + 16, true);
+  for (let i = 0; i < n; i++) {
+    if (dv.getUint32(p, true) !== 0x02014b50) throw new Error("ZIP defekt");
+    const methode = dv.getUint16(p + 10, true), csize = dv.getUint32(p + 20, true);
+    const nl = dv.getUint16(p + 28, true), xl = dv.getUint16(p + 30, true), cl = dv.getUint16(p + 32, true), lofs = dv.getUint32(p + 42, true);
+    const name = dec.decode(buf.subarray(p + 46, p + 46 + nl));
+    const start = lofs + 30 + dv.getUint16(lofs + 26, true) + dv.getUint16(lofs + 28, true);
+    let daten = buf.subarray(start, start + csize);
+    if (methode === 8) daten = new Uint8Array(await new Response(new Blob([daten]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer());
+    else if (methode !== 0) throw new Error("ZIP-Kompression nicht unterstützt");
+    out[name] = daten;
+    p += 46 + nl + xl + cl;
+  }
+  return out;
+}
+const heute = () => new Date().toISOString().slice(0, 10);
+function sicherungKopf() { return { app: "steuertool", version: 2, gesichert: new Date().toISOString(), daten: Z }; }
 $("exportKnopf").onclick = () => {
-  const blob = new Blob([JSON.stringify({ app: "steuertool", version: 1, gesichert: new Date().toISOString(), daten: Z }, null, 2)], { type: "application/json" });
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "steuertool-daten-" + new Date().toISOString().slice(0, 10) + ".json";
-  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  toast("Datei gespeichert");
+  const n = PDFS.length, g = PDFS.reduce((t, r) => t + r.groesse, 0);
+  blattZeigen(`<h3>Daten sichern</h3><p>Was soll in die Datei?</p>
+    <div class="knoepfe">
+      <button type="button" class="knopf zweizeilig" id="exJson"><b>Nur Eingaben</b><small>Kleine Datei (JSON), ohne PDFs</small></button>
+      <button type="button" class="knopf zweizeilig zweit" id="exZip"><b>Alles mit PDFs</b><small>${n ? `ZIP mit ${pdfAnzahl(n)}, rund ${groesseText(g)}` : "ZIP-Datei (noch keine PDFs vorhanden)"}</small></button>
+      <button type="button" class="knopf zweit" id="exAbbruch">Abbrechen</button>
+    </div>`);
+  $("exAbbruch").onclick = blattZu;
+  $("exJson").onclick = () => {
+    blattZu();
+    dateiSpeichern(new Blob([JSON.stringify(sicherungKopf(), null, 2)], { type: "application/json" }), "steuertool-daten-" + heute() + ".json");
+    toast("Datei gespeichert");
+  };
+  $("exZip").onclick = async () => {
+    blattZu(); toast("ZIP wird erstellt …", 8000);
+    try {
+      const eintraege = [], liste = [];
+      PDFS.forEach((r, i) => {
+        const datei = "pdf/" + String(i + 1).padStart(3, "0") + "_" + r.name.replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_");
+        eintraege.push({ name: datei, inhalt: r.blob });
+        liste.push({ datei, belegId: r.belegId, posId: r.posId, name: r.name, zeit: r.zeit });
+      });
+      eintraege.unshift({ name: "steuertool-daten.json", inhalt: JSON.stringify({ ...sicherungKopf(), pdfs: liste }, null, 2) });
+      dateiSpeichern(await zipBauen(eintraege), "steuertool-komplett-" + heute() + ".zip");
+      toast("ZIP gespeichert");
+    } catch (er) { toast("Das ZIP konnte nicht erstellt werden", 5000); }
+  };
 };
 $("importKnopf").onclick = () => $("importDatei").click();
 $("importDatei").onchange = async (e) => {
-  const datei = e.target.files[0]; if (!datei) return;
+  const datei = e.target.files[0]; e.target.value = "";
+  if (!datei) return;
   try {
-    const d = JSON.parse(await datei.text());
+    const kopf = new Uint8Array(await datei.slice(0, 2).arrayBuffer());
+    const istZip = kopf[0] === 0x50 && kopf[1] === 0x4B;
+    let d, dateien = null;
+    if (istZip) {
+      dateien = await zipLesen(datei);
+      if (!dateien["steuertool-daten.json"]) throw new Error();
+      d = JSON.parse(new TextDecoder().decode(dateien["steuertool-daten.json"]));
+    } else d = JSON.parse(await datei.text());
     if (d.app !== "steuertool" || !d.daten) throw new Error();
-    Z = { ...STANDARD, ...d.daten, lohn: { ...STANDARD.lohn, ...(d.daten.lohn || {}) } };
+    if (istZip && PDFS.length && !confirm("Die PDFs auf diesem Gerät werden durch die PDFs aus der Sicherung ersetzt. Fortfahren?")) return;
+    const neu = zustandAus(d.daten);
+    if (istZip) {
+      await PDFDB.leere();
+      for (const m of d.pdfs || []) {
+        const roh = dateien[m.datei]; if (!roh) continue;
+        await PDFDB.setze({ id: neueId(), belegId: m.belegId, posId: m.posId || "", name: m.name, groesse: roh.length, zeit: m.zeit || Date.now(), blob: new Blob([roh], { type: "application/pdf" }) });
+      }
+    }
+    Z = neu;
     try { localStorage.setItem(SPEICHER, JSON.stringify(Z)); } catch (er) {}
     location.reload();
   } catch (er) { toast("Diese Datei ist keine Sicherung vom Steuer-Tool"); }
-  e.target.value = "";
 };
-$("loeschKnopf").onclick = () => {
-  if (!confirm("Alle Eingaben und abgehakten Belege löschen? Das kann nicht rückgängig gemacht werden.")) return;
+$("loeschKnopf").onclick = async () => {
+  if (!confirm("Alle Eingaben, abgehakten Belege und angehängten PDFs löschen? Das kann nicht rückgängig gemacht werden.")) return;
   try { localStorage.removeItem(SPEICHER); } catch (er) {}
+  try { await PDFDB.leere(); await PDFDB.leere("eingang"); } catch (er) {}
   location.reload();
 };
+
+/* ---------- PDFs, die aus anderen Apps an dieses Tool geteilt wurden (Teilen-Menü) ---------- */
+async function eingangPruefen() {
+  if (/[?&]geteilt=/.test(location.search)) history.replaceState(null, "", location.pathname);
+  let eingang = [];
+  try { eingang = await PDFDB.alle("eingang"); } catch (e) { return; }
+  if (!eingang.length) return;
+  zeige("belege");
+  const optionen = DATEN.checkliste.kategorien.map((k) => `<optgroup label="${esc(k.name)}">${k.punkte.map((p) => `<option value="${esc(p.id)}">${esc(p.text)}</option>`).join("")}</optgroup>`).join("");
+  blattZeigen(`<h3>${eingang.length === 1 ? "PDF empfangen" : eingang.length + " PDFs empfangen"}</h3>
+    <ul>${eingang.map((r) => `<li>${esc(r.name)} (${groesseText(r.groesse)})</li>`).join("")}</ul>
+    <div class="feld"><label for="eingZiel">Zu welchem Beleg gehört das?</label>
+      <select id="eingZiel" class="auswahl"><option value="">Beleg wählen …</option>${optionen}</select></div>
+    <div class="knoepfe">
+      <button type="button" class="knopf" id="eingOk">Anhängen</button>
+      <button type="button" class="knopf zweit" id="eingSpaeter">Später</button>
+      <button type="button" class="knopf gefahr" id="eingWeg">Verwerfen</button>
+    </div>`);
+  $("eingSpaeter").onclick = blattZu;
+  $("eingWeg").onclick = async () => {
+    if (!confirm("Empfangene PDFs verwerfen?")) return;
+    try { await PDFDB.leere("eingang"); } catch (e) {}
+    blattZu();
+  };
+  $("eingOk").onclick = async () => {
+    const id = $("eingZiel").value;
+    if (!id) { toast("Bitte zuerst einen Beleg wählen"); return; }
+    blattZu();
+    await pdfsAnhaengen(eingang.map((r) => new File([r.blob], r.name, { type: "application/pdf" })), id, "");
+    try { await PDFDB.leere("eingang"); } catch (e) {}
+    Z.offen[id] = true; speichern();
+    const el = document.querySelector(`.posten[data-id="${CSS.escape(id)}"]`);
+    if (el) { el.classList.add("offen"); positionenZeichnen(el, id); el.scrollIntoView({ block: "center" }); }
+  };
+}
 
 function hilfeInhalt(t) {
   const b = t.bund.abzuege, ok = b.status !== "fehlt";
@@ -1320,12 +1665,16 @@ function hilfeInhalt(t) {
     ]},
     { titel: "Belege", unter: "Checkliste und Eintragen", felder: [
       ["Haken", "Tipp auf das Kästchen, wenn du den Beleg hast.", ""],
-      ["Betrag und Notiz", "Tipp auf einen Punkt, um ihn aufzuklappen. Dort steht, wo du den Beleg bekommst und in welche Ziffer der Steuererklärung er gehört. Trag den Betrag vom Beleg ein, damit du ihn später schnell findest.", ""],
+      ["Beträge und Notiz", "Tipp auf einen Punkt, um ihn aufzuklappen. Dort steht, wo du den Beleg bekommst und in welche Ziffer der Steuererklärung er gehört. Trag den Betrag vom Beleg ein, damit du ihn später schnell findest. Die Notiz ist für dich, z.B. «kommt im Januar».", ""],
+      ["Mehrere Positionen", "Gehören mehrere Zahlungen zu einem Punkt (z.B. jede Schulgeld-Rate einzeln), tippe auf «Position hinzufügen». Jede Position hat einen Betrag und eine kurze Bezeichnung, z.B. «WISS Rate März». Das Tool zählt die Beträge zur Summe zusammen. Mit dem Kreuz löschst du eine einzelne Position. Unter «Eintragen» siehst du die Summe.", ""],
+      ["PDF anhängen", "Mit «PDF anhängen» wählst du ein oder mehrere PDFs von deinem Handy, z.B. aus «Downloads». Du kannst sie an eine einzelne Position oder an den ganzen Beleg hängen. Tipp auf den Dateinamen öffnet das PDF, das Kreuz daneben löscht es. Pro Datei sind höchstens 10 MB erlaubt. Die PDFs bleiben nur auf diesem Gerät und werden nie hochgeladen. Wie viel Platz sie brauchen, steht unter «Info».", ""],
+      ["PDF aus der Mail-App teilen", "Hast du die App auf dem Startbildschirm installiert, kannst du ein PDF in der Mail-App öffnen, auf «Teilen» tippen und «Steuern ZH» wählen. Dann fragt dich das Tool, zu welchem Beleg das PDF gehört. Nach einem Update der App kann es etwas dauern, bis «Steuern ZH» im Teilen-Menü erscheint.", ""],
       ["Eintragen", "Zeigt alle Belege sortiert nach Ziffer, so wie die Steuererklärung aufgebaut ist. Damit gehst du in ZHprivateTax von oben nach unten durch.", ""]
     ]},
     { titel: "Daten und Info", unter: "Quellen, Sicherung", felder: [
       ["Daten", "Zeigt, woher jede Zahl im Tool kommt. «geprüft» heisst aus einer amtlichen Quelle, «prüfen» heisst noch nicht amtlich bestätigt, «fehlt» heisst, das Tool rechnet diesen Teil nicht.", ""],
-      ["Daten als Datei sichern", "Deine Eingaben sind nur in diesem Browser gespeichert. Sichere sie ab und zu als Datei, z.B. bevor du den Browserverlauf löschst oder das Handy wechselst. Mit «Gesicherte Datei laden» holst du sie zurück.", ""]
+      ["Daten als Datei sichern", "Deine Eingaben und PDFs sind nur auf diesem Gerät gespeichert. Sichere sie ab und zu als Datei, z.B. bevor du den Browserverlauf löschst oder das Handy wechselst. Du hast zwei Möglichkeiten: «Nur Eingaben» ist eine kleine Datei ohne PDFs. «Alles mit PDFs» ist eine ZIP-Datei mit den Eingaben und allen PDFs.", ""],
+      ["Gesicherte Datei laden", "Wähle eine Sicherung (JSON oder ZIP). Das Tool erkennt beide Arten und auch ältere Sicherungen. Bei einer ZIP-Sicherung ersetzen die PDFs aus der Datei die PDFs auf diesem Gerät.", ""]
     ]}
   ];
 }
@@ -1391,6 +1740,7 @@ hilfeAufbauen();
 zeige(ANSICHTEN.includes(Z.ansicht) ? Z.ansicht : "rechner");
 rechne();
 window.addEventListener("resize", () => markerSetzen(false));
+pdfsLaden().then(eingangPruefen);
 window.addEventListener("resize", () => ["jahrSeg", "zivilSeg", "modusSeg", "themaSeg", "belegeSeg"].forEach((id) => {
   const el = $(id); const aktiv = el.querySelector('button[aria-pressed="true"]'); if (aktiv && el._setze) el._setze(aktiv.dataset.v);
 }));

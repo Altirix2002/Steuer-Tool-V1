@@ -5,7 +5,7 @@ Das Tool **ersetzt die Steuererklärung nicht**. Eingereicht wird weiterhin übe
 
 ## Was es kann
 
-1. **Belege-Checkliste**: alle Unterlagen abhaken, Beträge und Notizen speichern, mit der Ziffer in der Steuererklärung
+1. **Belege-Checkliste**: alle Unterlagen abhaken, mehrere Beträge (Positionen mit Bezeichnung, Summe) und Notizen speichern, PDFs anhängen, mit der Ziffer in der Steuererklärung
 2. **Eintragen**: Übersicht nach Ziffer, damit du in ZHprivateTax weisst, wo was hingehört
 3. **Steuerrechner**: Steuern schätzen (Bund, Kanton, Gemeinde, Kirche, Personalsteuer)
 4. **Einkommen schätzen**: steuerbares Einkommen für Bund und Kanton aus Lohn und Belegen, je mit den eigenen Abzügen (inkl. Weiterbildung und Schuldzinsen, z.B. für ein Ausbildungsdarlehen)
@@ -22,6 +22,10 @@ Die App ist eine PWA und liegt auf GitHub Pages: **https://altirix2002.github.io
 - **Offline:** funktioniert nach dem ersten Öffnen. Das HTML wird immer zuerst aus dem Netz geladen, nur ohne Netz aus dem Cache.
 
 Gleiche Daten und gleiche Rechnung wie das Python-Programm. Eingaben bleiben nur im Browser auf dem Gerät. Unter «Info» kannst du sie als Datei sichern.
+
+**PDFs zu Belegen:** Bei jedem Beleg und jeder Position lassen sich PDFs anhängen (höchstens 10 MB pro Datei). Sie liegen in IndexedDB nur auf dem Gerät und werden nie hochgeladen. Aus der Mail-App geht es über «Teilen» → «Steuern ZH» (Web Share Target der installierten App). Nach einem Update des Manifests kann es etwas dauern, bis der Eintrag im Teilen-Menü erscheint, im Zweifel die App einmal neu installieren.
+
+**Sichern und Laden:** Unter «Info» wählst du zwischen «Nur Eingaben» (JSON) und «Alles mit PDFs» (ZIP). Laden versteht beides und auch ältere Sicherungen mit einem einzelnen Betrag pro Beleg (wird zur ersten Position).
 
 Lokal bauen und ansehen (erzeugt den Ordner `site/`, der nicht ins Repository kommt):
 
