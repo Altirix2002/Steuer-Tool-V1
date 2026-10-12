@@ -69,8 +69,8 @@
     }
   },
   "saeule_3a": {
-    "_quelle": "UBS (ubs.com, Maximalbetrag 2026) und Comparis. Amtliche Quelle (BSV) noch nicht selbst geprueft.",
-    "status": "zu_pruefen",
+    "_quelle": "BSV Medienmitteilung 02.10.2026: bis Ende 2026 gelten 7'258 (mit 2. Säule) und 36'288 (ohne).",
+    "status": "verifiziert",
     "max_mit_pensionskasse": 7258,
     "max_ohne_pensionskasse": 36288,
     "ohne_pensionskasse_prozent_vom_erwerbseinkommen": 20

@@ -135,6 +135,18 @@ class TestJahr2027(unittest.TestCase):
                     self.assertLessEqual(abs(berechnet - Decimal(str(b["basis"]))), Decimal("0.05"))
 
 
+class TestSaeule3a(unittest.TestCase):
+    """Maximalbetraege laut BSV Medienmitteilung vom 02.10.2026 (Bundesratsbeschluss)."""
+    def test_werte(self):
+        for jahr, mit, ohne in [(2026, 7258, 36288), (2027, 7373, 36864)]:
+            with self.subTest(jahr=jahr):
+                v = rechner.lade_tarife(jahr)["saeule_3a"]
+                self.assertEqual(v["max_mit_pensionskasse"], mit)
+                self.assertEqual(v["max_ohne_pensionskasse"], ohne)
+                self.assertEqual(v["ohne_pensionskasse_prozent_vom_erwerbseinkommen"], 20)
+                self.assertEqual(v["status"], "verifiziert")
+
+
 class TestEinkommenAusAngaben(unittest.TestCase):
     ANG = dict(netto=60000, fahr=900, verpf=3200, pk=True, s3a=7258, kk=4000, krankheit=3000, spenden=500)
 

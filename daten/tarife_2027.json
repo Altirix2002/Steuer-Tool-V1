@@ -69,10 +69,10 @@
     }
   },
   "saeule_3a": {
-    "_quelle": "Wert von 2026 uebernommen. Maximum 2027 noch nicht amtlich bestaetigt (BSV).",
-    "status": "zu_pruefen",
-    "max_mit_pensionskasse": 7258,
-    "max_ohne_pensionskasse": 36288,
+    "_quelle": "BSV Medienmitteilung 02.10.2026, Bundesratsbeschluss: ab 1.1.2027 7'373 (mit 2. Säule) und 36'864 (ohne).",
+    "status": "verifiziert",
+    "max_mit_pensionskasse": 7373,
+    "max_ohne_pensionskasse": 36864,
     "ohne_pensionskasse_prozent_vom_erwerbseinkommen": 20
   },
   "kanton_zh": {

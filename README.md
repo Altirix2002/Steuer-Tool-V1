@@ -68,7 +68,7 @@ Bei neuen Rechenregeln (z.B. ein neuer Abzug) werden beide Rechnungen nachgefüh
 | Gemeindesteuerfuss Stadt Zürich 119 % | geprüft | **prüfen** | zh.ch/steuerfuesse (2027 erst Anfang 2027 bekannt) |
 | Kirchensteuer ref. 10 %, kath. 10 %, christkath. 14 % | geprüft | **prüfen** | zh.ch/steuerfuesse |
 | Personalsteuer CHF 24 | geprüft | geprüft | StG ZH § 200 |
-| Säule 3a Maximum 7'258 | **prüfen** | **prüfen** | UBS, Comparis (amtlich BSV noch offen) |
+| Säule 3a Maximum 7'258 (2026), 7'373 (2027) | geprüft | geprüft | BSV Medienmitteilung vom 02.10.2026 (Bundesratsbeschluss) |
 
 **Steuerjahr 2025** (nur für den Vergleich mit der Steuererklärung 2025): Bundestarif geprüft (ESTV), Kantonstarif aus einer Tabelle des Regierungsrats (stimmt mit der Steuerberechnung 2025 überein). Vermögenstarif und Abzüge 2025 fehlen.
 
