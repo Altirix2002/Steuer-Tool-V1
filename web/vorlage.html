@@ -297,11 +297,13 @@ button { cursor: pointer; }
 .posten-detail { padding: 0 14px 14px 56px; font-size: 14px; }
 .posten-detail .wo { color: var(--tinte-2); margin: 0 0 10px; }
 .posten-detail .wo b { color: var(--tinte); font-weight: 600; }
-.positionen { display: grid; gap: 10px; }
-.pos { background: var(--flaeche-2); border: 1px solid var(--linie); border-radius: 14px; padding: 10px; display: grid; gap: 8px; }
+.posten-detail .feld { grid-template-columns: minmax(0, 1fr); }
+.positionen { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.pos { background: var(--flaeche-2); border: 1px solid var(--linie); border-radius: 14px; padding: 10px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; min-width: 0; }
 .pos-zeile { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
 .pos-zeile .pos-text { grid-column: 1 / -1; }
 .pos .eingabe input { padding: 10px 12px; font-size: 16px; }
+.pos-summe[hidden] { display: none; }
 .pos-summe { display: flex; justify-content: space-between; align-items: baseline; padding: 2px 4px; font-size: 15px; font-variant-numeric: tabular-nums; }
 .pos-summe b { font-size: 17px; color: var(--petrol); }
 .icon-knopf { width: 42px; height: 42px; flex: none; border-radius: 12px; border: 1.5px solid var(--linie); background: var(--flaeche); color: var(--tinte-2); display: grid; place-items: center; padding: 0; transition: transform .15s var(--feder); }
@@ -311,14 +313,15 @@ button { cursor: pointer; }
 .klein-knopf:active { transform: scale(.96); }
 .klein-knopf svg { width: 16px; height: 16px; flex: none; }
 .klein-knopf.plus { color: var(--petrol); justify-self: start; }
-.pdfliste { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.pdf-chip { display: inline-flex; align-items: stretch; max-width: 100%; border: 1.5px solid color-mix(in srgb, var(--petrol) 40%, var(--linie)); border-radius: 12px; background: var(--gut-grund); overflow: hidden; }
-.pdf-chip .auf { border: 0; background: none; padding: 8px 10px; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: center; min-width: 0; text-align: left; }
+.pdfliste { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-width: 0; }
+.pdf-chip { display: flex; flex: 1 1 100%; align-items: stretch; min-width: 0; max-width: 100%; border: 1.5px solid color-mix(in srgb, var(--petrol) 40%, var(--linie)); border-radius: 12px; background: var(--gut-grund); overflow: hidden; }
+.pdf-chip .auf { flex: 1 1 auto; border: 0; background: none; padding: 10px; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: center; min-width: 0; text-align: left; }
 .pdf-chip .auf svg { width: 16px; height: 16px; flex: none; color: var(--petrol); }
-.pdf-chip .auf .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.pdf-chip .auf .t { display: grid; min-width: 0; gap: 1px; }
+.pdf-chip .auf .n { overflow-wrap: anywhere; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 .pdf-chip .auf small { color: var(--tinte-2); font-weight: 500; white-space: nowrap; }
-.pdf-chip .weg { border: 0; border-left: 1px solid color-mix(in srgb, var(--petrol) 25%, var(--linie)); background: none; width: 38px; color: var(--tinte-2); display: grid; place-items: center; padding: 0; }
-.pdf-chip .weg svg { width: 16px; height: 16px; }
+.pdf-chip .weg { flex: none; border: 0; border-left: 1px solid color-mix(in srgb, var(--petrol) 25%, var(--linie)); background: none; width: 46px; color: var(--ziegel); display: grid; place-items: center; padding: 0; }
+.pdf-chip .weg svg { width: 20px; height: 20px; }
 dialog.blatt { border: 0; border-radius: 24px; padding: 20px; width: min(92vw, 420px); background: var(--flaeche); color: var(--tinte); box-shadow: var(--glas-schatten); }
 dialog.blatt::backdrop { background: rgba(15, 42, 46, .5); }
 dialog.blatt h3 { margin: 0 0 6px; font-size: 18px; }
@@ -1108,6 +1111,7 @@ const PDFDB = (() => {
 let PDFS = [];   // alle angehängten PDFs: { id, belegId, posId, name, groesse, zeit, blob }
 const IK = {
   weg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  muell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>'
 };
@@ -1133,7 +1137,7 @@ function belegSumme(id) {
   return Math.round(s * 100) / 100;
 }
 function pdfChips(liste) {
-  return liste.map((r) => `<span class="pdf-chip"><button type="button" class="auf" data-pdf="${esc(r.id)}" title="${esc(r.name)}">${IK.pdf}<span class="n">${esc(r.name)}</span><small>${groesseText(r.groesse)}</small></button><button type="button" class="weg" data-pdfweg="${esc(r.id)}" aria-label="${esc(r.name)} löschen">${IK.weg}</button></span>`).join("");
+  return liste.map((r) => `<span class="pdf-chip"><button type="button" class="auf" data-pdf="${esc(r.id)}" title="${esc(r.name)}">${IK.pdf}<span class="t"><span class="n">${esc(r.name)}</span><small>${groesseText(r.groesse)}</small></span></button><button type="button" class="weg" data-pdfweg="${esc(r.id)}" aria-label="${esc(r.name)} löschen" title="PDF löschen">${IK.muell}</button></span>`).join("");
 }
 function summeZeigen(el, id) {
   const d = belegDaten(id), n = belegSumme(id), mehr = d.positionen.filter((p) => F.zahl(p.betrag)).length > 1;
