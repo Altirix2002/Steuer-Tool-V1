@@ -154,6 +154,58 @@ class TestFristen(unittest.TestCase):
         self.assertIsNone(rechner.frist_info({}, date(2027, 3, 1)))
 
 
+class TestZuruecklegen(unittest.TestCase):
+    def test_pro_monat_und_rest(self):
+        from datetime import date
+        # Oktober 2026: Oktober, November, Dezember = 3 Monate
+        r = rechner.zuruecklegen(Decimal("2400"), Decimal("600"), 2026, date(2026, 10, 12))
+        self.assertEqual(r["pro_monat"], Decimal("200.00"))
+        self.assertEqual(r["fehlt"], Decimal("1800.00"))
+        self.assertEqual(r["monate"], 3)
+        self.assertEqual(r["pro_monat_bis_ende"], Decimal("600.00"))
+        self.assertEqual(r["ueberschuss"], Decimal("0.00"))
+
+    def test_monate(self):
+        from datetime import date
+        self.assertEqual(rechner.monate_bis_jahresende(2026, date(2026, 1, 31)), 12)
+        self.assertEqual(rechner.monate_bis_jahresende(2026, date(2026, 12, 31)), 1)
+        self.assertEqual(rechner.monate_bis_jahresende(2027, date(2026, 10, 12)), 12)
+        self.assertEqual(rechner.monate_bis_jahresende(2025, date(2026, 10, 12)), 0)
+
+    def test_genug_zurueckgelegt(self):
+        from datetime import date
+        r = rechner.zuruecklegen(Decimal("1000"), Decimal("1200"), 2026, date(2026, 3, 1))
+        self.assertEqual(r["fehlt"], Decimal("0.00"))
+        self.assertEqual(r["ueberschuss"], Decimal("200.00"))
+        self.assertEqual(r["pro_monat_bis_ende"], Decimal("0.00"))
+
+    def test_jahr_vorbei(self):
+        from datetime import date
+        r = rechner.zuruecklegen(Decimal("1000"), Decimal("400"), 2025, date(2026, 3, 1))
+        self.assertEqual(r["fehlt"], Decimal("600.00"))
+        self.assertIsNone(r["pro_monat_bis_ende"])
+
+    def test_rundung_auf_rappen(self):
+        from datetime import date
+        r = rechner.zuruecklegen(Decimal("1000"), Decimal("0"), 2027, date(2026, 10, 12))
+        self.assertEqual(r["pro_monat"], Decimal("83.33"))
+
+
+class TestSicherungErinnerung(unittest.TestCase):
+    def test_faelligkeit(self):
+        from datetime import datetime, timedelta
+        jetzt = datetime(2026, 10, 12, 12, 0)
+        self.assertFalse(rechner.sicherung_faellig(jetzt - timedelta(days=30), jetzt, True))
+        self.assertTrue(rechner.sicherung_faellig(jetzt - timedelta(days=31), jetzt, True))
+        self.assertFalse(rechner.sicherung_faellig(jetzt - timedelta(days=1), jetzt, True))
+
+    def test_noch_nie_gesichert(self):
+        from datetime import datetime
+        jetzt = datetime(2026, 10, 12)
+        self.assertTrue(rechner.sicherung_faellig(None, jetzt, True))
+        self.assertFalse(rechner.sicherung_faellig(None, jetzt, False))
+
+
 class TestJahr2027(unittest.TestCase):
     """Bundestarif 2027 gegen die Stufen im ESTV Rundschreiben 2-220-D-2026."""
     def test_stufen(self):

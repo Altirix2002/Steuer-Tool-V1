@@ -27,7 +27,11 @@ Gleiche Daten und gleiche Rechnung wie das Python-Programm. Eingaben bleiben nur
 
 **Frist und Kalender:** Oben bei den Belegen zeigt eine Karte die Einreichefrist, die verbleibenden Tage und die offenen Belege (Bernstein ab 30 Tagen, Rot ab 7 Tagen oder überschritten). Eine eigene Frist (z.B. nach Fristerstreckung) gilt statt der Standardfrist, wird pro Steuerjahr gespeichert und mitgesichert. «In Kalender eintragen» erzeugt eine `.ics`-Datei mit Erinnerung 14 Tage vorher und der Frist selbst.
 
+**Monatlich zurücklegen:** Unter dem Ergebnis im Rechner zeigt eine Karte die geschätzten Steuern geteilt durch 12, mit einem Feld «Schon zurückgelegt» (pro Steuerjahr, wird mitgesichert) und dem Betrag, der bis Ende des Steuerjahres pro Monat noch fehlt.
+
 **Sichern und Laden:** Unter «Info» wählst du zwischen «Nur Eingaben» (JSON) und «Alles mit PDFs» (ZIP). Laden versteht beides und auch ältere Sicherungen mit einem einzelnen Betrag pro Beleg (wird zur ersten Position).
+
+**Erinnerung:** Ist die letzte Sicherung älter als 30 Tage (oder wurde noch nie gesichert, obwohl Daten da sind), zeigt die App oben einen Hinweis, der sich 7 Tage ausblenden lässt. Das Datum der letzten Sicherung steht nur auf dem Gerät (nicht in der Sicherung) und ist unter «Info» sichtbar.
 
 Lokal bauen und ansehen (erzeugt den Ordner `site/`, der nicht ins Repository kommt):
 

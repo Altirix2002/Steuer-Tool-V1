@@ -304,3 +304,41 @@ def frist_info(tarife, heute, eigene=None):
     tage = (frist - heute).days
     stufe = "dringend" if tage <= 7 else "bald" if tage <= 30 else "normal"
     return {"frist": frist, "tage": tage, "stufe": stufe, "eigene": bool(eigene)}
+
+
+def monate_bis_jahresende(jahr, heute):
+    """Anzahl Monate (inklusive laufender Monat) bis Ende des Steuerjahres."""
+    if jahr > heute.year:
+        return 12
+    if jahr < heute.year:
+        return 0
+    return 12 - (heute.month - 1)
+
+
+def zuruecklegen(steuer, schon, jahr, heute):
+    """Wie viel pro Monat zuruecklegen? steuer und schon in Franken.
+
+    pro_monat: Steuer geteilt durch 12. fehlt: was noch nicht zurueckgelegt ist.
+    pro_monat_bis_ende: fehlt geteilt durch die Monate bis Ende Steuerjahr (None, wenn keine mehr uebrig).
+    """
+    steuer, schon = Decimal(str(steuer)), Decimal(str(schon))
+    monate = monate_bis_jahresende(jahr, heute)
+    fehlt = max(Decimal(0), steuer - schon)
+    return {
+        "pro_monat": chf(steuer / 12),
+        "fehlt": chf(fehlt),
+        "ueberschuss": chf(max(Decimal(0), schon - steuer)),
+        "monate": monate,
+        "pro_monat_bis_ende": chf(fehlt / monate) if monate else None,
+    }
+
+
+def sicherung_faellig(letzte, jetzt, hat_daten, tage=30):
+    """Soll die App an eine Sicherung erinnern?
+
+    letzte: Zeitpunkt der letzten Sicherung (datetime) oder None, wenn noch nie gesichert wurde.
+    Ohne bisherige Sicherung wird nur erinnert, wenn schon Daten eingegeben sind.
+    """
+    if letzte is None:
+        return bool(hat_daten)
+    return (jetzt - letzte).days > tage

@@ -349,6 +349,29 @@ dialog.blatt ul { margin: 0 0 6px; padding-left: 18px; font-size: 14px; color: v
 .frist .reihe-knoepfe { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .frist .meldung { margin-top: 12px; }
 
+/* ---------- Sicherungs-Hinweis ---------- */
+.sicherung-hinweis { margin: 0 0 14px; background: var(--bernstein-grund); border: 1.5px solid var(--bernstein); border-radius: 18px; padding: 14px; }
+.sicherung-hinweis[hidden] { display: none; }
+.sicherung-hinweis h3 { margin: 0 0 4px; font-size: 16px; }
+.sicherung-hinweis p { margin: 0; font-size: 14px; }
+.sicherung-hinweis .reihe-knoepfe { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.klein-knopf.haupt { background: var(--petrol); border-color: var(--petrol); color: #fff; }
+
+/* ---------- Monatlich zurücklegen ---------- */
+.zuruecklegen { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 24px; padding: 18px; margin-top: 14px; box-shadow: var(--schatten); }
+.zuruecklegen[hidden] { display: none; }
+.zuruecklegen h3 { margin: 0; font-size: 16px; }
+.zl-gross { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.zl-gross b { font-variation-settings: "wdth" 125; font-weight: 800; font-size: 34px; line-height: 1.1; letter-spacing: -.02em; color: var(--petrol); font-variant-numeric: tabular-nums; }
+.zl-gross span { color: var(--tinte-2); font-size: 15px; }
+.zuruecklegen .erkl { margin: 4px 0 0; font-size: 14px; color: var(--tinte-2); }
+.zl-zeilen { display: grid; gap: 6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--linie); }
+.zl-zeile { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 15px; font-variant-numeric: tabular-nums; }
+.zl-zeile span { color: var(--tinte-2); }
+.zl-zeile b { font-size: 17px; white-space: nowrap; }
+.zl-zeile.gross b { color: var(--petrol); }
+.zuruecklegen .meldung { margin-top: 14px; }
+
 /* ---------- Daten ---------- */
 .wert { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 16px; padding: 14px; margin-top: 10px; }
 .wert-kopf { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
@@ -499,6 +522,15 @@ dialog.blatt ul { margin: 0 0 6px; padding-left: 18px; font-size: 14px; color: v
     <div class="seg" id="jahrSeg" role="group" aria-label="Steuerjahr"></div>
   </header>
 
+  <div class="sicherung-hinweis" id="sicherungHinweis" role="status" hidden>
+    <h3>Zeit für eine Sicherung</h3>
+    <p id="sicherungText"></p>
+    <div class="reihe-knoepfe">
+      <button type="button" class="klein-knopf haupt" id="sicherungJetzt">Jetzt sichern</button>
+      <button type="button" class="klein-knopf" id="sicherungSpaeter">7 Tage ausblenden</button>
+    </div>
+  </div>
+
   <main>
     <!-- RECHNER -->
     <section class="ansicht aktiv" id="v-rechner" aria-label="Rechner">
@@ -509,6 +541,19 @@ dialog.blatt ul { margin: 0 0 6px; padding-left: 18px; font-size: 14px; color: v
         <div class="band" id="band" aria-hidden="true"></div>
         <ul class="legende" id="legende"></ul>
         <div class="meldungen" id="meldungen"></div>
+      </div>
+
+      <div class="zuruecklegen" id="zuruecklegenKarte" hidden>
+        <h3>Monatlich zurücklegen</h3>
+        <div class="zl-gross"><b id="zlMonat">0.00</b><span>CHF pro Monat</span></div>
+        <p class="erkl" id="zlErkl"></p>
+        <div class="feld">
+          <label for="zlSchon">Schon zurückgelegt</label>
+          <div class="eingabe"><span>CHF</span><input id="zlSchon" inputmode="decimal" autocomplete="off" placeholder="0"></div>
+          <div class="tipp">Gilt nur für das gewählte Steuerjahr.</div>
+        </div>
+        <div class="zl-zeilen" id="zlZeilen"></div>
+        <div class="meldung info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg><span>Das ist eine Schätzung. Die tatsächliche Rechnung kann abweichen, z.B. durch Abzüge, Einkommen im Lauf des Jahres und die Veranlagung des Steueramts.</span></div>
       </div>
 
       <div class="block">
@@ -680,6 +725,7 @@ dialog.blatt ul { margin: 0 0 6px; padding-left: 18px; font-size: 14px; color: v
         <h3>Deine Daten</h3>
         <p>Alles, was du eingibst, bleibt nur in diesem Browser auf diesem Gerät. Deine Eingaben werden nicht ins Internet geschickt. Wenn du den Browserverlauf löschst, sind die Eingaben weg. Sichere sie darum ab und zu als Datei. Angehängte PDFs bleiben ebenfalls nur auf diesem Gerät und werden nie hochgeladen.</p>
         <p id="pdfSpeicher"></p>
+        <p id="sicherungStand"></p>
         <div class="knoepfe">
           <button type="button" class="knopf" id="exportKnopf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Daten als Datei sichern</button>
           <button type="button" class="knopf zweit" id="importKnopf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3m0 0L8 7m4-4 4 4M5 21h14"/></svg>Gesicherte Datei laden</button>
@@ -897,7 +943,7 @@ const STANDARD = {
   jahr: JAHRE.find((j) => Number(j) <= HEUTE) || JAHRE[0], zivil: "ledig", kinder: 0, kirche: "keine", modus: "direkt",
   einkBund: "", einkKanton: "", gleich: true, vermoegen: "",
   lohn: { netto: "", neben: "", andere: "", fahr: "", verpf: "", pk: true, s3a: "", kk: "", wb: "", zinsen: "", krankheit: "", spenden: "" },
-  s3aZusatz: 0, belegeAnsicht: "liste", fristen: {},
+  s3aZusatz: 0, belegeAnsicht: "liste", fristen: {}, zurueck: {},
   belege: {}, offen: {}, thema: "auto", ansicht: "rechner"
 };
 let MIGRIERT = false;
@@ -918,6 +964,7 @@ function zustandAus(d) {
   const z = { ...STANDARD, ...d, lohn: { ...STANDARD.lohn, ...(d.lohn || {}) } };
   z.belege = belegeMigrieren(z.belege && typeof z.belege === "object" ? z.belege : {});
   z.fristen = { ...(z.fristen && typeof z.fristen === "object" ? z.fristen : {}) };
+  z.zurueck = { ...(z.zurueck && typeof z.zurueck === "object" ? z.zurueck : {}) };
   return z;
 }
 function laden() {
@@ -1024,12 +1071,14 @@ function rechne() {
     $("ergUnter").textContent = "Gib unten dein steuerbares Einkommen ein.";
     $("band").innerHTML = ""; $("legende").innerHTML = ""; $("meldungen").innerHTML = "";
     s3aAktualisieren(null, t, lohnModus, pk, s3aSchon);
+    zuruecklegenZeichnen(0);
     return;
   }
   const eingaben = { einkBund, einkKanton, vermoegen, verheiratet, ehepaar, kinder: Z.kinder, kirche: Z.kirche };
   const res = R.berechne(eingaben, t);
   s3aAktualisieren(eingaben, t, lohnModus, pk, s3aSchon);
   zaehle($("summe"), res.total);
+  zuruecklegenZeichnen(res.total / 100);
 
   const basis = Math.max(einkKanton, einkBund);
   const anteil = basis ? (res.total / 100 / basis * 100) : 0;
@@ -1216,11 +1265,11 @@ function pdfSpeicherZeigen() {
 }
 function pdfAnsichtAktualisieren() {
   document.querySelectorAll("#belegeListe .posten").forEach((el) => positionenZeichnen(el, el.dataset.id));
-  pdfSpeicherZeigen(); belegeAktualisieren();
+  pdfSpeicherZeigen(); belegeAktualisieren(); sicherungZeigen();
 }
 async function pdfsLaden() {
   try { PDFS = await PDFDB.alle(); } catch (e) { PDFS = []; }
-  if (document.querySelector("#belegeListe .posten")) pdfAnsichtAktualisieren(); else pdfSpeicherZeigen();
+  if (document.querySelector("#belegeListe .posten")) pdfAnsichtAktualisieren(); else { pdfSpeicherZeigen(); sicherungZeigen(); }
 }
 async function pdfsAnhaengen(dateien, belegId, posId) {
   const probleme = []; let ok = 0;
@@ -1402,6 +1451,87 @@ function datenAufbauen() {
     <div class="wert"><div class="wert-kopf"><h4>${esc(titel)}</h4><span class="status ${status}">${namen[status] || status}</span></div>
       <p class="zahl">${esc(wert)}</p>${quelle ? `<p class="quelle">${esc(quelle)}</p>` : ""}</div>`).join("");
 }
+
+/* =========================================================
+   Monatlich zurücklegen
+   ========================================================= */
+let LETZTE_STEUER = 0;   // geschätzte Steuer in Franken
+function monateBisJahresende(jahr, jetzt = new Date()) {
+  const y = jetzt.getFullYear();
+  return Number(jahr) > y ? 12 : Number(jahr) < y ? 0 : 12 - jetzt.getMonth();
+}
+function zuruecklegenZeichnen(steuer) {
+  if (steuer !== undefined) LETZTE_STEUER = steuer;
+  const karte = $("zuruecklegenKarte");
+  karte.hidden = !(LETZTE_STEUER > 0);
+  if (karte.hidden) return;
+  const eingabe = $("zlSchon");
+  if (document.activeElement !== eingabe) eingabe.value = Z.zurueck[Z.jahr] || "";
+  const rp = (fr) => F.rp(Math.round(fr * 100));
+  const schon = F.zahl(Z.zurueck[Z.jahr]), fehlt = Math.max(0, LETZTE_STEUER - schon), monate = monateBisJahresende(Z.jahr);
+  $("zlMonat").textContent = rp(LETZTE_STEUER / 12);
+  $("zlErkl").textContent = `Geschätzte Steuern ${Z.jahr} (CHF ${rp(LETZTE_STEUER)}) geteilt durch 12.`;
+  const zeilen = [["Schon zurückgelegt", "CHF " + rp(schon)], ["Noch offen", "CHF " + rp(fehlt)]];
+  if (fehlt === 0) zeilen.push(["Es ist genug zurückgelegt", schon > LETZTE_STEUER ? "+ CHF " + rp(schon - LETZTE_STEUER) : "✓"]);
+  else if (monate > 0) zeilen.push([`Pro Monat bis Ende ${Z.jahr} (${monate} ${monate === 1 ? "Monat" : "Monate"})`, "CHF " + rp(fehlt / monate), true]);
+  else zeilen.push([`Das Steuerjahr ${Z.jahr} ist vorbei`, "CHF " + rp(fehlt) + " offen", true]);
+  $("zlZeilen").innerHTML = zeilen.map(([n, w, gross]) => `<div class="zl-zeile${gross ? " gross" : ""}"><span>${esc(n)}</span><b>${esc(w)}</b></div>`).join("");
+}
+$("zlSchon").addEventListener("input", (e) => {
+  if (F.zahl(e.target.value)) Z.zurueck[Z.jahr] = e.target.value; else delete Z.zurueck[Z.jahr];
+  speichern(); zuruecklegenZeichnen();
+});
+$("zlSchon").addEventListener("blur", (e) => { const n = F.zahl(e.target.value); if (n) e.target.value = chfBetrag(n); });
+
+/* =========================================================
+   Erinnerung an die Sicherung
+   ========================================================= */
+const SICHERUNG_KEY = "steuertool.sicherung", SICHERUNG_AUS_KEY = "steuertool.sicherungAus", TAG = 86400000;
+function sicherungLesen() {
+  try { const s = JSON.parse(localStorage.getItem(SICHERUNG_KEY)); if (s && Number(s.zeit)) return { zeit: Number(s.zeit), art: s.art, pdfIds: Array.isArray(s.pdfIds) ? s.pdfIds : [] }; } catch (e) {}
+  return null;
+}
+function sicherungSpeichern(art) {
+  const alt = sicherungLesen();
+  const pdfIds = art === "zip" ? PDFS.map((r) => r.id) : (alt ? alt.pdfIds : []);   // PDFs aus einem früheren ZIP bleiben gesichert
+  try { localStorage.setItem(SICHERUNG_KEY, JSON.stringify({ zeit: Date.now(), art, pdfIds })); localStorage.removeItem(SICHERUNG_AUS_KEY); } catch (e) {}
+  sicherungZeigen();
+}
+function pdfsNichtGesichert() {
+  const s = sicherungLesen(), bekannt = new Set(s ? s.pdfIds : []);
+  return PDFS.filter((r) => !bekannt.has(r.id)).length;
+}
+function hatDaten() {
+  if (PDFS.length || Z.einkBund || Z.einkKanton || Z.vermoegen) return true;
+  if (Object.values(Z.lohn).some((v) => typeof v === "string" && v.trim())) return true;
+  if (Object.values(Z.zurueck).some((v) => String(v).trim()) || Object.values(Z.fristen).some(Boolean)) return true;
+  return Object.values(Z.belege).some((d) => d && (d.erledigt || String(d.notiz || "").trim() ||
+    (d.positionen || []).some((p) => String(p.betrag || "").trim() || String(p.text || "").trim())));
+}
+function tageSeit(zeit) { return Math.floor((Date.now() - zeit) / TAG); }
+function vorTagen(n) { return n <= 0 ? "heute" : n === 1 ? "gestern" : "vor " + n + " Tagen"; }
+function sicherungZeigen() {
+  const s = sicherungLesen(), nicht = pdfsNichtGesichert();
+  // Info: Stand der letzten Sicherung
+  const art = s && (s.art === "zip" ? "alles mit PDFs" : "nur Eingaben");
+  $("sicherungStand").textContent = (s
+    ? `Zuletzt gesichert: ${new Date(s.zeit).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })} (${vorTagen(tageSeit(s.zeit))}), ${art}.`
+    : "Noch nie gesichert.") + (PDFS.length && nicht ? ` ${pdfAnzahl(nicht)} noch in keiner Sicherung.` : "");
+  // Hinweis oben
+  const faellig = s ? tageSeit(s.zeit) > 30 : hatDaten();
+  let aus = 0; try { aus = Number(localStorage.getItem(SICHERUNG_AUS_KEY)) || 0; } catch (e) {}
+  const hinweis = $("sicherungHinweis");
+  hinweis.hidden = !(faellig && Date.now() >= aus);
+  if (hinweis.hidden) return;
+  $("sicherungText").textContent = (s ? `Die letzte Sicherung ist ${tageSeit(s.zeit)} Tage her.` : "Du hast noch nie gesichert.") +
+    " Deine Eingaben sind nur auf diesem Gerät gespeichert." +
+    (nicht ? ` ${pdfAnzahl(nicht)} ${s ? "seit der letzten Sicherung dazugekommen" : "angehängt"}: Sichere am besten «Alles mit PDFs».` : "");
+}
+$("sicherungJetzt").onclick = () => exportDialog();
+$("sicherungSpaeter").onclick = () => {
+  try { localStorage.setItem(SICHERUNG_AUS_KEY, String(Date.now() + 7 * TAG)); } catch (e) {}
+  sicherungZeigen(); toast("Hinweis für 7 Tage ausgeblendet");
+};
 
 /* =========================================================
    Fristen und Kalender
@@ -1670,18 +1800,21 @@ async function zipLesen(datei) {
 }
 const heute = () => new Date().toISOString().slice(0, 10);
 function sicherungKopf() { return { app: "steuertool", version: 2, gesichert: new Date().toISOString(), daten: Z }; }
-$("exportKnopf").onclick = () => {
-  const n = PDFS.length, g = PDFS.reduce((t, r) => t + r.groesse, 0);
+$("exportKnopf").onclick = () => exportDialog();
+function exportDialog() {
+  const n = PDFS.length, g = PDFS.reduce((t, r) => t + r.groesse, 0), neu = pdfsNichtGesichert();
+  const knopfJson = `<button type="button" class="knopf zweizeilig${neu ? " zweit" : ""}" id="exJson"><b>Nur Eingaben</b><small>Kleine Datei (JSON), ohne PDFs</small></button>`;
+  const knopfZip = `<button type="button" class="knopf zweizeilig${neu ? "" : " zweit"}" id="exZip"><b>Alles mit PDFs${neu ? " (empfohlen)" : ""}</b><small>${n ? `ZIP mit ${pdfAnzahl(n)}, rund ${groesseText(g)}${neu ? `. ${pdfAnzahl(neu)} noch in keiner Sicherung.` : ""}` : "ZIP-Datei (noch keine PDFs vorhanden)"}</small></button>`;
   blattZeigen(`<h3>Daten sichern</h3><p>Was soll in die Datei?</p>
     <div class="knoepfe">
-      <button type="button" class="knopf zweizeilig" id="exJson"><b>Nur Eingaben</b><small>Kleine Datei (JSON), ohne PDFs</small></button>
-      <button type="button" class="knopf zweizeilig zweit" id="exZip"><b>Alles mit PDFs</b><small>${n ? `ZIP mit ${pdfAnzahl(n)}, rund ${groesseText(g)}` : "ZIP-Datei (noch keine PDFs vorhanden)"}</small></button>
+      ${neu ? knopfZip + knopfJson : knopfJson + knopfZip}
       <button type="button" class="knopf zweit" id="exAbbruch">Abbrechen</button>
     </div>`);
   $("exAbbruch").onclick = blattZu;
   $("exJson").onclick = () => {
     blattZu();
     dateiSpeichern(new Blob([JSON.stringify(sicherungKopf(), null, 2)], { type: "application/json" }), "steuertool-daten-" + heute() + ".json");
+    sicherungSpeichern("json");
     toast("Datei gespeichert");
   };
   $("exZip").onclick = async () => {
@@ -1695,10 +1828,11 @@ $("exportKnopf").onclick = () => {
       });
       eintraege.unshift({ name: "steuertool-daten.json", inhalt: JSON.stringify({ ...sicherungKopf(), pdfs: liste }, null, 2) });
       dateiSpeichern(await zipBauen(eintraege), "steuertool-komplett-" + heute() + ".zip");
+      sicherungSpeichern("zip");
       toast("ZIP gespeichert");
     } catch (er) { toast("Das ZIP konnte nicht erstellt werden", 5000); }
   };
-};
+}
 $("importKnopf").onclick = () => $("importDatei").click();
 $("importDatei").onchange = async (e) => {
   const datei = e.target.files[0]; e.target.value = "";
@@ -1729,7 +1863,7 @@ $("importDatei").onchange = async (e) => {
 };
 $("loeschKnopf").onclick = async () => {
   if (!confirm("Alle Eingaben, abgehakten Belege und angehängten PDFs löschen? Das kann nicht rückgängig gemacht werden.")) return;
-  try { localStorage.removeItem(SPEICHER); } catch (er) {}
+  try { localStorage.removeItem(SPEICHER); localStorage.removeItem(SICHERUNG_KEY); localStorage.removeItem(SICHERUNG_AUS_KEY); } catch (er) {}
   try { await PDFDB.leere(); await PDFDB.leere("eingang"); } catch (er) {}
   location.reload();
 };
@@ -1810,6 +1944,11 @@ function hilfeInhalt(t) {
     { titel: "Säule 3a: was wäre wenn", unter: "Regler unten im Rechner", felder: [
       ["Zusätzlich einzahlen", "Zieh den Regler auf den Betrag, den du noch in die Säule 3a einzahlen könntest. Das Tool zeigt, wie viel Steuern du damit sparst. Es zählt, was im Steuerjahr eingezahlt wird, also bis Ende Dezember.", ""]
     ]},
+    { titel: "Monatlich zurücklegen", unter: "Karte unter dem Ergebnis im Rechner", felder: [
+      ["Pro Monat", "Die geschätzten Steuern des Jahres geteilt durch 12. So viel legst du jeden Monat zur Seite, damit die Rechnung des Steueramts kein Loch ins Budget reisst. Die Karte erscheint, sobald das Tool eine Steuer schätzt.", ""],
+      ["Schon zurückgelegt", "Trag ein, wie viel du für dieses Steuerjahr schon auf die Seite gelegt hast (z.B. Akontozahlungen oder Sparkonto). Das Tool zeigt, was noch fehlt und wie viel du bis Ende des Steuerjahres pro Monat noch zurücklegen musst. Der Betrag wird pro Steuerjahr gespeichert und mitgesichert.", ""],
+      ["Nur eine Schätzung", "Die Zahlen hängen an deiner Steuerschätzung. Die tatsächliche Rechnung kann abweichen. Plane lieber etwas Reserve ein.", ""]
+    ]},
     { titel: "Belege", unter: "Checkliste und Eintragen", felder: [
       ["Haken", "Tipp auf das Kästchen, wenn du den Beleg hast.", ""],
       ["Beträge und Notiz", "Tipp auf einen Punkt, um ihn aufzuklappen. Dort steht, wo du den Beleg bekommst und in welche Ziffer der Steuererklärung er gehört. Trag den Betrag vom Beleg ein, damit du ihn später schnell findest. Die Notiz ist für dich, z.B. «kommt im Januar».", ""],
@@ -1825,6 +1964,7 @@ function hilfeInhalt(t) {
     { titel: "Daten und Info", unter: "Quellen, Sicherung", felder: [
       ["Daten", "Zeigt, woher jede Zahl im Tool kommt. «geprüft» heisst aus einer amtlichen Quelle, «prüfen» heisst noch nicht amtlich bestätigt, «fehlt» heisst, das Tool rechnet diesen Teil nicht.", ""],
       ["Daten als Datei sichern", "Deine Eingaben und PDFs sind nur auf diesem Gerät gespeichert. Sichere sie ab und zu als Datei, z.B. bevor du den Browserverlauf löschst oder das Handy wechselst. Du hast zwei Möglichkeiten: «Nur Eingaben» ist eine kleine Datei ohne PDFs. «Alles mit PDFs» ist eine ZIP-Datei mit den Eingaben und allen PDFs.", ""],
+      ["Erinnerung an die Sicherung", "Wenn deine letzte Sicherung mehr als 30 Tage her ist, oder du noch nie gesichert hast, obwohl du schon Daten eingegeben hast, zeigt das Tool oben einen Hinweis. «Jetzt sichern» öffnet die Auswahl, «7 Tage ausblenden» blendet ihn für eine Woche aus. Sind seit der letzten Sicherung PDFs dazugekommen, empfiehlt das Tool die Variante mit PDFs. Unter «Info» steht, wann du zuletzt gesichert hast. Dieser Stand ist nur auf diesem Gerät gespeichert.", ""],
       ["Gesicherte Datei laden", "Wähle eine Sicherung (JSON oder ZIP). Das Tool erkennt beide Arten und auch ältere Sicherungen. Bei einer ZIP-Sicherung ersetzen die PDFs aus der Datei die PDFs auf diesem Gerät.", ""]
     ]}
   ];
@@ -1892,6 +2032,7 @@ zeige(ANSICHTEN.includes(Z.ansicht) ? Z.ansicht : "rechner");
 rechne();
 window.addEventListener("resize", () => markerSetzen(false));
 pdfsLaden().then(eingangPruefen);
+sicherungZeigen();
 window.addEventListener("resize", () => ["jahrSeg", "zivilSeg", "modusSeg", "themaSeg", "belegeSeg"].forEach((id) => {
   const el = $(id); const aktiv = el.querySelector('button[aria-pressed="true"]'); if (aktiv && el._setze) el._setze(aktiv.dataset.v);
 }));
