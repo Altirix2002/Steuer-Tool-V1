@@ -1,0 +1,11 @@
+# Eigene Daten, nie hochladen
+meine_daten/
+*.privat.json
+
+# Erzeugt (python build_web.py)
+site/
+web/steuer-tool*.html
+
+__pycache__/
+*.pyc
+.claude/

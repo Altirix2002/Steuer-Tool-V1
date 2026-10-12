@@ -1,0 +1,1399 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#028090">
+<title>Steuern Zürich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --petrol: #028090;
+  --petrol-hell: #4FB3B9;
+  --petrol-blass: #A6D6D8;
+  --tiefe: #1F4E5A;
+  --tinte: #0F2A2E;
+  --tinte-2: #48636A;
+  --grund: #EEF3F2;
+  --flaeche: #FFFFFF;
+  --flaeche-2: #F6F9F9;
+  --linie: #D3DEDC;
+  --bernstein: #C9851C;
+  --bernstein-grund: #FBF0DD;
+  --ziegel: #B8432F;
+  --ziegel-grund: #F8E4E0;
+  --gut-grund: #DDF0F1;
+  --schatten: 0 1px 2px rgba(15,42,46,.06), 0 8px 24px rgba(15,42,46,.06);
+  --glas: rgba(255,255,255,.22);
+  --glas-licht: rgba(255,255,255,.95);
+  --glas-kante: rgba(255,255,255,.55);
+  --glas-innen: rgba(255,255,255,.35);
+  --linse: rgba(2,128,144,.11);
+  --glas-schatten: 0 12px 32px rgba(15,42,46,.16), 0 2px 6px rgba(15,42,46,.08);
+  --kurve: cubic-bezier(.2,.8,.2,1);
+  --feder: cubic-bezier(.34,1.4,.64,1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --petrol: #2BB3BF;
+    --petrol-hell: #5CC6CF;
+    --petrol-blass: #2E6E74;
+    --tiefe: #8FC9CE;
+    --tinte: #E4EEED;
+    --tinte-2: #9DB3B6;
+    --grund: #0B1A1D;
+    --flaeche: #12262A;
+    --flaeche-2: #0F2024;
+    --linie: #24403F;
+    --bernstein: #E7AB4A;
+    --bernstein-grund: #3A2D14;
+    --ziegel: #E27A66;
+    --ziegel-grund: #3C1F1A;
+    --gut-grund: #143A3E;
+    --schatten: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    --glas: rgba(18,38,42,.22);
+    --glas-licht: rgba(255,255,255,.55);
+    --glas-kante: rgba(255,255,255,.22);
+    --glas-innen: rgba(255,255,255,.10);
+    --linse: rgba(255,255,255,.11);
+    --glas-schatten: 0 12px 32px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --petrol: #2BB3BF; --petrol-hell: #5CC6CF; --petrol-blass: #2E6E74; --tiefe: #8FC9CE;
+  --tinte: #E4EEED; --tinte-2: #9DB3B6; --grund: #0B1A1D; --flaeche: #12262A; --flaeche-2: #0F2024;
+  --linie: #24403F; --bernstein: #E7AB4A; --bernstein-grund: #3A2D14; --ziegel: #E27A66;
+  --ziegel-grund: #3C1F1A; --gut-grund: #143A3E; --schatten: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  --glas: rgba(18,38,42,.22); --glas-licht: rgba(255,255,255,.55); --glas-kante: rgba(255,255,255,.22);
+  --glas-innen: rgba(255,255,255,.10); --linse: rgba(255,255,255,.11); --glas-schatten: 0 12px 32px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--grund);
+  color: var(--tinte);
+  font-family: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-variation-settings: "wdth" 100;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--petrol); outline-offset: 2px; border-radius: 6px; }
+
+.app { max-width: 560px; margin: 0 auto; padding: 0 16px calc(96px + env(safe-area-inset-bottom)); }
+
+/* ---------- Kopf ---------- */
+.kopf {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: calc(14px + env(safe-area-inset-top)) 0 14px;
+}
+.marke { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; }
+.marke svg { width: 28px; height: 28px; flex: none; }
+.kopf .seg button { padding: 7px 11px; font-size: 13px; }
+.marke { white-space: nowrap; font-size: 15px; }
+.marke small { display: block; font-weight: 400; font-size: 13px; color: var(--tinte-2); line-height: 1.2; }
+
+/* Segment-Schalter (Jahr, Zivilstand, Modus) */
+.seg {
+  position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  background: var(--flaeche-2); border: 1px solid var(--linie); border-radius: 999px; padding: 3px;
+}
+.seg button {
+  position: relative; z-index: 1; border: 0; background: none; padding: 7px 14px;
+  border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--tinte-2);
+  transition: color .25s var(--kurve); white-space: nowrap;
+}
+.seg button[aria-pressed="true"] { color: #fff; }
+.seg .daumen {
+  position: absolute; z-index: 0; top: 3px; bottom: 3px; left: 0; border-radius: 999px;
+  background: var(--petrol); box-shadow: 0 2px 8px rgba(2,128,144,.35);
+  transition: transform .45s var(--feder), width .45s var(--feder);
+}
+.seg.voll { display: grid; width: 100%; }
+
+/* ---------- Ansichten ---------- */
+.ansicht { display: none; }
+.ansicht.aktiv { display: block; animation: eintritt .42s var(--kurve) both; }
+@keyframes eintritt { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Ergebnis ---------- */
+.ergebnis {
+  background: var(--flaeche); border-radius: 28px; padding: 24px 20px 20px;
+  box-shadow: var(--schatten); position: relative; overflow: hidden;
+}
+.ergebnis::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 4px;
+  background: linear-gradient(90deg, var(--tiefe), var(--petrol) 40%, var(--petrol-hell) 75%, var(--petrol-blass));
+}
+.erg-titel { margin: 0; font-size: 15px; color: var(--tinte-2); }
+.summe {
+  margin: 6px 0 2px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  font-variation-settings: "wdth" 125; font-weight: 800; letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.summe .whg { font-size: 18px; font-weight: 600; color: var(--tinte-2); letter-spacing: 0; }
+.summe .zahl { font-size: clamp(40px, 13vw, 60px); }
+.erg-unter { margin: 10px 0 18px; font-size: 15px; color: var(--tinte-2); }
+.erg-unter strong { color: var(--tinte); font-weight: 600; }
+
+.band {
+  display: flex; height: 18px; border-radius: 999px; overflow: hidden; gap: 3px;
+  background: var(--flaeche-2);
+}
+.band span {
+  flex: 0 0 0%; min-width: 0; height: 100%;
+  transition: flex-basis .9s var(--kurve);
+}
+.band span:first-child { border-radius: 999px 0 0 999px; }
+.band span:last-child { border-radius: 0 999px 999px 0; }
+
+.legende { list-style: none; margin: 16px 0 0; padding: 0; }
+.legende li {
+  display: grid; grid-template-columns: 12px 1fr auto; align-items: center; gap: 10px;
+  padding: 9px 0; border-top: 1px solid var(--linie); font-size: 15px;
+  animation: zeile .4s var(--kurve) both;
+}
+.legende li:first-child { border-top: 0; }
+.legende i { width: 12px; height: 12px; border-radius: 4px; display: block; }
+.legende .betrag { font-variant-numeric: tabular-nums; font-weight: 600; }
+.legende .neben { display: block; font-size: 13px; color: var(--tinte-2); }
+@keyframes zeile { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
+
+.meldungen { margin-top: 14px; display: grid; gap: 8px; }
+.meldung {
+  border-radius: 14px; padding: 10px 12px; font-size: 14px; line-height: 1.45;
+  display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start;
+}
+.meldung svg { width: 18px; height: 18px; margin-top: 1px; }
+.meldung.fehlt { background: var(--ziegel-grund); color: var(--tinte); }
+.meldung.fehlt svg { color: var(--ziegel); }
+.meldung.pruefen { background: var(--bernstein-grund); }
+.meldung.pruefen svg { color: var(--bernstein); }
+.meldung.info { background: var(--flaeche-2); color: var(--tinte-2); }
+.meldung.info svg { color: var(--tinte-2); }
+
+/* ---------- Formular ---------- */
+.block { margin-top: 28px; }
+.block h2 { font-size: 20px; margin: 0 0 4px; letter-spacing: -.01em; font-weight: 700; }
+.block > p.erkl { margin: 0 0 14px; color: var(--tinte-2); font-size: 15px; }
+.feld { display: grid; gap: 6px; margin-top: 14px; }
+.feld > label, .feld > .lbl { font-size: 14px; font-weight: 600; }
+.feld .tipp { font-size: 13px; color: var(--tinte-2); margin-top: -2px; }
+.eingabe {
+  display: flex; align-items: center; background: var(--flaeche); border: 1.5px solid var(--linie);
+  border-radius: 12px; transition: border-color .2s, box-shadow .2s;
+}
+.eingabe:focus-within { border-color: var(--petrol); box-shadow: 0 0 0 4px color-mix(in srgb, var(--petrol) 18%, transparent); }
+.eingabe span { padding-left: 12px; color: var(--tinte-2); font-size: 14px; }
+.eingabe input {
+  flex: 1; min-width: 0; border: 0; background: none; padding: 12px; font-size: 17px;
+  font-variant-numeric: tabular-nums; outline: none;
+}
+.eingabe input::placeholder { color: color-mix(in srgb, var(--tinte-2) 60%, transparent); }
+.reihe { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; }
+.feld, .reihe > * { min-width: 0; }
+.eingabe input { width: 100%; }
+
+.zaehler { display: inline-flex; align-items: center; gap: 4px; background: var(--flaeche); border: 1.5px solid var(--linie); border-radius: 12px; padding: 3px; width: max-content; }
+.zaehler button { width: 40px; height: 40px; border: 0; border-radius: 9px; background: var(--flaeche-2); font-size: 20px; font-weight: 600; transition: transform .15s var(--feder), background .2s; }
+.zaehler button:active { transform: scale(.9); }
+.zaehler output { min-width: 36px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 18px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1.5px solid var(--linie); background: var(--flaeche); border-radius: 999px; padding: 8px 14px;
+  font-size: 14px; font-weight: 600; color: var(--tinte-2);
+  transition: background .25s var(--kurve), border-color .25s, color .25s, transform .15s var(--feder);
+}
+.chip:active { transform: scale(.95); }
+.chip[aria-pressed="true"] { background: var(--gut-grund); border-color: var(--petrol); color: var(--tinte); }
+
+.schalter { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; background: var(--flaeche); border-radius: 14px; border: 1.5px solid var(--linie); }
+.schalter .txt { font-size: 15px; font-weight: 600; }
+.schalter .txt small { display: block; font-weight: 400; font-size: 13px; color: var(--tinte-2); }
+.kipp { position: relative; width: 50px; height: 30px; flex: none; border: 0; border-radius: 999px; background: var(--linie); transition: background .3s var(--kurve); padding: 0; }
+.kipp::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .35s var(--feder); }
+.kipp[aria-checked="true"] { background: var(--petrol); }
+.kipp[aria-checked="true"]::after { transform: translateX(20px); }
+
+/* Aufklappen */
+.klapp { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--kurve), opacity .35s; opacity: 0; }
+.klapp.offen { grid-template-rows: 1fr; opacity: 1; }
+.klapp > div { overflow: hidden; min-height: 0; }
+
+.zwischen {
+  margin-top: 16px; padding: 14px; border-radius: 16px; background: var(--flaeche-2); border: 1px dashed var(--linie);
+  font-size: 14px;
+}
+.zwischen table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.zwischen td { padding: 3px 0; }
+.zwischen td:last-child { text-align: right; }
+.zwischen tr.ende td { border-top: 1px solid var(--linie); padding-top: 8px; font-weight: 700; }
+.zwischen .minus { color: var(--tinte-2); }
+
+/* ---------- Säule 3a ---------- */
+.s3a-karte { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 20px; padding: 18px; }
+.s3a-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 15px; font-weight: 600; }
+.s3a-kopf output { font-variant-numeric: tabular-nums; font-size: 17px; }
+.regler { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; margin: 18px 0 20px; border-radius: 999px; outline: none;
+  background: linear-gradient(90deg, var(--petrol) var(--p, 0%), var(--flaeche-2) var(--p, 0%)); border: 1px solid var(--linie); }
+.regler::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 3px solid var(--petrol); box-shadow: 0 2px 8px rgba(2,128,144,.35); transition: transform .2s var(--feder); }
+.regler:active::-webkit-slider-thumb { transform: scale(1.15); }
+.regler::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 3px solid var(--petrol); }
+.s3a-erg { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.s3a-erg .gross { font-variation-settings: "wdth" 125; font-weight: 800; font-size: 40px; line-height: 1; color: var(--petrol); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.s3a-erg span:last-child { color: var(--tinte-2); font-size: 15px; }
+.s3a-karte .tipp { margin: 12px 0 0; font-size: 13px; color: var(--tinte-2); }
+
+/* ---------- Belege ---------- */
+.unteransicht { display: none; }
+.unteransicht.aktiv { display: block; animation: eintritt .38s var(--kurve) both; }
+.ziffer-hinweis { margin: 16px 0 4px; font-size: 14px; color: var(--tinte-2); }
+.ziffer-zeile { display: grid; grid-template-columns: 62px 1fr auto; gap: 12px; align-items: center; background: var(--flaeche); border: 1px solid var(--linie); border-radius: 16px; padding: 12px 14px; margin-top: 8px; animation: zeile .4s var(--kurve) both; }
+.ziffer-zeile .ziffer { font-variation-settings: "wdth" 125; font-weight: 800; font-size: 22px; color: var(--petrol); font-variant-numeric: tabular-nums; line-height: 1; }
+.ziffer-zeile .zt { font-size: 15px; line-height: 1.35; min-width: 0; }
+.ziffer-zeile .zt span { display: block; font-size: 13px; color: var(--tinte-2); margin-top: 2px; }
+.ziffer-zeile .zb { text-align: right; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ziffer-zeile .zb.offen { color: var(--tinte-2); font-weight: 500; }
+.ziffer-zeile.erledigt { border-color: color-mix(in srgb, var(--petrol) 45%, var(--linie)); }
+.zwischen h4 { margin: 0 0 6px; font-size: 14px; }
+.zwischen h4:not(:first-child) { margin-top: 14px; }
+
+.fortschritt { background: var(--flaeche); border-radius: 28px; padding: 22px 20px; box-shadow: var(--schatten); }
+.fortschritt .bruch { font-variation-settings: "wdth" 125; font-weight: 800; font-size: 52px; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.fortschritt .bruch small { font-size: 22px; color: var(--tinte-2); font-weight: 600; }
+.fortschritt p { margin: 8px 0 14px; color: var(--tinte-2); font-size: 15px; }
+.balken { height: 10px; background: var(--flaeche-2); border-radius: 999px; overflow: hidden; }
+.balken div { height: 100%; width: 0; background: linear-gradient(90deg, var(--tiefe), var(--petrol)); border-radius: 999px; transition: width .8s var(--kurve); }
+
+.gruppe { margin-top: 22px; }
+.gruppe h3 { font-size: 16px; margin: 0 0 8px; display: flex; justify-content: space-between; align-items: baseline; }
+.gruppe h3 span { font-size: 13px; color: var(--tinte-2); font-weight: 500; font-variant-numeric: tabular-nums; }
+.posten { background: var(--flaeche); border-radius: 16px; margin-top: 8px; border: 1px solid var(--linie); transition: border-color .3s, background .3s; }
+.posten.erledigt { border-color: color-mix(in srgb, var(--petrol) 45%, var(--linie)); }
+.posten-kopf { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 12px 12px 12px 10px; }
+.haken { width: 34px; height: 34px; border-radius: 10px; border: 2px solid var(--linie); background: var(--flaeche); display: grid; place-items: center; padding: 0; transition: background .3s var(--kurve), border-color .3s, transform .2s var(--feder); }
+.haken:active { transform: scale(.88); }
+.haken svg { width: 20px; height: 20px; }
+.haken path { stroke: #fff; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset .35s var(--kurve) .05s; }
+.posten.erledigt .haken { background: var(--petrol); border-color: var(--petrol); }
+.posten.erledigt .haken path { stroke-dashoffset: 0; }
+.posten-text { border: 0; background: none; text-align: left; padding: 0; font-size: 15px; line-height: 1.35; }
+.posten.erledigt .posten-text .t { color: var(--tinte-2); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--tinte-2) 50%, transparent); }
+.posten-text .klein { display: block; font-size: 13px; color: var(--tinte-2); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.posten-text .klein .abkl { color: var(--bernstein); font-weight: 600; }
+.pfeil { width: 32px; height: 32px; border: 0; background: none; display: grid; place-items: center; color: var(--tinte-2); transition: transform .35s var(--kurve); padding: 0; }
+.posten.offen .pfeil { transform: rotate(180deg); }
+.posten-detail { padding: 0 14px 14px 56px; font-size: 14px; }
+.posten-detail .wo { color: var(--tinte-2); margin: 0 0 10px; }
+.posten-detail .wo b { color: var(--tinte); font-weight: 600; }
+
+/* ---------- Daten ---------- */
+.wert { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 16px; padding: 14px; margin-top: 10px; }
+.wert-kopf { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+.wert h4 { margin: 0; font-size: 15px; }
+.wert .zahl { margin: 4px 0 0; font-size: 14px; font-variant-numeric: tabular-nums; }
+.wert .quelle { margin: 8px 0 0; font-size: 13px; color: var(--tinte-2); overflow-wrap: anywhere; }
+.status { flex: none; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+.status.verifiziert { background: var(--gut-grund); color: var(--petrol); }
+.status.zu_pruefen { background: var(--bernstein-grund); color: var(--bernstein); }
+.status.fehlt { background: var(--ziegel-grund); color: var(--ziegel); }
+.zusammen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.zusammen div { background: var(--flaeche); border-radius: 16px; padding: 12px; text-align: center; border: 1px solid var(--linie); }
+.zusammen b { display: block; font-size: 26px; font-variation-settings: "wdth" 125; font-weight: 800; line-height: 1.1; }
+.zusammen span { font-size: 13px; color: var(--tinte-2); }
+
+/* ---------- Hilfe ---------- */
+.hilfe-gruppe { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 18px; margin-top: 10px; overflow: hidden; }
+.hilfe-kopf { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 0; background: none; padding: 16px; text-align: left; font-size: 16px; font-weight: 700; }
+.hilfe-kopf small { display: block; font-size: 13px; font-weight: 400; color: var(--tinte-2); margin-top: 2px; }
+.hilfe-kopf svg { flex: none; color: var(--tinte-2); transition: transform .35s var(--kurve); }
+.hilfe-gruppe.offen .hilfe-kopf svg { transform: rotate(180deg); }
+.hilfe-feld { padding: 0 16px 14px; }
+.hilfe-feld + .hilfe-feld { border-top: 1px solid var(--linie); padding-top: 14px; }
+.hilfe-feld h4 { margin: 0 0 4px; font-size: 15px; }
+.hilfe-feld p { margin: 0; font-size: 15px; color: var(--tinte-2); line-height: 1.5; }
+.hilfe-feld .wo { margin-top: 6px; font-size: 13px; color: var(--tinte); background: var(--flaeche-2); border-radius: 10px; padding: 7px 10px; }
+.hilfe-feld .wo b { font-weight: 600; }
+
+/* ---------- Info ---------- */
+.text { background: var(--flaeche); border-radius: 20px; padding: 18px; border: 1px solid var(--linie); margin-top: 12px; }
+.text h3 { margin: 0 0 6px; font-size: 16px; }
+.text p, .text li { font-size: 15px; color: var(--tinte-2); margin: 0 0 6px; }
+.text ul { margin: 0; padding-left: 18px; }
+.text a { color: var(--petrol); font-weight: 600; }
+.knoepfe { display: grid; gap: 10px; margin-top: 12px; }
+.knopf {
+  border: 0; border-radius: 14px; padding: 14px 16px; font-weight: 700; font-size: 15px;
+  background: var(--petrol); color: #fff; transition: transform .15s var(--feder), filter .2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.knopf:active { transform: scale(.97); }
+.knopf.zweit { background: var(--flaeche); color: var(--tinte); border: 1.5px solid var(--linie); }
+.knopf.gefahr { background: var(--flaeche); color: var(--ziegel); border: 1.5px solid var(--ziegel-grund); }
+.knopf svg { width: 18px; height: 18px; }
+
+/* ---------- Tableiste (Liquid Glass) ---------- */
+/* Aufbau in Schichten, damit beim Scrollen nichts flackert:
+   ::before = Glas (Unschärfe), .marker = Linse, ::after = Lichtkanten, Buttons, .farbe = fliessende Farbe.
+   Kein Mischmodus, kein transform und keine Maske auf der Leiste selbst: das stört die Unschärfe in Chrome. */
+.leiste {
+  --pad: 6px;
+  position: fixed; left: 0; right: 0; margin-inline: auto; bottom: calc(12px + env(safe-area-inset-bottom));
+  width: min(460px, calc(100% - 24px));
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding: var(--pad); border-radius: 999px; z-index: 10;
+  box-shadow: var(--glas-schatten);
+}
+.leiste::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 0; pointer-events: none;
+  background: var(--glas);
+  -webkit-backdrop-filter: blur(16px) saturate(2) brightness(1.06); backdrop-filter: blur(16px) saturate(2) brightness(1.06);
+  transform: translateZ(0); /* eigene Grafikebene, verhindert Flackern beim Scrollen */
+}
+/* Lichtkanten und Glanz */
+.leiste::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 2;
+  background:
+    radial-gradient(70% 90% at 18% -20%, rgba(255,255,255,.22), transparent 60%),
+    radial-gradient(60% 80% at 85% 125%, color-mix(in srgb, var(--petrol-hell) 18%, transparent), transparent 65%);
+  box-shadow:
+    inset 1.5px 1.5px 0 -0.5px var(--glas-licht),      /* Lichtkante oben links */
+    inset -1px -1px 0 -0.5px var(--glas-kante),          /* schwächere Kante unten rechts */
+    inset 0 0 0 1px var(--glas-kante),                   /* feiner Rand rundherum */
+    inset 0 0 18px var(--glas-innen);                    /* Leuchten am Glasrand innen */
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .leiste::before { background: var(--flaeche); }
+}
+/* Lichtbrechung (nur Chrome/Edge): Unschärfe, Verbiegen am Rand und Farbsaum stecken im SVG-Filter #lg-filter */
+.leiste.licht::before {
+  background: color-mix(in srgb, var(--flaeche) var(--toenung, 18%), transparent);
+  -webkit-backdrop-filter: url(#lg-filter); backdrop-filter: url(#lg-filter);
+}
+.leiste button {
+  position: relative; z-index: 3; border: 0; background: none; padding: 7px 2px 5px; border-radius: 999px; min-width: 0;
+  display: grid; justify-items: center; gap: 1px; font-size: 11px; font-weight: 600; color: var(--tinte);
+  transition: color .3s;
+}
+.leiste button svg { width: 23px; height: 23px; transition: transform .45s var(--feder); }
+.leiste button[aria-current="page"] { color: transparent; }
+.leiste button:active svg { transform: scale(.86); }
+/* Flüssige Farbe: gleiche Symbole in Petrol, nur sichtbar wo der Farbtropfen ist */
+.leiste .farbe {
+  position: absolute; inset: var(--pad); z-index: 4; pointer-events: none;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); color: var(--petrol);
+  -webkit-mask-image: radial-gradient(var(--bw, 30px) 30px at var(--bx, -100px) 50%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(var(--bw, 30px) 30px at var(--bx, -100px) 50%, #000 58%, transparent 100%);
+}
+.leiste .farbe span {
+  display: grid; justify-items: center; gap: 1px; padding: 7px 2px 5px; min-width: 0;
+  font-size: 11px; font-weight: 600; line-height: 1.5;
+}
+.leiste .farbe svg { width: 23px; height: 23px; }
+/* Glas-Linse für den aktiven Tab: Position und Breite setzt das Skript */
+.leiste .marker {
+  position: absolute; z-index: 1; top: var(--pad); bottom: var(--pad); left: 0; width: 0;
+  border-radius: 999px; background: var(--linse);
+  box-shadow:
+    inset 1.5px 1.5px 0 -0.5px var(--glas-licht),
+    inset -1px -1px 0 -0.5px var(--glas-kante),
+    inset 0 0 0 1px var(--glas-kante),
+    inset 0 0 12px var(--glas-innen);
+  will-change: transform, width;
+}
+.leiste .marker::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: radial-gradient(80% 70% at 30% 0%, rgba(255,255,255,.22), transparent 60%);
+}
+
+/* ---------- Glas-Labor ---------- */
+.labor-feld { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; margin-top: 14px; }
+.labor-feld label { font-size: 14px; font-weight: 600; color: var(--tinte); }
+.labor-feld output { font-size: 14px; font-variant-numeric: tabular-nums; color: var(--tinte-2); }
+.labor-feld .regler { grid-column: 1 / -1; margin: 10px 0 4px; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px);
+  background: var(--tinte); color: var(--grund); padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 600;
+  opacity: 0; pointer-events: none; transition: opacity .3s, transform .4s var(--feder); z-index: 20; max-width: calc(100% - 32px);
+}
+.toast.zeigen { opacity: 1; transform: translate(-50%, 0); }
+
+.versteckt { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kopf">
+    <div class="marke">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--petrol)"/><path d="M9 21.5h14M9 16h9M9 10.5h14" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+      <div>Steuern Zürich<small id="kopfUnter">Stadt Zürich</small></div>
+    </div>
+    <div class="seg" id="jahrSeg" role="group" aria-label="Steuerjahr"></div>
+  </header>
+
+  <main>
+    <!-- RECHNER -->
+    <section class="ansicht aktiv" id="v-rechner" aria-label="Rechner">
+      <div class="ergebnis" aria-live="polite">
+        <p class="erg-titel" id="ergTitel">Geschätzte Steuern 2026</p>
+        <div class="summe"><span class="whg">CHF</span><span class="zahl" id="summe">0.00</span></div>
+        <p class="erg-unter" id="ergUnter">Gib unten dein steuerbares Einkommen ein.</p>
+        <div class="band" id="band" aria-hidden="true"></div>
+        <ul class="legende" id="legende"></ul>
+        <div class="meldungen" id="meldungen"></div>
+      </div>
+
+      <div class="block">
+        <h2>Deine Situation</h2>
+        <div class="feld">
+          <span class="lbl" id="lblZivil">Zivilstand</span>
+          <div class="seg voll" id="zivilSeg" role="group" aria-labelledby="lblZivil"></div>
+        </div>
+        <div class="feld">
+          <span class="lbl" id="lblKinder">Kinder</span>
+          <div class="zaehler" role="group" aria-labelledby="lblKinder">
+            <button type="button" id="kinderMinus" aria-label="Ein Kind weniger">−</button>
+            <output id="kinder">0</output>
+            <button type="button" id="kinderPlus" aria-label="Ein Kind mehr">+</button>
+          </div>
+        </div>
+        <div class="feld">
+          <span class="lbl" id="lblKirche">Kirche</span>
+          <div class="chips" id="kircheChips" role="group" aria-labelledby="lblKirche"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h2>Bundessteuer</h2>
+        <p class="erkl">Steuerbares Einkommen für die direkte Bundessteuer.</p>
+        <div class="seg voll" id="modusSeg" role="group" aria-label="Eingabeart"></div>
+        <div class="klapp offen" id="klappDirekt"><div>
+          <div class="feld">
+            <label for="einkBund">Steuerbares Einkommen Bund</label>
+            <div class="eingabe"><span>CHF</span><input id="einkBund" inputmode="decimal" autocomplete="off" placeholder="z.B. 52'000"></div>
+            <div class="tipp">Steht in der Steuererklärung (Ziffer 27, Spalte Bund) oder in der Veranlagung.</div>
+          </div>
+        </div></div>
+        <div class="klapp" id="klappLohn"><div>
+          <div class="feld"><label for="l_netto">Nettolohn laut Lohnausweis (Ziffer 11)</label><div class="eingabe"><span>CHF</span><input id="l_netto" data-lohn="netto" inputmode="decimal" placeholder="0"></div></div>
+          <div class="reihe">
+            <div class="feld"><label for="l_neben">Gewinn Nebenerwerb</label><div class="eingabe"><span>CHF</span><input id="l_neben" data-lohn="neben" inputmode="decimal" placeholder="0"></div></div>
+            <div class="feld"><label for="l_andere">Andere Einkünfte</label><div class="eingabe"><span>CHF</span><input id="l_andere" data-lohn="andere" inputmode="decimal" placeholder="0"></div></div>
+          </div>
+          <div class="reihe">
+            <div class="feld"><label for="l_fahr">Fahrkosten Arbeitsweg</label><div class="eingabe"><span>CHF</span><input id="l_fahr" data-lohn="fahr" inputmode="decimal" placeholder="0"></div></div>
+            <div class="feld"><label for="l_verpf">Verpflegung</label><div class="eingabe"><span>CHF</span><input id="l_verpf" data-lohn="verpf" inputmode="decimal" placeholder="0"></div></div>
+          </div>
+          <div class="feld">
+            <div class="schalter">
+              <div class="txt">In einer Pensionskasse versichert<small>Steht auf dem Lohnausweis (BVG-Beiträge)</small></div>
+              <button type="button" class="kipp" id="kippPk" role="switch" aria-checked="true" aria-label="Pensionskasse"></button>
+            </div>
+          </div>
+          <div class="reihe">
+            <div class="feld"><label for="l_s3a">Einzahlung Säule 3a</label><div class="eingabe"><span>CHF</span><input id="l_s3a" data-lohn="s3a" inputmode="decimal" placeholder="0"></div></div>
+            <div class="feld"><label for="l_kk">Krankenkassenprämien</label><div class="eingabe"><span>CHF</span><input id="l_kk" data-lohn="kk" inputmode="decimal" placeholder="0"></div></div>
+          </div>
+          <div class="feld"><label for="l_wb">Weiterbildungskosten (nur falls abzugsfähig)</label><div class="eingabe"><span>CHF</span><input id="l_wb" data-lohn="wb" inputmode="decimal" placeholder="0"></div></div>
+          <div class="feld"><label for="l_zinsen">Schuldzinsen (z.B. Ausbildungsdarlehen)</label><div class="eingabe"><span>CHF</span><input id="l_zinsen" data-lohn="zinsen" inputmode="decimal" placeholder="0"></div><div class="tipp">Nur die Zinsen, nicht die Rückzahlung.</div></div>
+          <div class="reihe">
+            <div class="feld"><label for="l_krankheit">Selbst bezahlte Krankheitskosten</label><div class="eingabe"><span>CHF</span><input id="l_krankheit" data-lohn="krankheit" inputmode="decimal" placeholder="0"></div></div>
+            <div class="feld"><label for="l_spenden">Spenden</label><div class="eingabe"><span>CHF</span><input id="l_spenden" data-lohn="spenden" inputmode="decimal" placeholder="0"></div></div>
+          </div>
+          <div class="zwischen" id="lohnRechnung"></div>
+        </div></div>
+      </div>
+
+      <div class="block">
+        <h2>Staats- und Gemeindesteuer</h2>
+        <p class="erkl" id="kantonHinweis">Der Kanton hat teilweise andere Abzüge als der Bund.</p>
+        <div class="klapp offen" id="klappKantonWahl"><div>
+        <div class="schalter">
+          <div class="txt">Gleicher Betrag wie beim Bund<small>Nur als grobe Schätzung</small></div>
+          <button type="button" class="kipp" id="kippGleich" role="switch" aria-checked="true" aria-label="Gleicher Betrag wie beim Bund"></button>
+        </div>
+        <div class="klapp" id="klappKanton"><div>
+          <div class="feld">
+            <label for="einkKanton">Steuerbares Einkommen Kanton</label>
+            <div class="eingabe"><span>CHF</span><input id="einkKanton" inputmode="decimal" autocomplete="off" placeholder="z.B. 50'000"></div>
+            <div class="tipp">Steht in der Steuererklärung (Ziffer 27, Spalte Staatssteuer) oder in ZHprivateTax.</div>
+          </div>
+        </div></div>
+        </div></div>
+        <div class="feld">
+          <label for="vermoegen">Steuerbares Vermögen</label>
+          <div class="eingabe"><span>CHF</span><input id="vermoegen" inputmode="decimal" autocomplete="off" placeholder="0"></div>
+          <div class="tipp">Konten, Wertschriften usw. per 31.12., minus Schulden (z.B. offenes Darlehen).</div>
+        </div>
+      </div>
+
+      <div class="block" id="blockS3a">
+        <h2>Säule 3a: was wäre wenn</h2>
+        <p class="erkl">Jeder Franken in der Säule 3a senkt dein steuerbares Einkommen bei Bund und Kanton.</p>
+        <div class="s3a-karte">
+          <div class="s3a-kopf"><label for="s3aRegler">Zusätzlich einzahlen</label><output id="s3aBetrag" for="s3aRegler">CHF 0</output></div>
+          <input type="range" class="regler" id="s3aRegler" min="0" max="7258" step="1" value="0">
+          <div class="s3a-erg"><span class="gross" id="s3aErsparnis">0.00</span><span>Franken weniger Steuern</span></div>
+          <p class="tipp" id="s3aTipp"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BELEGE -->
+    <section class="ansicht" id="v-belege" aria-label="Belege">
+      <div class="fortschritt">
+        <div class="bruch"><span id="belegeZahl">0</span><small> von <span id="belegeTotal">0</span></small></div>
+        <p id="belegeText">Belege beisammen</p>
+        <div class="balken"><div id="belegeBalken"></div></div>
+      </div>
+      <div class="seg voll" id="belegeSeg" role="group" aria-label="Ansicht Belege" style="margin-top:18px"></div>
+      <div class="unteransicht aktiv" id="belegeListe"></div>
+      <div class="unteransicht" id="eintragListe"></div>
+    </section>
+
+    <!-- DATEN -->
+    <section class="ansicht" id="v-daten" aria-label="Steuerdaten">
+      <div class="block" style="margin-top:4px">
+        <h2 id="datenTitel">Steuerwerte 2026</h2>
+        <p class="erkl">Woher jede Zahl kommt. Nur geprüfte Werte stammen aus amtlichen Quellen.</p>
+      </div>
+      <div class="zusammen" id="datenZusammen"></div>
+      <div id="datenListe"></div>
+    </section>
+
+    <!-- HILFE -->
+    <section class="ansicht" id="v-hilfe" aria-label="Hilfe">
+      <div class="block" style="margin-top:4px">
+        <h2>Was gehört in welches Feld?</h2>
+        <p class="erkl" id="hilfeIntro">Tipp auf ein Thema. Die Beträge passen sich dem gewählten Steuerjahr an.</p>
+      </div>
+      <div id="hilfeListe"></div>
+    </section>
+
+    <!-- INFO -->
+    <section class="ansicht" id="v-info" aria-label="Info">
+      <div class="block" style="margin-top:4px">
+        <h2>So brauchst du das Tool</h2>
+      </div>
+      <div class="text">
+        <h3>Was es kann</h3>
+        <p>Steuern schätzen und Belege für die Steuererklärung sammeln. Eingereicht wird weiterhin über ZHprivateTax oder auf Papier.</p>
+      </div>
+      <div class="text">
+        <h3>Wichtig</h3>
+        <ul>
+          <li>Das Ergebnis ist eine Schätzung. Verbindlich ist nur die Veranlagung des Steueramts.</li>
+          <li>Fehlt ein Steuerwert, rechnet das Tool diesen Teil nicht, statt eine falsche Zahl zu zeigen.</li>
+          <li>Die Bundessteuer rechnet mit dem Einkommen auf 100 Franken abgerundet.</li>
+          <li>Kleine Rundungsdifferenzen zur Software des Steueramts sind möglich (wenige Rappen bis 1 Franken).</li>
+        </ul>
+      </div>
+      <div class="text">
+        <h3>Deine Daten</h3>
+        <p>Alles, was du eingibst, bleibt nur in diesem Browser auf diesem Gerät. Deine Eingaben werden nicht ins Internet geschickt. Wenn du den Browserverlauf löschst, sind die Eingaben weg. Sichere sie darum ab und zu als Datei.</p>
+        <div class="knoepfe">
+          <button type="button" class="knopf" id="exportKnopf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Daten als Datei sichern</button>
+          <button type="button" class="knopf zweit" id="importKnopf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3m0 0L8 7m4-4 4 4M5 21h14"/></svg>Gesicherte Datei laden</button>
+          <input type="file" id="importDatei" accept="application/json,.json" class="versteckt">
+          <button type="button" class="knopf gefahr" id="loeschKnopf">Alle Eingaben löschen</button>
+        </div>
+      </div>
+      <div class="text">
+        <h3>Links</h3>
+        <ul>
+          <li><a href="https://www.zhprivatetax.ch" target="_blank" rel="noopener">ZHprivateTax</a> zum Ausfüllen und Einreichen</li>
+          <li><a href="https://www.zh.ch/steuerfuesse" target="_blank" rel="noopener">Steuerfüsse Kanton Zürich</a></li>
+          <li><a href="https://www.estv.admin.ch/de/rundschreiben-direkten-bundessteuer" target="_blank" rel="noopener">ESTV Rundschreiben Bundessteuer</a></li>
+        </ul>
+      </div>
+      <div class="text" id="labor">
+        <h3>Glas-Labor</h3>
+        <p id="laborHinweis">Schieb die Regler und scroll dann, damit Inhalt hinter die Leiste kommt.</p>
+        <div class="labor-feld"><label for="gRand">Randbreite (wie weit das Glas sich wölbt)</label><output id="gRandW"></output><input type="range" class="regler" id="gRand" min="4" max="32" step="1"></div>
+        <div class="labor-feld"><label for="gStaerke">Brechung (wie stark es biegt)</label><output id="gStaerkeW"></output><input type="range" class="regler" id="gStaerke" min="0" max="100" step="1"></div>
+        <div class="labor-feld"><label for="gUnschaerfe">Unschärfe</label><output id="gUnschaerfeW"></output><input type="range" class="regler" id="gUnschaerfe" min="0" max="12" step="0.5"></div>
+        <div class="labor-feld"><label for="gSaum">Farbsaum (Regenbogen am Rand)</label><output id="gSaumW"></output><input type="range" class="regler" id="gSaum" min="0" max="16" step="1"></div>
+        <div class="labor-feld"><label for="gToenung">Tönung (wie stark das Glas eingefärbt ist)</label><output id="gToenungW"></output><input type="range" class="regler" id="gToenung" min="0" max="60" step="1"></div>
+        <div class="knoepfe"><button type="button" class="knopf zweit" id="gReset">Standardwerte</button></div>
+      </div>
+      <div class="text">
+        <h3>Darstellung</h3>
+        <div class="seg voll" id="themaSeg" role="group" aria-label="Darstellung" style="margin-top:6px"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Lichtbrechung: Karte (lg-karte) sagt pro Pixel, wohin das Hintergrundbild verschoben wird.
+     Rot = links/rechts, Grün = oben/unten. Drei Farbkanäle leicht verschieden stark = Farbsaum wie bei echtem Glas. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="lg-filter" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" x="0" y="0" width="460" height="64" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" edgeMode="duplicate" result="weich"/>
+    <feImage id="lg-karte" href="" x="0" y="0" width="460" height="64" preserveAspectRatio="none" result="karte"/>
+    <feDisplacementMap in="weich" in2="karte" scale="46" xChannelSelector="R" yChannelSelector="G" result="vr"/>
+    <feColorMatrix in="vr" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+    <feDisplacementMap in="weich" in2="karte" scale="42" xChannelSelector="R" yChannelSelector="G" result="vg"/>
+    <feColorMatrix in="vg" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+    <feDisplacementMap in="weich" in2="karte" scale="38" xChannelSelector="R" yChannelSelector="G" result="vb"/>
+    <feColorMatrix in="vb" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+    <feBlend in="r" in2="g" mode="screen" result="rg"/>
+    <feBlend in="rg" in2="b" mode="screen" result="rgb"/>
+    <feColorMatrix in="rgb" type="saturate" values="1.6"/>
+  </filter>
+</svg>
+<nav class="leiste" id="leiste" aria-label="Hauptnavigation">
+  <span class="marker" id="marker"></span>
+  <button type="button" data-ziel="rechner" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>Rechner</button>
+  <button type="button" data-ziel="belege"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1Z"/><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="m8.5 13.5 2.5 2.5 4.5-5"/></svg>Belege</button>
+  <button type="button" data-ziel="hilfe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.6M12 17v.01"/></svg>Hilfe</button>
+  <button type="button" data-ziel="daten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Daten</button>
+  <button type="button" data-ziel="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Info</button>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const DATEN = /*__DATEN__*/null;
+if (!DATEN) {
+  document.body.innerHTML = '<div style="max-width:520px;margin:15vh auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.5"><h2 style="margin:0 0 8px">Das ist nur die Vorlage</h2><p style="margin:0">Hier sind noch keine Steuerdaten drin. Bitte <b>python build_web.py</b> ausführen und dann <b>web/steuer-tool.html</b> öffnen.</p></div>';
+  throw new Error("Vorlage ohne Daten geöffnet. Bitte steuer-tool.html öffnen.");
+}
+
+/* =========================================================
+   Rechenlogik (gleich wie rechner.py, Beträge in Rappen)
+   ========================================================= */
+const R = {
+  rund(rappen) {               // kaufmännisch auf Rappen runden (wie ROUND_HALF_UP)
+    const x = Math.round(rappen * 1e6) / 1e6;
+    return Math.floor(x + 0.5);
+  },
+  bundessteuer(einkommen, t, verheiratet, kinder) {
+    const bund = t.bund;
+    const stufen = bund[verheiratet ? "tarif_verheiratet" : "tarif_alleinstehend"].stufen;
+    let eink = Math.floor(Math.floor(einkommen) / 100) * 100;
+    let rp = 0;
+    for (const s of stufen) {
+      if (eink >= s.ab) {
+        const schritte = Math.floor((eink - s.ab) / 100);
+        rp = Math.round(s.basis * 100) + schritte * Math.round(s.satz_pro_100 * 100);
+      } else break;
+    }
+    const letzte = stufen[stufen.length - 1];
+    if (eink >= letzte.ab) rp = eink * Math.round(letzte.satz_pro_100 * 100) / 100;
+    rp -= (kinder || 0) * bund.abzug_pro_kind_vom_steuerbetrag * 100;
+    if (rp < bund.mindeststeuer_wird_erhoben_ab * 100) rp = 0;
+    return R.rund(rp);
+  },
+  progressiv(betrag, stufen, feld, teiler) {
+    if (!stufen || !stufen.length) throw new Error("fehlt");
+    let rest = betrag * 100, rp = 0;
+    for (const s of stufen) {
+      const satz = s[feld] / teiler;
+      if (s.betrag === null) { rp += rest * satz; rest = 0; break; }
+      const teil = Math.min(rest, s.betrag * 100);
+      rp += teil * satz; rest -= teil;
+      if (rest <= 0) break;
+    }
+    return R.rund(rp);
+  },
+  einkommenAusAngaben(l, t, ebene) {
+    let a, verpfMax, prozent, min, max;
+    if (ebene === "bund") {
+      a = t.bund.abzuege;
+      if (a.status === "fehlt") throw new Error("Abzüge Bund fehlen für dieses Jahr.");
+      verpfMax = a.verpflegung_voll_pro_jahr; prozent = a.uebrige_berufskosten_prozent ?? 3;
+      min = a.uebrige_berufskosten_min; max = a.uebrige_berufskosten_max;
+    } else {
+      a = t.kanton_zh.abzuege || { status: "fehlt" };
+      if (a.status === "fehlt") throw new Error("Abzüge Kanton fehlen für dieses Jahr.");
+      const p = a.berufskosten_pauschalen;
+      if (p.status === "fehlt") throw new Error("Die Pauschalen für Berufsauslagen beim Kanton fehlen noch.");
+      verpfMax = p.verpflegung_voll_pro_jahr; prozent = p.uebrige_berufskosten_prozent;
+      min = p.uebrige_berufskosten_min; max = p.uebrige_berufskosten_max;
+    }
+    const kinder = l.kinder || 0, ehepaar = !!l.ehepaar;
+    const netto = l.netto || 0, einkuenfte = netto + (l.neben || 0) + (l.andere || 0);
+    const z = [["Einkünfte (Lohn, Nebenerwerb, andere)", einkuenfte]];
+    const fahr = Math.min(l.fahr || 0, a.fahrkosten_max), verpf = Math.min(l.verpf || 0, verpfMax);
+    const uebrige = netto > 0 ? Math.min(Math.max(min, Math.min(netto * prozent / 100, max)), netto) : 0;
+    z.push(["Fahrkosten (max. " + F.chf0(a.fahrkosten_max) + ")", -fahr], ["Verpflegung (max. " + F.chf0(verpfMax) + ")", -verpf],
+           [`Übrige Berufskosten (${prozent} %, ${F.chf0(min)} bis ${F.chf0(max)})`, -uebrige]);
+    const max3a = t.saeule_3a[l.pk ? "max_mit_pensionskasse" : "max_ohne_pensionskasse"];
+    const s3a = Math.min(l.s3a || 0, max3a);
+    z.push(["Säule 3a (max. " + F.chf0(max3a) + ")", -s3a]);
+    const vkey = "versicherungspraemien_" + (ehepaar ? "verheiratet" : "alleinstehend") + ((l.pk || s3a > 0) ? "_mit_2_3a" : "_ohne_2_3a");
+    const vmax = a[vkey] + kinder * a.versicherungspraemien_pro_kind;
+    const vers = Math.min(l.kk || 0, vmax);
+    z.push(["Versicherungen (max. " + F.chf0(vmax) + ")", -vers]);
+    const wb = Math.min(l.wb || 0, a.weiterbildung_max);
+    if (wb) z.push(["Weiterbildung (max. " + F.chf0(a.weiterbildung_max) + ")", -wb]);
+    // Schuldzinsen: bis Vermögensertrag plus 50'000 (Art. 33 Abs. 1 lit. a DBG, § 31 Abs. 1 lit. a StG ZH).
+    // Vermögenserträge werden hier nicht erfasst, darum gilt nur der Sockel.
+    let zinsen = l.zinsen || 0;
+    if (zinsen) {
+      if (a.schuldzinsen_max_ohne_vermoegensertrag == null) throw new Error("Grenze für Schuldzinsen fehlt für dieses Jahr.");
+      zinsen = Math.min(zinsen, a.schuldzinsen_max_ohne_vermoegensertrag);
+      z.push(["Private Schuldzinsen", -zinsen]);
+    }
+    const nettoEink = einkuenfte - fahr - verpf - uebrige - s3a - vers - wb - zinsen;
+    const basis = Math.max(nettoEink, 0);
+    const krank = Math.max(0, (l.krankheit || 0) - basis * a.krankheitskosten_selbstbehalt_prozent / 100);
+    if (krank) z.push([`Krankheitskosten (über ${a.krankheitskosten_selbstbehalt_prozent} % Selbstbehalt)`, -krank]);
+    let sp = l.spenden || 0;
+    sp = sp < a.spenden_minimum ? 0 : Math.min(sp, basis * a.spenden_max_prozent / 100);
+    if (sp) z.push([`Spenden (max. ${a.spenden_max_prozent} %)`, -sp]);
+    let sozial = kinder * a.kinderabzug;
+    if (kinder) z.push([`Kinderabzug (${kinder} × ${F.chf0(a.kinderabzug)})`, -sozial]);
+    if (ebene === "bund" && ehepaar) { sozial += a.verheiratetenabzug; z.push(["Verheiratetenabzug", -a.verheiratetenabzug]); }
+    const total = Math.max(0, nettoEink - krank - sp - sozial);
+    return { total: R.rund(total * 100) / 100, zeilen: z };
+  },
+  ersparnis3a(e, t, betrag) {
+    const vorher = R.berechne(e, t).total;
+    const nachher = R.berechne({ ...e, einkBund: Math.max(e.einkBund - betrag, 0), einkKanton: Math.max(e.einkKanton - betrag, 0) }, t).total;
+    return vorher - nachher;
+  },
+  berechne(e, t) {
+    const res = { teile: [], warnungen: [], fehlt: [] };
+    const verh = e.verheiratet;
+    res.teile.push({ key: "bund", name: "Direkte Bundessteuer", rp: R.bundessteuer(e.einkBund, t, verh, e.kinder) });
+    const zh = t.kanton_zh;
+    const tarifName = verh ? "einkommenssteuer_verheiratetentarif" : "einkommenssteuer_grundtarif";
+    const tarif = zh[tarifName];
+    if (tarif.status === "fehlt") {
+      res.fehlt.push("Einkommenstarif Kanton fehlt für dieses Jahr. Staats-, Gemeinde- und Kirchensteuer sind nicht berechnet.");
+    } else {
+      let einfach = R.progressiv(e.einkKanton, tarif.stufen, "satz_prozent", 100);
+      if (tarif.status !== "verifiziert") res.warnungen.push("Einkommenstarif Kanton ist noch nicht mit dem Gesetz abgeglichen.");
+      if (e.vermoegen) {
+        const vt = zh[verh ? "vermoegenssteuer_verheiratetentarif" : "vermoegenssteuer_grundtarif"];
+        if (vt.status === "fehlt") res.fehlt.push("Vermögenstarif fehlt für dieses Jahr. Die Vermögenssteuer ist nicht enthalten.");
+        else einfach += R.progressiv(e.vermoegen, vt.stufen, "satz_promille", 1000);
+      }
+      res.einfach = einfach;
+      for (const [key, name, eintrag] of [["staat", "Staatssteuer", zh.steuerfuss_staat], ["gemeinde", "Gemeindesteuer", zh.steuerfuss_gemeinde]]) {
+        res.teile.push({ key, name, neben: eintrag.wert_prozent + " % der einfachen Steuer", rp: R.rund(einfach * eintrag.wert_prozent / 100) });
+        if (eintrag.status !== "verifiziert") res.warnungen.push("Steuerfuss " + name + " noch prüfen.");
+      }
+      if (e.kirche !== "keine") {
+        const satz = zh.steuerfuss_kirche[e.kirche];
+        res.teile.push({ key: "kirche", name: "Kirchensteuer", neben: satz + " % der einfachen Steuer", rp: R.rund(einfach * satz / 100) });
+        if (zh.steuerfuss_kirche.status !== "verifiziert") res.warnungen.push("Kirchensteuerfuss noch prüfen.");
+      }
+    }
+    const ps = zh.personalsteuer;
+    res.teile.push({ key: "personal", name: "Personalsteuer", neben: e.ehepaar ? "2 × " + F.chf0(ps.wert) : "Fester Betrag", rp: ps.wert * 100 * (e.ehepaar ? 2 : 1) });
+    if (ps.status !== "verifiziert") res.warnungen.push("Personalsteuer noch prüfen.");
+    res.total = res.teile.reduce((s, x) => s + x.rp, 0);
+    return res;
+  }
+};
+
+/* ---------- Formatierung ---------- */
+const F = {
+  tausender(s) { return s.replace(/\B(?=(\d{3})+(?!\d))/g, "'"); },
+  rp(rp) { const neg = rp < 0; rp = Math.abs(Math.round(rp)); const fr = Math.floor(rp / 100), r = rp % 100; return (neg ? "−" : "") + F.tausender(String(fr)) + "." + String(r).padStart(2, "0"); },
+  chf0(fr) { return F.tausender(String(Math.round(fr))); },
+  zahl(text) { if (text == null) return 0; const n = parseFloat(String(text).replace(/['’\s]/g, "").replace(",", ".")); return isFinite(n) && n > 0 ? n : 0; }
+};
+
+/* =========================================================
+   Zustand und Speicher
+   ========================================================= */
+const SPEICHER = "steuertool.v1";
+const JAHRE = Object.keys(DATEN.tarife).sort().reverse();
+const HEUTE = new Date().getFullYear();
+const STANDARD = {
+  jahr: JAHRE.find((j) => Number(j) <= HEUTE) || JAHRE[0], zivil: "ledig", kinder: 0, kirche: "keine", modus: "direkt",
+  einkBund: "", einkKanton: "", gleich: true, vermoegen: "",
+  lohn: { netto: "", neben: "", andere: "", fahr: "", verpf: "", pk: true, s3a: "", kk: "", wb: "", zinsen: "", krankheit: "", spenden: "" },
+  s3aZusatz: 0, belegeAnsicht: "liste",
+  belege: {}, offen: {}, thema: "auto", ansicht: "rechner"
+};
+let Z = laden();
+function laden() {
+  try {
+    const roh = localStorage.getItem(SPEICHER);
+    if (roh) { const d = JSON.parse(roh); return { ...STANDARD, ...d, lohn: { ...STANDARD.lohn, ...(d.lohn || {}) } }; }
+  } catch (e) {}
+  return structuredClone(STANDARD);
+}
+let speicherTimer;
+function speichern() {
+  clearTimeout(speicherTimer);
+  speicherTimer = setTimeout(() => { try { localStorage.setItem(SPEICHER, JSON.stringify(Z)); } catch (e) {} }, 200);
+}
+if (!DATEN.tarife[Z.jahr]) Z.jahr = JAHRE[0];
+
+/* =========================================================
+   Hilfen für die Oberfläche
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+const BEWEGUNG = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function segment(el, optionen, wert, beiWahl) {
+  el.innerHTML = '<span class="daumen"></span>' + optionen.map(([v, t]) => `<button type="button" data-v="${v}" aria-pressed="${v === wert}">${t}</button>`).join("");
+  const daumen = el.querySelector(".daumen");
+  const setze = (v) => {
+    el.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === v));
+    const b = el.querySelector(`button[data-v="${v}"]`);
+    if (b) { daumen.style.width = b.offsetWidth + "px"; daumen.style.transform = `translateX(${b.offsetLeft}px)`; }
+  };
+  el.addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (!b) return; setze(b.dataset.v); beiWahl(b.dataset.v); });
+  el._setze = setze;
+  requestAnimationFrame(() => setze(wert));
+  return setze;
+}
+function kipp(el, an, beiWechsel) {
+  el.setAttribute("aria-checked", an);
+  el.addEventListener("click", () => { const neu = el.getAttribute("aria-checked") !== "true"; el.setAttribute("aria-checked", neu); beiWechsel(neu); });
+}
+function klapp(el, offen) { el.classList.toggle("offen", offen); el.querySelectorAll("input,button").forEach((i) => (i.tabIndex = offen ? 0 : -1)); }
+function toast(text) { const t = $("toast"); t.textContent = text; t.classList.add("zeigen"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("zeigen"), 2200); }
+
+function zaehle(el, ziel) {
+  const start = el._jetzt || 0; el._jetzt = ziel;
+  if (!BEWEGUNG) { el.textContent = F.rp(ziel); return; }
+  const dauer = 650, t0 = performance.now();
+  cancelAnimationFrame(el._raf);
+  const schritt = (t) => {
+    const p = Math.min(1, (t - t0) / dauer), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = F.rp(start + (ziel - start) * e);
+    if (p < 1) el._raf = requestAnimationFrame(schritt);
+  };
+  el._raf = requestAnimationFrame(schritt);
+}
+
+const FARBEN = { bund: "var(--tiefe)", staat: "var(--petrol)", gemeinde: "var(--petrol-hell)", kirche: "var(--petrol-blass)", personal: "var(--bernstein)" };
+const SYMBOL = {
+  fehlt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>',
+  pruefen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 10v4M12 17v.01"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>'
+};
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* =========================================================
+   Rechner
+   ========================================================= */
+function tarife() { return DATEN.tarife[Z.jahr]; }
+function abzuegeVorhanden() { return tarife().bund.abzuege.status !== "fehlt"; }
+
+function rechne() {
+  const t = tarife();
+  const ehepaar = Z.zivil === "verheiratet";
+  const verheiratet = ehepaar || (Z.zivil === "alleinerziehend" && Z.kinder > 0);
+  let einkBund, einkKanton = null, kantonFehler = null;
+  const lohnModus = Z.modus === "lohn" && abzuegeVorhanden();
+  let s3aSchon = 0, pk = true;
+  if (lohnModus) {
+    const l = {}; for (const k of Object.keys(STANDARD.lohn)) l[k] = k === "pk" ? Z.lohn.pk : F.zahl(Z.lohn[k]);
+    l.kinder = Z.kinder; l.ehepaar = ehepaar; pk = l.pk; s3aSchon = l.s3a;
+    const tabelle = (titel, r) => `<h4>${titel}</h4><table>` + r.zeilen.filter(([, b], i) => i === 0 || b).map(([n, b]) => `<tr class="${b < 0 ? "minus" : ""}"><td>${esc(n)}</td><td>${b < 0 ? "−" : ""}${F.rp(Math.round(Math.abs(b) * 100))}</td></tr>`).join("") +
+      `<tr class="ende"><td>Steuerbares Einkommen ${titel}</td><td>${F.rp(Math.round(r.total * 100))}</td></tr></table>`;
+    const rb = R.einkommenAusAngaben(l, t, "bund");
+    einkBund = rb.total;
+    let html = tabelle("Bund", rb);
+    try { const rk = R.einkommenAusAngaben(l, t, "kanton"); einkKanton = rk.total; html += tabelle("Kanton", rk); }
+    catch (err) { kantonFehler = err.message; }
+    $("lohnRechnung").innerHTML = html + '<p style="margin:8px 0 0;color:var(--tinte-2);font-size:13px">Nicht enthalten: Unterstützungsabzug, Zweiverdienerabzug. Schuldzinsen höchstens CHF 50\'000 (Vermögenserträge nicht erfasst).</p>';
+  } else {
+    einkBund = F.zahl(Z.einkBund);
+  }
+  const kantonAusLohn = lohnModus && einkKanton !== null;
+  klapp($("klappKantonWahl"), !kantonAusLohn);
+  if (!kantonAusLohn) klapp($("klappKanton"), !Z.gleich);
+  $("kantonHinweis").textContent = kantonAusLohn ? "Wird aus deinen Angaben oben geschätzt, mit den Abzügen des Kantons."
+    : lohnModus && kantonFehler ? kantonFehler + " Bis dahin den Betrag eingeben oder den gleichen wie beim Bund nehmen."
+    : "Der Kanton hat teilweise andere Abzüge als der Bund.";
+  if (!kantonAusLohn) einkKanton = Z.gleich ? einkBund : F.zahl(Z.einkKanton);
+  const vermoegen = F.zahl(Z.vermoegen);
+
+  $("ergTitel").textContent = "Geschätzte Steuern " + Z.jahr;
+  if (!einkBund && !einkKanton) {
+    zaehle($("summe"), 0);
+    $("ergUnter").textContent = "Gib unten dein steuerbares Einkommen ein.";
+    $("band").innerHTML = ""; $("legende").innerHTML = ""; $("meldungen").innerHTML = "";
+    s3aAktualisieren(null, t, lohnModus, pk, s3aSchon);
+    return;
+  }
+  const eingaben = { einkBund, einkKanton, vermoegen, verheiratet, ehepaar, kinder: Z.kinder, kirche: Z.kirche };
+  const res = R.berechne(eingaben, t);
+  s3aAktualisieren(eingaben, t, lohnModus, pk, s3aSchon);
+  zaehle($("summe"), res.total);
+
+  const basis = Math.max(einkKanton, einkBund);
+  const anteil = basis ? (res.total / 100 / basis * 100) : 0;
+  $("ergUnter").innerHTML = `Das sind <strong>${anteil.toFixed(1).replace(".", ".")} %</strong> von ${F.chf0(basis)} Franken steuerbarem Einkommen.`;
+
+  // Band
+  const band = $("band");
+  const vorhanden = new Map([...band.children].map((s) => [s.dataset.k, s]));
+  const keys = res.teile.filter((x) => x.rp > 0).map((x) => x.key);
+  [...band.children].forEach((s) => { if (!keys.includes(s.dataset.k) && !s._weg) { s.style.flexBasis = "0%"; s._weg = setTimeout(() => s.remove(), BEWEGUNG ? 900 : 0); } });
+  res.teile.filter((x) => x.rp > 0).forEach((x) => {
+    let s = vorhanden.get(x.key);
+    if (!s) { s = document.createElement("span"); s.dataset.k = x.key; s.style.background = FARBEN[x.key]; band.appendChild(s); }
+    if (s._weg) { clearTimeout(s._weg); s._weg = null; }
+    const breite = (x.rp / res.total * 100).toFixed(3) + "%";
+    requestAnimationFrame(() => requestAnimationFrame(() => (s.style.flexBasis = breite)));
+  });
+  const reihenfolge = ["bund", "staat", "gemeinde", "kirche", "personal"];
+  [...band.children].sort((a, b) => reihenfolge.indexOf(a.dataset.k) - reihenfolge.indexOf(b.dataset.k)).forEach((s) => band.appendChild(s));
+
+  // Legende
+  const alteLegende = $("legende").dataset.sig, sig = res.teile.map((x) => x.key).join();
+  $("legende").innerHTML = res.teile.map((x, i) => `<li style="${alteLegende === sig ? "animation:none" : `animation-delay:${i * 60}ms`}"><i style="background:${FARBEN[x.key]}"></i><span>${esc(x.name)}${x.neben ? `<span class="neben">${esc(x.neben)}</span>` : x.key === "bund" ? `<span class="neben">Tarif ${verheiratet ? "Verheiratete" : "Alleinstehende"}</span>` : ""}</span><span class="betrag">${F.rp(x.rp)}</span></li>`).join("");
+  $("legende").dataset.sig = sig;
+
+  // Meldungen
+  const m = [];
+  res.fehlt.forEach((t) => m.push(["fehlt", t]));
+  res.warnungen.forEach((t) => m.push(["pruefen", t]));
+  if (Z.gleich && !kantonAusLohn) m.push(["info", "Kanton rechnet mit dem gleichen Einkommen wie beim Bund. Für eine genauere Schätzung den Kantonsbetrag separat eingeben."]);
+  if (Z.modus === "lohn" && !abzuegeVorhanden()) m.push(["info", "Für " + Z.jahr + " sind die Abzüge nicht eingetragen. Bitte den Betrag direkt eingeben."]);
+  m.push(["info", "Schätzung. Verbindlich ist nur die Veranlagung des Steueramts."]);
+  $("meldungen").innerHTML = m.map(([k, t]) => `<div class="meldung ${k}">${SYMBOL[k]}<span>${esc(t)}</span></div>`).join("");
+}
+
+function s3aAktualisieren(e, t, lohnModus, pk, schon) {
+  const v = t.saeule_3a, block = $("blockS3a");
+  block.hidden = v.status === "fehlt";
+  if (block.hidden) return;
+  const max3a = pk ? v.max_mit_pensionskasse : v.max_ohne_pensionskasse;
+  const moeglich = lohnModus ? Math.max(0, max3a - Math.min(schon, max3a)) : v.max_mit_pensionskasse;
+  const regler = $("s3aRegler");
+  regler.max = moeglich; regler.disabled = moeglich === 0;
+  Z.s3aZusatz = Math.min(Z.s3aZusatz, moeglich); regler.value = Z.s3aZusatz;
+  regler.style.setProperty("--p", (moeglich ? Z.s3aZusatz / moeglich * 100 : 0) + "%");
+  $("s3aBetrag").textContent = "CHF " + F.chf0(Z.s3aZusatz);
+  const ersparnis = e && Z.s3aZusatz ? R.ersparnis3a(e, t, Z.s3aZusatz) : 0;
+  zaehle($("s3aErsparnis"), ersparnis);
+  let tipp = lohnModus
+    ? (moeglich === 0 ? "Du zahlst bereits das Maximum ein." : `Du zahlst schon ${F.chf0(Math.min(schon, max3a))} Franken ein. Möglich sind noch ${F.chf0(moeglich)} Franken.`)
+    : `Mit Pensionskasse sind höchstens ${F.chf0(v.max_mit_pensionskasse)} Franken pro Jahr möglich. Ohne Pensionskasse 20 % des Erwerbseinkommens, höchstens ${F.chf0(v.max_ohne_pensionskasse)}.`;
+  if (!e) tipp = "Gib zuerst oben dein Einkommen ein. " + tipp;
+  if (v.status !== "verifiziert") tipp += " Das Maximum ist noch nicht amtlich bestätigt.";
+  $("s3aTipp").textContent = tipp;
+}
+
+function rechnerAufbauen() {
+  $("s3aRegler").addEventListener("input", (ev) => { Z.s3aZusatz = Number(ev.target.value); speichern(); rechne(); });
+  segment($("zivilSeg"), [["ledig", "Ledig"], ["verheiratet", "Verheiratet"], ["alleinerziehend", "Alleinerz."]], Z.zivil, (v) => { Z.zivil = v; speichern(); rechne(); });
+  const kirchen = [["keine", "Keine"], ["reformiert", "Reformiert"], ["roemisch_katholisch", "Katholisch"], ["christkatholisch", "Christkatholisch"]];
+  $("kircheChips").innerHTML = kirchen.map(([v, t]) => `<button type="button" class="chip" data-v="${v}" aria-pressed="${Z.kirche === v}">${t}</button>`).join("");
+  $("kircheChips").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    Z.kirche = b.dataset.v; $("kircheChips").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b)); speichern(); rechne();
+  });
+  const kinderSetzen = (n) => { Z.kinder = Math.max(0, Math.min(15, n)); $("kinder").textContent = Z.kinder; speichern(); rechne(); };
+  $("kinderMinus").onclick = () => kinderSetzen(Z.kinder - 1);
+  $("kinderPlus").onclick = () => kinderSetzen(Z.kinder + 1);
+  $("kinder").textContent = Z.kinder;
+
+  segment($("modusSeg"), [["direkt", "Betrag kenne ich"], ["lohn", "Aus Lohn schätzen"]], Z.modus, (v) => { Z.modus = v; modusZeigen(); speichern(); rechne(); });
+  kipp($("kippPk"), Z.lohn.pk, (an) => { Z.lohn.pk = an; speichern(); rechne(); });
+  kipp($("kippGleich"), Z.gleich, (an) => { Z.gleich = an; klapp($("klappKanton"), !an); speichern(); rechne(); });
+  klapp($("klappKanton"), !Z.gleich);
+  modusZeigen();
+
+  const binden = (id, setter, wert) => { const el = $(id); el.value = wert; el.addEventListener("input", () => { setter(el.value); speichern(); rechne(); }); el.addEventListener("blur", () => { const n = F.zahl(el.value); if (n) el.value = F.chf0(n); }); };
+  binden("einkBund", (v) => (Z.einkBund = v), Z.einkBund);
+  binden("einkKanton", (v) => (Z.einkKanton = v), Z.einkKanton);
+  binden("vermoegen", (v) => (Z.vermoegen = v), Z.vermoegen);
+  document.querySelectorAll("[data-lohn]").forEach((el) => binden(el.id, (v) => (Z.lohn[el.dataset.lohn] = v), Z.lohn[el.dataset.lohn]));
+}
+function modusZeigen() {
+  const lohn = Z.modus === "lohn";
+  klapp($("klappDirekt"), !lohn); klapp($("klappLohn"), lohn);
+}
+
+/* =========================================================
+   Belege
+   ========================================================= */
+function eintragenZeichnen() {
+  const punkte = DATEN.checkliste.kategorien.flatMap((k) => k.punkte).filter((p) => p.ziffer);
+  punkte.sort((a, b) => { const x = a.ziffer.split(".").map(Number), y = b.ziffer.split(".").map(Number); return (x[0] - y[0]) || ((x[1] || 0) - (y[1] || 0)); });
+  $("eintragListe").innerHTML = `<p class="ziffer-hinweis">So trägst du deine Belege in ZHprivateTax ein, sortiert nach Ziffer. ${esc(DATEN.checkliste._ziffern || "")}</p>` +
+    punkte.map((p, i) => {
+      const d = Z.belege[p.id] || {}, b = F.zahl(d.betrag);
+      return `<div class="ziffer-zeile${d.erledigt ? " erledigt" : ""}" style="animation-delay:${i * 35}ms"><div class="ziffer">${esc(p.ziffer)}</div>
+        <div class="zt">${esc(p.text)}<span>${esc(p.ziffer_text)}</span></div>
+        <div class="zb${b ? "" : " offen"}">${b ? "CHF " + F.chf0(b) : d.erledigt ? "Beleg da" : "offen"}</div></div>`;
+    }).join("");
+}
+
+function belegeAufbauen() {
+  segment($("belegeSeg"), [["liste", "Checkliste"], ["eintragen", "Eintragen"]], Z.belegeAnsicht, (v) => { Z.belegeAnsicht = v; belegeAnsichtZeigen(); speichern(); });
+  belegeAnsichtZeigen();
+  const liste = $("belegeListe");
+  liste.innerHTML = DATEN.checkliste.kategorien.map((kat) => `
+    <div class="gruppe"><h3>${esc(kat.name)} <span data-zaehler="${esc(kat.name)}"></span></h3>
+      ${kat.punkte.map((p) => `
+      <div class="posten" data-id="${p.id}">
+        <div class="posten-kopf">
+          <button type="button" class="haken" aria-label="${esc(p.text)} erledigt"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <button type="button" class="posten-text" aria-expanded="false"><span class="t">${esc(p.text)}</span><span class="klein"></span></button>
+          <button type="button" class="pfeil" aria-label="Details"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        </div>
+        <div class="klapp"><div><div class="posten-detail">
+          <p class="wo"><b>Wo bekommen:</b> ${esc(p.wo)}</p>
+          ${p.ziffer ? `<p class="wo"><b>In der Steuererklärung:</b> Ziffer ${esc(p.ziffer)}, ${esc(p.ziffer_text)}</p>` : ""}
+          ${p.abklaeren ? '<div class="meldung pruefen" style="margin-bottom:10px">' + SYMBOL.pruefen + '<span>Ob und wie das für dich gilt, ist nicht sicher. Beim Steueramt nachfragen.</span></div>' : ""}
+          <div class="feld" style="margin-top:0"><label for="b_${p.id}">Betrag</label><div class="eingabe"><span>CHF</span><input id="b_${p.id}" data-betrag inputmode="decimal" placeholder="0"></div></div>
+          <div class="feld"><label for="n_${p.id}">Notiz</label><div class="eingabe"><input id="n_${p.id}" data-notiz placeholder="z.B. kommt im Januar"></div></div>
+        </div></div></div>
+      </div>`).join("")}
+    </div>`).join("");
+
+  liste.querySelectorAll(".posten").forEach((el) => {
+    const id = el.dataset.id, d = () => (Z.belege[id] = Z.belege[id] || {});
+    const betrag = el.querySelector("[data-betrag]"), notiz = el.querySelector("[data-notiz]");
+    betrag.value = (Z.belege[id] || {}).betrag || ""; notiz.value = (Z.belege[id] || {}).notiz || "";
+    const offen = (an) => { el.classList.toggle("offen", an); klapp(el.querySelector(".klapp"), an); el.querySelector(".posten-text").setAttribute("aria-expanded", an); Z.offen[id] = an; };
+    offen(!!Z.offen[id]);
+    el.querySelector(".haken").onclick = () => { d().erledigt = !d().erledigt; speichern(); belegeAktualisieren(); if (d().erledigt) toast("Beleg abgehakt"); };
+    el.querySelector(".posten-text").onclick = () => { offen(!el.classList.contains("offen")); speichern(); };
+    el.querySelector(".pfeil").onclick = () => { offen(!el.classList.contains("offen")); speichern(); };
+    betrag.addEventListener("input", () => { d().betrag = betrag.value; speichern(); belegeAktualisieren(false); });
+    betrag.addEventListener("blur", () => { const n = F.zahl(betrag.value); if (n) betrag.value = F.chf0(n); });
+    notiz.addEventListener("input", () => { d().notiz = notiz.value; speichern(); belegeAktualisieren(false); });
+  });
+  belegeAktualisieren();
+}
+function belegeAnsichtZeigen() {
+  $("belegeListe").classList.toggle("aktiv", Z.belegeAnsicht !== "eintragen");
+  $("eintragListe").classList.toggle("aktiv", Z.belegeAnsicht === "eintragen");
+  if (Z.belegeAnsicht === "eintragen") eintragenZeichnen();
+}
+function belegeAktualisieren() {
+  let total = 0, fertig = 0;
+  DATEN.checkliste.kategorien.forEach((kat) => {
+    let f = 0;
+    kat.punkte.forEach((p) => {
+      const d = Z.belege[p.id] || {}, el = document.querySelector(`.posten[data-id="${p.id}"]`);
+      total++; if (d.erledigt) { fertig++; f++; }
+      el.classList.toggle("erledigt", !!d.erledigt);
+      el.querySelector(".haken").setAttribute("aria-pressed", !!d.erledigt);
+      const teile = [];
+      if (d.betrag && F.zahl(d.betrag)) teile.push("CHF " + F.chf0(F.zahl(d.betrag)));
+      if (d.notiz) teile.push(esc(d.notiz));
+      if (p.abklaeren) teile.push('<span class="abkl">abklären</span>');
+      el.querySelector(".klein").innerHTML = teile.join(", ");
+      el.querySelector(".klein").style.display = teile.length ? "" : "none";
+    });
+    document.querySelector(`[data-zaehler="${CSS.escape(kat.name)}"]`).textContent = f + " / " + kat.punkte.length;
+  });
+  $("belegeZahl").textContent = fertig; $("belegeTotal").textContent = total;
+  $("belegeBalken").style.width = (fertig / total * 100) + "%";
+  eintragenZeichnen();
+  $("belegeText").textContent = fertig === total ? "Alle Belege beisammen. Bereit für ZHprivateTax." : fertig === 0 ? "Belege beisammen. Tipp auf einen Punkt für Details." : "Belege beisammen. Noch " + (total - fertig) + " offen.";
+}
+
+/* =========================================================
+   Daten
+   ========================================================= */
+function stufenText(stufen, feld, einheit) {
+  if (!stufen || !stufen.length) return "Noch nicht eingetragen";
+  const erste = stufen[0], letzte = stufen[stufen.length - 1], vorletzte = stufen.slice(0, -1).reduce((s, x) => s + (x.betrag || 0), 0);
+  return `${erste[feld]} ${einheit} für die ersten ${F.chf0(erste.betrag)} Fr., bis ${letzte[feld]} ${einheit} über ${F.chf0(vorletzte)} Fr. (${stufen.length} Stufen)`;
+}
+function datenAufbauen() {
+  const t = tarife(), zh = t.kanton_zh, b = t.bund, a = b.abzuege;
+  const s1 = b.tarif_alleinstehend.stufen;
+  const za = zh.abzuege || {};
+  const sz = a.schuldzinsen_max_ohne_vermoegensertrag != null && za.schuldzinsen_max_ohne_vermoegensertrag != null;
+  const eintraege = [
+    ["Bundessteuer: Tarif Alleinstehende", b.status, `Steuerfrei bis ${F.chf0(s1[0].ab)} Fr., ab ${F.chf0(s1[s1.length - 1].ab)} Fr. ${s1[s1.length - 1].satz_pro_100} %`, b._quelle],
+    ["Bundessteuer: Tarif Verheiratete", b.status, `Steuerfrei bis ${F.chf0(b.tarif_verheiratet.stufen[0].ab)} Fr.`, b._quelle],
+    ["Bundessteuer: Abzüge", a.status, a.status === "fehlt" ? "Noch nicht eingetragen" : `Fahrkosten max. ${F.chf0(a.fahrkosten_max)}, Verpflegung ${F.chf0(a.verpflegung_voll_pro_jahr)}, Berufskosten ${F.chf0(a.uebrige_berufskosten_min)} bis ${F.chf0(a.uebrige_berufskosten_max)}, Versicherungen ${F.chf0(a.versicherungspraemien_alleinstehend_mit_2_3a)} / ${F.chf0(a.versicherungspraemien_alleinstehend_ohne_2_3a)}`, a._quelle],
+    ["Schuldzinsen: Obergrenze", sz ? "verifiziert" : "fehlt", sz ? `Vermögensertrag plus ${F.chf0(a.schuldzinsen_max_ohne_vermoegensertrag)} Fr. (Bund und Kanton gleich)` : "Noch nicht eingetragen", sz ? a._quelle_schuldzinsen + " " + za._quelle_schuldzinsen : ""],
+    ["Säule 3a: Maximum", t.saeule_3a.status, t.saeule_3a.status === "fehlt" ? "Noch nicht eingetragen" : `${F.chf0(t.saeule_3a.max_mit_pensionskasse)} Fr. mit Pensionskasse, ${F.chf0(t.saeule_3a.max_ohne_pensionskasse)} Fr. ohne`, t.saeule_3a._quelle],
+    ["Kanton: Einkommen Grundtarif", zh.einkommenssteuer_grundtarif.status, stufenText(zh.einkommenssteuer_grundtarif.stufen, "satz_prozent", "%"), zh.einkommenssteuer_grundtarif._quelle || zh.einkommenssteuer_grundtarif._wo_holen],
+    ["Kanton: Einkommen Verheiratete", zh.einkommenssteuer_verheiratetentarif.status, stufenText(zh.einkommenssteuer_verheiratetentarif.stufen, "satz_prozent", "%"), zh.einkommenssteuer_verheiratetentarif._quelle || zh.einkommenssteuer_verheiratetentarif._wo_holen],
+    ["Kanton: Vermögen Grundtarif", zh.vermoegenssteuer_grundtarif.status, stufenText(zh.vermoegenssteuer_grundtarif.stufen, "satz_promille", "‰"), zh.vermoegenssteuer_grundtarif._quelle || zh.vermoegenssteuer_grundtarif._wo_holen],
+    ["Kanton: Vermögen Verheiratete", (zh.vermoegenssteuer_verheiratetentarif || { status: "fehlt" }).status, stufenText((zh.vermoegenssteuer_verheiratetentarif || {}).stufen, "satz_promille", "‰"), (zh.vermoegenssteuer_verheiratetentarif || {})._quelle || (zh.vermoegenssteuer_verheiratetentarif || {})._wo_holen || ""],
+    ["Kanton: Abzüge aus dem Steuergesetz", (zh.abzuege || { status: "fehlt" }).status, zh.abzuege && zh.abzuege.status !== "fehlt" ? `Fahrkosten max. ${F.chf0(zh.abzuege.fahrkosten_max)}, Versicherungen ${F.chf0(zh.abzuege.versicherungspraemien_alleinstehend_mit_2_3a)} / ${F.chf0(zh.abzuege.versicherungspraemien_alleinstehend_ohne_2_3a)}, Weiterbildung ${F.chf0(zh.abzuege.weiterbildung_max)}, Kinderabzug ${F.chf0(zh.abzuege.kinderabzug)}` : "Noch nicht eingetragen", (zh.abzuege || {})._quelle || ""],
+    ["Kanton: Pauschalen Berufsauslagen", ((zh.abzuege || {}).berufskosten_pauschalen || { status: "fehlt" }).status, ((zh.abzuege || {}).berufskosten_pauschalen || {}).status === "verifiziert" ? `Verpflegung ${F.chf0(zh.abzuege.berufskosten_pauschalen.verpflegung_voll_pro_jahr)}, übrige ${zh.abzuege.berufskosten_pauschalen.uebrige_berufskosten_prozent} % (${F.chf0(zh.abzuege.berufskosten_pauschalen.uebrige_berufskosten_min)} bis ${F.chf0(zh.abzuege.berufskosten_pauschalen.uebrige_berufskosten_max)})` : "Noch nicht eingetragen", ((zh.abzuege || {}).berufskosten_pauschalen || {})._quelle || ((zh.abzuege || {}).berufskosten_pauschalen || {})._wo_holen || ""],
+    ["Staatssteuerfuss", zh.steuerfuss_staat.status, zh.steuerfuss_staat.wert_prozent + " %", zh.steuerfuss_staat._quelle],
+    ["Gemeindesteuerfuss Stadt Zürich", zh.steuerfuss_gemeinde.status, zh.steuerfuss_gemeinde.wert_prozent + " %", zh.steuerfuss_gemeinde._quelle],
+    ["Kirchensteuerfuss", zh.steuerfuss_kirche.status, `Reformiert ${zh.steuerfuss_kirche.reformiert} %, katholisch ${zh.steuerfuss_kirche.roemisch_katholisch} %, christkatholisch ${zh.steuerfuss_kirche.christkatholisch} %`, zh.steuerfuss_kirche._quelle],
+    ["Personalsteuer", zh.personalsteuer.status, "CHF " + zh.personalsteuer.wert + " pro Person", zh.personalsteuer._quelle]
+  ];
+  const namen = { verifiziert: "geprüft", zu_pruefen: "prüfen", fehlt: "fehlt" };
+  const zahl = (s) => eintraege.filter((e) => e[1] === s).length;
+  $("datenTitel").textContent = "Steuerwerte " + Z.jahr;
+  $("datenZusammen").innerHTML = `<div><b style="color:var(--petrol)">${zahl("verifiziert")}</b><span>geprüft</span></div><div><b style="color:var(--bernstein)">${zahl("zu_pruefen")}</b><span>prüfen</span></div><div><b style="color:var(--ziegel)">${zahl("fehlt")}</b><span>fehlen</span></div>`;
+  $("datenListe").innerHTML = eintraege.map(([titel, status, wert, quelle]) => `
+    <div class="wert"><div class="wert-kopf"><h4>${esc(titel)}</h4><span class="status ${status}">${namen[status] || status}</span></div>
+      <p class="zahl">${esc(wert)}</p>${quelle ? `<p class="quelle">${esc(quelle)}</p>` : ""}</div>`).join("");
+}
+
+/* =========================================================
+   Navigation, Jahr, Thema, Sicherung
+   ========================================================= */
+const ANSICHTEN = ["rechner", "belege", "hilfe", "daten", "info"];
+function zeige(name) {
+  Z.ansicht = name; speichern();
+  ANSICHTEN.forEach((n) => $("v-" + n).classList.toggle("aktiv", n === name));
+  document.querySelectorAll(".leiste button").forEach((b) => b.setAttribute("aria-current", b.dataset.ziel === name ? "page" : "false"));
+  markerSetzen(true);
+  window.scrollTo({ top: 0, behavior: BEWEGUNG ? "smooth" : "auto" });
+  if (name === "rechner") requestAnimationFrame(() => ["zivilSeg", "modusSeg"].forEach((id) => $(id)._setze && $(id)._setze(id === "zivilSeg" ? Z.zivil : Z.modus)));
+  if (name === "info") requestAnimationFrame(() => $("themaSeg")._setze(Z.thema));
+  if (name === "belege") requestAnimationFrame(() => $("belegeSeg")._setze(Z.belegeAnsicht));
+}
+document.querySelectorAll(".leiste button").forEach((b) => (b.onclick = () => zeige(b.dataset.ziel)));
+
+// Flüssige Farbe und Glas-Linse: folgen dem aktiven Tab mit einer Feder
+const LEISTE = $("leiste");
+const FARBE = document.createElement("div");
+FARBE.className = "farbe"; FARBE.setAttribute("aria-hidden", "true");
+FARBE.innerHTML = [...LEISTE.querySelectorAll("button")].map((b) => `<span>${b.innerHTML}</span>`).join("");
+LEISTE.appendChild(FARBE);
+const FEDER = { pos: null, tempo: 0, ziel: 0, breite: 60, zuletzt: 0, laeuft: false };
+
+// ---------- Lichtbrechung: Brechungs-Karte für die Glasform berechnen ----------
+const LICHT = { an: /Chrome\//.test(navigator.userAgent) && !/Firefox\//.test(navigator.userAgent), breite: 0, hoehe: 0 };
+const GLAS_STANDARD = { rand: 22, staerke: 1, unschaerfe: 4, saum: 4, toenung: 18 };
+const GLAS = { ...GLAS_STANDARD };
+try { Object.assign(GLAS, JSON.parse(localStorage.getItem("steuertool.glas") || "{}")); } catch (e) {}
+function glasFilter() {
+  // Unschärfe und Farbsaum direkt im SVG-Filter setzen (ohne Karte neu zu rechnen)
+  document.querySelector("#lg-filter feGaussianBlur").setAttribute("stdDeviation", GLAS.unschaerfe);
+  const v = document.querySelectorAll("#lg-filter feDisplacementMap");
+  v[0].setAttribute("scale", 42 + GLAS.saum); v[1].setAttribute("scale", 42); v[2].setAttribute("scale", 42 - GLAS.saum);
+  LEISTE.style.setProperty("--toenung", GLAS.toenung + "%");
+}
+function lichtKarte() {
+  if (!LICHT.an) return;
+  const W = Math.round(LEISTE.offsetWidth), H = Math.round(LEISTE.offsetHeight);
+  if (!W || !H) return;
+  LICHT.breite = W; LICHT.hoehe = H;
+  const c = document.createElement("canvas"); c.width = W; c.height = H;
+  const ctx = c.getContext("2d"), bild = ctx.createImageData(W, H), d = bild.data;
+  const r = H / 2, rand = Math.min(GLAS.rand, r);
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      // Abstand zum Rand der Kapsel und Richtung nach aussen
+      const mx = Math.min(Math.max(x + 0.5, r), W - r), dx = x + 0.5 - mx, dy = y + 0.5 - r;
+      const dist = Math.hypot(dx, dy) || 0.0001, innen = r - dist;
+      let vx = 0, vy = 0;
+      if (innen > 0 && innen < rand) {
+        const t = 1 - innen / rand;                 // 0 = Beginn der Rundung, 1 = ganz am Rand
+        const kraft = t * t * t * GLAS.staerke;     // wie eine gewölbte Glaskante: aussen stark, innen sanft
+        vx = -dx / dist * kraft; vy = -dy / dist * kraft;   // Bild von innen holen = Rand wirkt gewölbt
+      }
+      const i = (y * W + x) * 4;
+      d[i] = 128 + vx * 127; d[i + 1] = 128 + vy * 127; d[i + 2] = 128; d[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(bild, 0, 0);
+  const f = document.getElementById("lg-filter"), k = document.getElementById("lg-karte");
+  for (const el of [f, k]) { el.setAttribute("width", W); el.setAttribute("height", H); }
+  k.setAttribute("href", c.toDataURL());
+  LEISTE.classList.add("licht");
+}
+if (LICHT.an) {
+  glasFilter();
+  lichtKarte();
+  if (window.ResizeObserver) new ResizeObserver(() => {
+    if (Math.round(LEISTE.offsetWidth) !== LICHT.breite || Math.round(LEISTE.offsetHeight) !== LICHT.hoehe) lichtKarte();
+  }).observe(LEISTE);
+}
+
+function fliessenZeichnen() {
+  const f = FEDER, pad = parseFloat(getComputedStyle(LEISTE).getPropertyValue("--pad")) || 6;
+  const schnell = Math.abs(f.tempo);
+  const dehnung = Math.min(schnell * 0.07, f.breite * 0.9);          // je schneller, desto länger
+  LEISTE.style.setProperty("--bx", f.pos + "px");
+  LEISTE.style.setProperty("--bw", (f.breite * 0.42 + dehnung * 0.55) + "px");
+  FARBE.style.filter = schnell > 40 ? `blur(${Math.min(schnell / 1100, 1.4).toFixed(2)}px)` : "";
+  // Linse bleibt immer innerhalb der Leiste (statt sie am Rand abzuschneiden)
+  const linse = $("marker"), innen = LEISTE.clientWidth - 2 * pad;
+  let links = f.pos - (f.breite + dehnung * 0.5) / 2, rechts = f.pos + (f.breite + dehnung * 0.5) / 2;
+  links = Math.max(0, links); rechts = Math.min(innen, rechts);
+  linse.style.width = (rechts - links) + "px";
+  linse.style.transform = `translateX(${(links + pad).toFixed(2)}px) scaleY(${(1 - Math.min(dehnung / 900, 0.06)).toFixed(3)})`;
+}
+function fliessenSchritt(t) {
+  const f = FEDER, dt = Math.min((t - f.zuletzt) / 1000 || 0.016, 0.032);
+  f.zuletzt = t;
+  const k = 340, d = 26;                                             // Federhärte und Dämpfung
+  f.tempo += (k * (f.ziel - f.pos) - d * f.tempo) * dt;
+  f.pos += f.tempo * dt;
+  if (Math.abs(f.ziel - f.pos) < 0.3 && Math.abs(f.tempo) < 4) { f.pos = f.ziel; f.tempo = 0; f.laeuft = false; fliessenZeichnen(); return; }
+  fliessenZeichnen();
+  requestAnimationFrame(fliessenSchritt);
+}
+function markerSetzen(animiert) {
+  const b = LEISTE.querySelector('button[aria-current="page"]');
+  if (!b) return;
+  const pad = parseFloat(getComputedStyle(LEISTE).getPropertyValue("--pad")) || 6;
+  FEDER.ziel = b.offsetLeft - pad + b.offsetWidth / 2;
+  FEDER.breite = b.offsetWidth;
+  if (!animiert || !BEWEGUNG || FEDER.pos === null) { FEDER.pos = FEDER.ziel; FEDER.tempo = 0; fliessenZeichnen(); return; }
+  if (!FEDER.laeuft) { FEDER.laeuft = true; FEDER.zuletzt = performance.now(); requestAnimationFrame(fliessenSchritt); }
+}
+
+function thema(v) { if (v === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", v); }
+
+$("exportKnopf").onclick = () => {
+  const blob = new Blob([JSON.stringify({ app: "steuertool", version: 1, gesichert: new Date().toISOString(), daten: Z }, null, 2)], { type: "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "steuertool-daten-" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast("Datei gespeichert");
+};
+$("importKnopf").onclick = () => $("importDatei").click();
+$("importDatei").onchange = async (e) => {
+  const datei = e.target.files[0]; if (!datei) return;
+  try {
+    const d = JSON.parse(await datei.text());
+    if (d.app !== "steuertool" || !d.daten) throw new Error();
+    Z = { ...STANDARD, ...d.daten, lohn: { ...STANDARD.lohn, ...(d.daten.lohn || {}) } };
+    try { localStorage.setItem(SPEICHER, JSON.stringify(Z)); } catch (er) {}
+    location.reload();
+  } catch (er) { toast("Diese Datei ist keine Sicherung vom Steuer-Tool"); }
+  e.target.value = "";
+};
+$("loeschKnopf").onclick = () => {
+  if (!confirm("Alle Eingaben und abgehakten Belege löschen? Das kann nicht rückgängig gemacht werden.")) return;
+  try { localStorage.removeItem(SPEICHER); } catch (er) {}
+  location.reload();
+};
+
+function hilfeInhalt(t) {
+  const b = t.bund.abzuege, ok = b.status !== "fehlt";
+  const k = (t.kanton_zh.abzuege && t.kanton_zh.abzuege.status !== "fehlt") ? t.kanton_zh.abzuege : null;
+  const kp = k && k.berufskosten_pauschalen && k.berufskosten_pauschalen.status !== "fehlt" ? k.berufskosten_pauschalen : null;
+  const v = t.saeule_3a, f = F.chf0;
+  const bk = (bund, kanton) => ok ? (k ? `Bund höchstens CHF ${f(bund)}, Kanton höchstens CHF ${f(kanton)}.` : `Bund höchstens CHF ${f(bund)}.`) : "";
+  return [
+    { titel: "Deine Situation", unter: "Steuerjahr, Zivilstand, Kinder, Kirche", felder: [
+      ["Steuerjahr (oben rechts)", "Das Jahr, für das du die Steuererklärung machst. Die Erklärung für 2026 reichst du 2027 ein. Jedes Jahr hat eigene Tarife, darum gibt es mehrere Jahre zur Auswahl.", "Steht oben im Brief vom Steueramt, z.B. «Steuererklärung 2026»."],
+      ["Zivilstand: Ledig", "Für alle, die nicht verheiratet sind und nicht allein mit Kindern leben. Auch geschieden, getrennt oder verwitwet ohne Kinder im Haushalt.", ""],
+      ["Zivilstand: Verheiratet", "Für Ehepaare, die zusammen leben. Ihr werdet gemeinsam besteuert und bekommt einen tieferen Tarif.", ""],
+      ["Zivilstand: Alleinerziehend", "Wenn du nicht verheiratet bist, mit deinen Kindern zusammenlebst und hauptsächlich für ihren Unterhalt bezahlst. Dann gilt der tiefere Verheiratetentarif. Wähle auch die Anzahl Kinder.", ""],
+      ["Kinder", "Anzahl minderjährige Kinder, für die du sorgst, oder volljährige Kinder in der ersten Ausbildung, deren Unterhalt du hauptsächlich bezahlst.", ""],
+      ["Kirche", "Nur wenn du Mitglied der reformierten, katholischen oder christkatholischen Landeskirche bist. Bist du ausgetreten oder hast eine andere Religion: «Keine».", "Steht in der letzten Steuererklärung unter Konfession."]
+    ]},
+    { titel: "Bundessteuer", unter: "Betrag direkt eingeben", felder: [
+      ["Betrag kenne ich / Aus Lohn schätzen", "Hast du die Zahl schon (z.B. aus der Steuererklärung oder ZHprivateTax), nimm «Betrag kenne ich». Sonst «Aus Lohn schätzen»: Dann rechnet das Tool das steuerbare Einkommen aus deinem Lohn und deinen Belegen aus.", ""],
+      ["Steuerbares Einkommen Bund", "Dein Einkommen nach allen Abzügen, so wie es für die direkte Bundessteuer zählt. Nicht dein Lohn, sondern die Zahl ganz am Schluss der Einkommensberechnung.", "Steuererklärung, Ziffer 27, Spalte Bundessteuer. Oder in der Veranlagung vom Steueramt."]
+    ]},
+    { titel: "Aus Lohn schätzen", unter: "Lohn, Abzüge, Belege", felder: [
+      ["Nettolohn laut Lohnausweis", "Dein Lohn nach Abzug von AHV, ALV, Pensionskasse usw. Hast du mehrere Stellen, zähl alle Nettolöhne zusammen.", "Lohnausweis vom Arbeitgeber, Ziffer 11 «Nettolohn»."],
+      ["Gewinn Nebenerwerb", "Nur für selbständige Arbeit, z.B. dein PC-Service: Einnahmen minus Geschäftsausgaben. Nicht der Umsatz. Ob und wie das genau deklariert wird, beim Steueramt abklären.", "Eigene Buchhaltung: alle Rechnungen und Quittungen des Jahres."],
+      ["Andere Einkünfte", "Geld, das nicht vom Lohn kommt: Arbeitslosengeld, Taggelder (Krankheit, Unfall), Zinsen auf Konten. Ein Darlehen ist kein Einkommen und gehört nicht hierhin.", "Bescheinigungen der Kassen und Versicherungen, Zinsausweis der Bank."],
+      ["Fahrkosten Arbeitsweg", `Kosten für den Weg zur Arbeit, meistens das Abo für Bus und Tram (z.B. ZVV). Mit dem Velo gilt eine Pauschale von CHF 700. Das Auto zählt nur in Ausnahmen, z.B. wenn es keinen ÖV gibt. ${bk(b.fahrkosten_max, k && k.fahrkosten_max)}`, "Abo-Rechnung oder SBB-/ZVV-Konto."],
+      ["Verpflegung", ok ? `Wenn du über Mittag nicht nach Hause kannst. Bezahlst du das Essen selbst: CHF 15 pro Arbeitstag, höchstens CHF ${f(b.verpflegung_voll_pro_jahr)} im Jahr. Gibt es eine Kantine oder verbilligtes Essen: CHF 7.50 pro Tag, höchstens CHF ${f(b.verpflegung_halb_pro_jahr)}. Bekommst du das Essen bezahlt, gibt es keinen Abzug.` : "Wenn du über Mittag nicht nach Hause kannst.", "Eigene Notiz: Anzahl Arbeitstage."],
+      ["In einer Pensionskasse versichert", "Eingeschaltet lassen, wenn dir der Arbeitgeber Pensionskasse (BVG) vom Lohn abzieht. Das beeinflusst, wie viel du in die Säule 3a einzahlen darfst und wie hoch der Versicherungsabzug ist.", "Lohnausweis, Ziffer 10 «Berufliche Vorsorge». Steht dort ein Betrag, bist du versichert."],
+      ["Einzahlung Säule 3a", v.status !== "fehlt" ? `Was du im Steuerjahr auf dein 3a-Konto eingezahlt hast. Mit Pensionskasse höchstens CHF ${f(v.max_mit_pensionskasse)}, ohne Pensionskasse 20 % des Erwerbseinkommens, höchstens CHF ${f(v.max_ohne_pensionskasse)}.` : "Was du im Steuerjahr auf dein 3a-Konto eingezahlt hast.", "Bescheinigung der Bank oder Versicherung (kommt meistens im Januar)."],
+      ["Krankenkassenprämien", `Die Prämien, die du im Jahr selbst bezahlt hast, Grund- und Zusatzversicherung zusammen. Ziehe eine Prämienverbilligung ab. Der Abzug ist begrenzt: ${ok ? (k ? `Bund CHF ${f(b.versicherungspraemien_alleinstehend_mit_2_3a)}, Kanton CHF ${f(k.versicherungspraemien_alleinstehend_mit_2_3a)} für Ledige mit Pensionskasse oder 3a.` : `Bund CHF ${f(b.versicherungspraemien_alleinstehend_mit_2_3a)} für Ledige.`) : ""} Meistens zahlst du mehr, dann zählt einfach das Maximum.`, "Prämienbestätigung der Krankenkasse (Kundenportal)."],
+      ["Weiterbildungskosten", `Kosten für eine berufsorientierte Aus- oder Weiterbildung: Schulgeld, Kurse, Material. Bei Bund und Kanton gilt dieselbe Regel: Abziehbar, wenn du schon einen ersten Abschluss nach der obligatorischen Schule hast (z.B. EFZ, EBA, Matura). Hast du keinen, nur wenn du mindestens 20 bist und es nicht um die Ausbildung bis zu diesem ersten Abschluss geht. Ist deine Lehre als Erwachsener also dein erster Abschluss, zählt sie nicht. Nur was du selbst bezahlst, nicht was Arbeitgeber oder Stipendien übernehmen. Abgezogen wird im Jahr, in dem du bezahlst. ${bk(b.weiterbildung_max, k && k.weiterbildung_max)}`, "Rechnungen der Schule und Zahlungsbelege. Ziffer 16.2 mit Hilfsblatt."],
+      ["Schuldzinsen", `Zinsen für private Schulden, z.B. ein Ausbildungsdarlehen oder einen Kredit. Nur die Zinsen, nicht die Rückzahlung. Zählt im Jahr, in dem der Zins fällig ist. Höchstens die Erträge aus deinem Vermögen plus CHF ${f(b.schuldzinsen_max_ohne_vermoegensertrag || 50000)}, das erreichst du praktisch nie. Den offenen Betrag des Darlehens per 31.12. trägst du zusätzlich bei den Schulden ein (Ziffer 34). Das senkt dein Vermögen.`, "Zinsbestätigung des Darlehensgebers. Steuererklärung Ziffer 12, aus dem Schuldenverzeichnis."],
+      ["Selbst bezahlte Krankheitskosten", "Arztrechnungen, Zahnarzt, Franchise und Selbstbehalt, die du selbst bezahlt hast. Gib alles ein: Das Tool zieht automatisch nur den Teil ab, der über 5 % deines Nettoeinkommens liegt.", "Rechnungen und die Leistungsabrechnungen der Krankenkasse."],
+      ["Spenden", "Spenden an gemeinnützige Organisationen in der Schweiz, die von der Steuer befreit sind. Zählt erst ab CHF 100 im Jahr, höchstens 20 % des Nettoeinkommens.", "Spendenbestätigungen der Organisationen."]
+    ]},
+    { titel: "Staats- und Gemeindesteuer", unter: "Kanton, Vermögen", felder: [
+      ["Gleicher Betrag wie beim Bund", "Nur als grobe Schätzung, wenn du die Kantonszahl nicht kennst. Beim Kanton sind die Abzüge etwas anders, darum ist das Einkommen beim Kanton oft etwas tiefer. Im Modus «Aus Lohn schätzen» rechnet das Tool den Kanton automatisch.", ""],
+      ["Steuerbares Einkommen Kanton", "Wie beim Bund, aber die Zahl für die Staats- und Gemeindesteuer.", "Steuererklärung, Ziffer 27, Spalte Staatssteuer. Oder in ZHprivateTax."],
+      ["Steuerbares Vermögen", "Alles Geld auf Konten, Wertschriften und Krypto am 31. Dezember, minus deine Schulden (z.B. ein offenes Ausbildungsdarlehen). Bis zu einem Freibetrag zahlst du keine Vermögenssteuer, das rechnet das Tool selbst.", "Jahresauszüge der Bank per 31.12., Steuererklärung Ziffer 35 bis 37."]
+    ]},
+    { titel: "Säule 3a: was wäre wenn", unter: "Regler unten im Rechner", felder: [
+      ["Zusätzlich einzahlen", "Zieh den Regler auf den Betrag, den du noch in die Säule 3a einzahlen könntest. Das Tool zeigt, wie viel Steuern du damit sparst. Es zählt, was im Steuerjahr eingezahlt wird, also bis Ende Dezember.", ""]
+    ]},
+    { titel: "Belege", unter: "Checkliste und Eintragen", felder: [
+      ["Haken", "Tipp auf das Kästchen, wenn du den Beleg hast.", ""],
+      ["Betrag und Notiz", "Tipp auf einen Punkt, um ihn aufzuklappen. Dort steht, wo du den Beleg bekommst und in welche Ziffer der Steuererklärung er gehört. Trag den Betrag vom Beleg ein, damit du ihn später schnell findest.", ""],
+      ["Eintragen", "Zeigt alle Belege sortiert nach Ziffer, so wie die Steuererklärung aufgebaut ist. Damit gehst du in ZHprivateTax von oben nach unten durch.", ""]
+    ]},
+    { titel: "Daten und Info", unter: "Quellen, Sicherung", felder: [
+      ["Daten", "Zeigt, woher jede Zahl im Tool kommt. «geprüft» heisst aus einer amtlichen Quelle, «prüfen» heisst noch nicht amtlich bestätigt, «fehlt» heisst, das Tool rechnet diesen Teil nicht.", ""],
+      ["Daten als Datei sichern", "Deine Eingaben sind nur in diesem Browser gespeichert. Sichere sie ab und zu als Datei, z.B. bevor du den Browserverlauf löschst oder das Handy wechselst. Mit «Gesicherte Datei laden» holst du sie zurück.", ""]
+    ]}
+  ];
+}
+function hilfeAufbauen() {
+  const gruppen = hilfeInhalt(tarife());
+  const offen = Z.hilfeOffen || {};
+  $("hilfeListe").innerHTML = gruppen.map((g, i) => `
+    <div class="hilfe-gruppe${offen[i] ? " offen" : ""}" data-i="${i}">
+      <button type="button" class="hilfe-kopf" aria-expanded="${!!offen[i]}"><span>${esc(g.titel)}<small>${esc(g.unter)}</small></span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="klapp${offen[i] ? " offen" : ""}"><div>
+        ${g.felder.map(([name, text, wo]) => `<div class="hilfe-feld"><h4>${esc(name)}</h4><p>${esc(text)}</p>${wo ? `<p class="wo"><b>Wo finde ich das?</b> ${esc(wo)}</p>` : ""}</div>`).join("")}
+      </div></div>
+    </div>`).join("");
+  $("hilfeListe").querySelectorAll(".hilfe-gruppe").forEach((el) => {
+    klapp(el.querySelector(".klapp"), el.classList.contains("offen"));
+    el.querySelector(".hilfe-kopf").onclick = () => {
+      const an = !el.classList.contains("offen");
+      el.classList.toggle("offen", an); klapp(el.querySelector(".klapp"), an);
+      el.querySelector(".hilfe-kopf").setAttribute("aria-expanded", an);
+      Z.hilfeOffen = { ...(Z.hilfeOffen || {}), [el.dataset.i]: an }; speichern();
+    };
+  });
+}
+
+function jahrWechsel(v) {
+  Z.jahr = v; speichern();
+
+  rechne(); datenAufbauen(); hilfeAufbauen();
+}
+
+/* ---------- Glas-Labor ---------- */
+function laborAufbauen() {
+  const felder = { gRand: ["rand", (v) => v + " px", true], gStaerke: ["staerke", (v) => Math.round(v * 100) + " %", true, 100],
+    gUnschaerfe: ["unschaerfe", (v) => v + " px"], gSaum: ["saum", (v) => v], gToenung: ["toenung", (v) => v + " %"] };
+  if (!LICHT.an) $("laborHinweis").textContent = "Die Lichtbrechung läuft nur in Chrome und Edge. In diesem Browser siehst du die normale Glas-Version.";
+  let karteTimer;
+  const zeigen = () => Object.entries(felder).forEach(([id, [k, fmt, , teiler]]) => {
+    $(id).value = teiler ? GLAS[k] * teiler : GLAS[k]; $(id + "W").textContent = fmt(GLAS[k]);
+    $(id).style.setProperty("--p", (($(id).value - $(id).min) / ($(id).max - $(id).min) * 100) + "%");
+  });
+  Object.entries(felder).forEach(([id, [k, , karte, teiler]]) => {
+    $(id).addEventListener("input", () => {
+      GLAS[k] = Number($(id).value) / (teiler || 1); zeigen();
+      try { localStorage.setItem("steuertool.glas", JSON.stringify(GLAS)); } catch (e) {}
+      if (!LICHT.an) return;
+      if (karte) { clearTimeout(karteTimer); karteTimer = setTimeout(lichtKarte, 30); } else glasFilter();
+    });
+  });
+  $("gReset").onclick = () => { Object.assign(GLAS, GLAS_STANDARD); try { localStorage.removeItem("steuertool.glas"); } catch (e) {} zeigen(); if (LICHT.an) { glasFilter(); lichtKarte(); } };
+  zeigen();
+}
+laborAufbauen();
+
+/* ---------- Start ---------- */
+thema(Z.thema);
+segment($("jahrSeg"), JAHRE.map((j) => [j, j]), Z.jahr, jahrWechsel);
+segment($("themaSeg"), [["auto", "Automatisch"], ["light", "Hell"], ["dark", "Dunkel"]], Z.thema, (v) => { Z.thema = v; thema(v); speichern(); });
+rechnerAufbauen();
+belegeAufbauen();
+datenAufbauen();
+hilfeAufbauen();
+zeige(ANSICHTEN.includes(Z.ansicht) ? Z.ansicht : "rechner");
+rechne();
+window.addEventListener("resize", () => markerSetzen(false));
+window.addEventListener("resize", () => ["jahrSeg", "zivilSeg", "modusSeg", "themaSeg", "belegeSeg"].forEach((id) => {
+  const el = $(id); const aktiv = el.querySelector('button[aria-pressed="true"]'); if (aktiv && el._setze) el._setze(aktiv.dataset.v);
+}));
+</script>
+</body>
+</html>

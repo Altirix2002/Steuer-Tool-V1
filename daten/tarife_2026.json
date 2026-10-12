@@ -1,0 +1,199 @@
+{
+  "_info": "Steuerdaten fuer das Steuerjahr 2026 (Steuererklaerung wird 2027 eingereicht). Jeder Wert hat eine Quelle und einen Status. Status: 'verifiziert' = aus amtlicher Quelle uebernommen, 'zu_pruefen' = nur aus nicht-amtlicher Quelle, bitte mit amtlicher Quelle vergleichen, 'fehlt' = noch nicht eingetragen, das Programm rechnet diesen Teil NICHT.",
+  "steuerjahr": 2026,
+  "bund": {
+    "_quelle": "ESTV Rundschreiben 2-215-D-2025-d vom 11.09.2025, Tarif 2026 (Art. 36 DBG). https://www.estv.admin.ch/dam/de/sd-web/vFK3ntWLQ4s4/2-215-D-2025-d.pdf",
+    "status": "verifiziert",
+    "tarif_alleinstehend": {
+      "_hinweis": "Jede Stufe: ab 'ab' Franken betraegt die Steuer 'basis' Franken, plus 'satz_pro_100' fuer je weitere 100 Franken. Ab 'pauschal_ab' gilt 'pauschal_satz' Prozent auf das ganze Einkommen.",
+      "stufen": [
+        {"ab": 15200, "basis": 0.0, "satz_pro_100": 0.77},
+        {"ab": 33200, "basis": 138.6, "satz_pro_100": 0.88},
+        {"ab": 43500, "basis": 229.2, "satz_pro_100": 2.64},
+        {"ab": 58000, "basis": 612.0, "satz_pro_100": 2.97},
+        {"ab": 76200, "basis": 1152.5, "satz_pro_100": 5.94},
+        {"ab": 82100, "basis": 1502.95, "satz_pro_100": 6.6},
+        {"ab": 108900, "basis": 3271.75, "satz_pro_100": 8.8},
+        {"ab": 141500, "basis": 6140.55, "satz_pro_100": 11.0},
+        {"ab": 185100, "basis": 10936.55, "satz_pro_100": 13.2},
+        {"ab": 794000, "basis": 91310.0, "satz_pro_100": 11.5}
+      ]
+    },
+    "tarif_verheiratet": {
+      "_hinweis": "Gilt fuer Ehepaare und Einelternfamilien (Art. 36 Abs. 2 DBG).",
+      "stufen": [
+        {"ab": 29700, "basis": 0.0, "satz_pro_100": 1.0},
+        {"ab": 53400, "basis": 237.0, "satz_pro_100": 2.0},
+        {"ab": 61300, "basis": 395.0, "satz_pro_100": 3.0},
+        {"ab": 79100, "basis": 929.0, "satz_pro_100": 4.0},
+        {"ab": 94900, "basis": 1561.0, "satz_pro_100": 5.0},
+        {"ab": 108700, "basis": 2251.0, "satz_pro_100": 6.0},
+        {"ab": 120600, "basis": 2965.0, "satz_pro_100": 7.0},
+        {"ab": 130500, "basis": 3658.0, "satz_pro_100": 8.0},
+        {"ab": 138400, "basis": 4290.0, "satz_pro_100": 9.0},
+        {"ab": 144300, "basis": 4821.0, "satz_pro_100": 10.0},
+        {"ab": 148300, "basis": 5221.0, "satz_pro_100": 11.0},
+        {"ab": 150400, "basis": 5452.0, "satz_pro_100": 12.0},
+        {"ab": 152400, "basis": 5692.0, "satz_pro_100": 13.0},
+        {"ab": 941400, "basis": 108261.0, "satz_pro_100": 11.5}
+      ]
+    },
+    "abzug_pro_kind_vom_steuerbetrag": 263,
+    "mindeststeuer_wird_erhoben_ab": 25,
+    "abzuege": {
+      "_quelle": "ESTV Rundschreiben 2-215-D-2025-d, Tabelle Abzuege Steuerjahr 2026",
+      "status": "verifiziert",
+      "fahrkosten_max": 3300,
+      "verpflegung_voll_pro_jahr": 3200,
+      "verpflegung_halb_pro_jahr": 1600,
+      "uebrige_berufskosten_min": 2000,
+      "uebrige_berufskosten_max": 4000,
+      "nebenerwerb_pauschale_min": 800,
+      "nebenerwerb_pauschale_max": 2400,
+      "versicherungspraemien_alleinstehend_mit_2_3a": 1800,
+      "versicherungspraemien_alleinstehend_ohne_2_3a": 2700,
+      "versicherungspraemien_verheiratet_mit_2_3a": 3700,
+      "versicherungspraemien_verheiratet_ohne_2_3a": 5550,
+      "versicherungspraemien_pro_kind": 700,
+      "weiterbildung_max": 13000,
+      "kinderabzug": 6800,
+      "verheiratetenabzug": 2800,
+      "krankheitskosten_selbstbehalt_prozent": 5,
+      "spenden_minimum": 100,
+      "spenden_max_prozent": 20,
+      "_quelle_krankheit_spenden": "Art. 33 Abs. 1 lit. h DBG (Krankheitskosten ueber 5% des Nettoeinkommens) und Art. 33a DBG (Spenden ab CHF 100, hoechstens 20%). Bestaetigt durch Steuererklaerung 2025: gleiche Kosten ergeben bei Bund und Staat genau 5% Selbstbehalt.",
+      "uebrige_berufskosten_prozent": 3,
+      "_quelle_prozent": "3 % gemaess Berufskostenverordnung EFD; bestaetigt in ESTV Quellensteuer-Berechnungsgrundlagen 2026 (Pauschalabzug Art. 26 Abs. 1 lit. c DBG 3.00%).",
+      "schuldzinsen_max_ohne_vermoegensertrag": 50000,
+      "_quelle_schuldzinsen": "Art. 33 Abs. 1 lit. a DBG: private Schuldzinsen im Umfang der steuerbaren Vermoegensertraege und weiterer 50'000 Franken; auch ohne Vermoegensertrag bis 50'000 (ESTV Kreisschreiben Nr. 22a vom 31.01.2020). Abzug im Jahr der Faelligkeit."
+    }
+  },
+  "saeule_3a": {
+    "_quelle": "UBS (ubs.com, Maximalbetrag 2026) und Comparis. Amtliche Quelle (BSV) noch nicht selbst geprueft.",
+    "status": "zu_pruefen",
+    "max_mit_pensionskasse": 7258,
+    "max_ohne_pensionskasse": 36288,
+    "ohne_pensionskasse_prozent_vom_erwerbseinkommen": 20
+  },
+  "kanton_zh": {
+    "steuerfuss_staat": {
+      "wert_prozent": 95,
+      "status": "verifiziert",
+      "_quelle": "zh.ch/steuerfuesse: Staatssteuerfuss 2026 und 2027 = 95% (2024/2025 = 98%)"
+    },
+    "steuerfuss_gemeinde": {
+      "gemeinde": "Zuerich (Stadt)",
+      "wert_prozent": 119,
+      "status": "verifiziert",
+      "_quelle": "zh.ch/steuerfuesse, Tabelle Gemeinde Zuerich, abgerufen 08.10.2026: Gesamtsteuerfuss ohne Kirchen 119%"
+    },
+    "steuerfuss_kirche": {
+      "_hinweis": "Nur wenn du Mitglied einer Landeskirche bist. Sonst 'keine' waehlen.",
+      "reformiert": 10,
+      "roemisch_katholisch": 10,
+      "christkatholisch": 14,
+      "status": "verifiziert",
+      "_quelle": "zh.ch/steuerfuesse, Tabelle Gemeinde Zuerich, abgerufen 08.10.2026: mit ref. Kirche 129%, mit kath. Kirche 129%, mit christkath. Kirche 133% (je minus 119% Gemeinde)"
+    },
+    "personalsteuer": {
+      "wert": 24,
+      "status": "verifiziert",
+      "_quelle": "Steuergesetz ZH LS 631.1, Paragraph 200 (Nachtrag 132). Ehegatten je CHF 24 (Paragraph 199 Abs. 2)."
+    },
+    "einkommenssteuer_grundtarif": {
+      "status": "verifiziert",
+      "_quelle": "Steuergesetz Kanton Zuerich LS 631.1, Nachtrag 132 (Stand 1.4.26), Fassung gemaess V ueber den Ausgleich der kalten Progression ab 1.1.2026 (OS 80, 273), Paragraph 35 Abs. 1",
+      "stufen": [
+        {"satz_prozent": 0, "betrag": 7000},
+        {"satz_prozent": 2, "betrag": 5000},
+        {"satz_prozent": 3, "betrag": 4800},
+        {"satz_prozent": 4, "betrag": 8000},
+        {"satz_prozent": 5, "betrag": 9700},
+        {"satz_prozent": 6, "betrag": 11200},
+        {"satz_prozent": 7, "betrag": 13100},
+        {"satz_prozent": 8, "betrag": 17600},
+        {"satz_prozent": 9, "betrag": 34000},
+        {"satz_prozent": 10, "betrag": 33700},
+        {"satz_prozent": 11, "betrag": 53300},
+        {"satz_prozent": 12, "betrag": 69300},
+        {"satz_prozent": 13, "betrag": null}
+      ]
+    },
+    "einkommenssteuer_verheiratetentarif": {
+      "status": "verifiziert",
+      "_quelle": "Steuergesetz Kanton Zuerich LS 631.1, Nachtrag 132 (Stand 1.4.26), Fassung gemaess V ueber den Ausgleich der kalten Progression ab 1.1.2026 (OS 80, 273), Paragraph 35 Abs. 2",
+      "stufen": [
+        {"satz_prozent": 0, "betrag": 14100},
+        {"satz_prozent": 2, "betrag": 6400},
+        {"satz_prozent": 3, "betrag": 8100},
+        {"satz_prozent": 4, "betrag": 9800},
+        {"satz_prozent": 5, "betrag": 11200},
+        {"satz_prozent": 6, "betrag": 14500},
+        {"satz_prozent": 7, "betrag": 32200},
+        {"satz_prozent": 8, "betrag": 32400},
+        {"satz_prozent": 9, "betrag": 48500},
+        {"satz_prozent": 10, "betrag": 57900},
+        {"satz_prozent": 11, "betrag": 62900},
+        {"satz_prozent": 12, "betrag": 72600},
+        {"satz_prozent": 13, "betrag": null}
+      ]
+    },
+    "vermoegenssteuer_grundtarif": {
+      "status": "verifiziert",
+      "_quelle": "Steuergesetz Kanton Zuerich LS 631.1, Nachtrag 132 (Stand 1.4.26), Fassung gemaess V ueber den Ausgleich der kalten Progression ab 1.1.2026 (OS 80, 273), Paragraph 47 Abs. 1",
+      "stufen": [
+        {"satz_promille": 0, "betrag": 81000},
+        {"satz_promille": 0.5, "betrag": 241000},
+        {"satz_promille": 1, "betrag": 404000},
+        {"satz_promille": 1.5, "betrag": 645000},
+        {"satz_promille": 2, "betrag": 968000},
+        {"satz_promille": 2.5, "betrag": 965000},
+        {"satz_promille": 3, "betrag": null}
+      ]
+    },
+    "vermoegenssteuer_verheiratetentarif": {
+      "status": "verifiziert",
+      "_quelle": "Steuergesetz Kanton Zuerich LS 631.1, Nachtrag 132 (Stand 1.4.26), Fassung gemaess V ueber den Ausgleich der kalten Progression ab 1.1.2026 (OS 80, 273), Paragraph 47 Abs. 2",
+      "stufen": [
+        {"satz_promille": 0, "betrag": 161000},
+        {"satz_promille": 0.5, "betrag": 242000},
+        {"satz_promille": 1, "betrag": 402000},
+        {"satz_promille": 1.5, "betrag": 646000},
+        {"satz_promille": 2, "betrag": 967000},
+        {"satz_promille": 2.5, "betrag": 967000},
+        {"satz_promille": 3, "betrag": null}
+      ]
+    },
+    "abzuege": {
+      "status": "verifiziert",
+      "_quelle": "Steuergesetz ZH LS 631.1, Nachtrag 132 (gueltig ab 1.1.2026): Fahrkosten Paragraph 26 Abs. 1 lit. a, Versicherungen Paragraph 31 Abs. 1 lit. g, Weiterbildung lit. k, Krankheitskosten Paragraph 32 lit. a, Spenden Paragraph 32 lit. b, Sozialabzuege Paragraph 34",
+      "fahrkosten_max": 5200,
+      "versicherungspraemien_alleinstehend_mit_2_3a": 2900,
+      "versicherungspraemien_alleinstehend_ohne_2_3a": 4350,
+      "versicherungspraemien_verheiratet_mit_2_3a": 5800,
+      "versicherungspraemien_verheiratet_ohne_2_3a": 8700,
+      "versicherungspraemien_pro_kind": 1300,
+      "_hinweis_versicherung": "Ohne Beitraege an 2. Saeule und 3a erhoehen sich die Abzuege um die Haelfte (2900 x 1.5 = 4350, 5800 x 1.5 = 8700).",
+      "weiterbildung_max": 12600,
+      "krankheitskosten_selbstbehalt_prozent": 5,
+      "spenden_minimum": 100,
+      "spenden_max_prozent": 20,
+      "kinderabzug": 9400,
+      "unterstuetzungsabzug": 2800,
+      "schuldzinsen_max_ohne_vermoegensertrag": 50000,
+      "_quelle_schuldzinsen": "StG ZH Paragraph 31 Abs. 1 lit. a: private Schuldzinsen im Umfang der nach den Paragraphen 20 und 21 steuerbaren Vermoegensertraege und weiterer Fr. 50'000 (zitiert in Zuercher Steuerbuch ZStB 20.1, zh.ch).",
+      "berufskosten_pauschalen": {
+        "status": "verifiziert",
+        "_quelle": "Verfuegung der Finanzdirektion ueber die Pauschalierung von Berufsauslagen Unselbststaendigerwerbender (ab Steuerperiode 2026), LS 631.33, Nachtrag 131, vom 26.09.2025: Ziff. I/2 Verpflegung Fr. 3200 im Jahr (voll) bzw. 1600 (verbilligt), Ziff. I/3 weitere Berufsauslagen 3% des Nettolohns, min. 2000, max. 4000, Ziff. I/1 Fahrkosten max. 5200.",
+        "verpflegung_voll_pro_jahr": 3200,
+        "verpflegung_halb_pro_jahr": 1600,
+        "uebrige_berufskosten_prozent": 3,
+        "uebrige_berufskosten_min": 2000,
+        "uebrige_berufskosten_max": 4000,
+        "nebenerwerb_unselbstaendig_prozent": 20,
+        "nebenerwerb_unselbstaendig_min": 800,
+        "nebenerwerb_unselbstaendig_max": 2400
+      }
+    }
+  }
+}

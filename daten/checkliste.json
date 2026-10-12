@@ -1,0 +1,183 @@
+{
+  "_info": "Unterlagen für die Steuererklärung. Du kannst eigene Punkte hinzufügen. 'abklaeren' = ob und wie der Punkt für dich gilt, ist nicht sicher. Frag beim Steueramt nach.",
+  "kategorien": [
+    {
+      "name": "Einkommen",
+      "punkte": [
+        {
+          "id": "lohnausweis",
+          "text": "Lohnausweis von jedem Arbeitgeber",
+          "wo": "Arbeitgeber, meistens im Januar/Februar",
+          "ziffer": "1.1",
+          "ziffer_text": "Haupterwerb (Lohnausweis); weitere Stelle unter 1.2 Nebenerwerb"
+        },
+        {
+          "id": "nebenerwerb_einnahmen",
+          "text": "Einnahmen Nebenerwerb: alle Rechnungen/Quittungen",
+          "wo": "Eigene Buchhaltung",
+          "abklaeren": true,
+          "ziffer": "2.2",
+          "ziffer_text": "Selbständiger Nebenerwerb, mit Hilfsblatt A"
+        },
+        {
+          "id": "ersatzeinkommen",
+          "text": "Taggelder, Arbeitslosengeld oder andere Ersatzeinkommen (falls erhalten)",
+          "wo": "Bescheinigung der auszahlenden Kasse/Versicherung",
+          "ziffer": "3.3",
+          "ziffer_text": "3.3 Arbeitslosenversicherung, 3.4 Taggelder"
+        },
+        {
+          "id": "bankzinsen",
+          "text": "Zinsen und Erträge auf Konten",
+          "wo": "Bank: Zinsausweis oder Steuerauszug per 31.12.",
+          "ziffer": "4.1",
+          "ziffer_text": "Wertschriftenertrag, aus dem Wertschriftenverzeichnis"
+        }
+      ]
+    },
+    {
+      "name": "Abzüge",
+      "punkte": [
+        {
+          "id": "saeule3a",
+          "text": "Bescheinigung Einzahlungen Säule 3a",
+          "wo": "Bank oder Versicherung, kommt meistens im Januar",
+          "ziffer": "14.1",
+          "ziffer_text": "Beiträge Säule 3a, Bescheinigung beilegen"
+        },
+        {
+          "id": "krankenkasse",
+          "text": "Prämienbestätigung Krankenkasse",
+          "wo": "Krankenkasse (Kundenportal oder Post)",
+          "ziffer": "15",
+          "ziffer_text": "Versicherungsprämien"
+        },
+        {
+          "id": "fahrkosten",
+          "text": "Arbeitsweg: Abo-Rechnung (z.B. ZVV) oder Belege",
+          "wo": "Eigene Belege / SBB- oder ZVV-Konto",
+          "ziffer": "11.1",
+          "ziffer_text": "Berufsauslagen, Formular Berufsauslagen"
+        },
+        {
+          "id": "verpflegung",
+          "text": "Auswärtige Verpflegung: Anzahl Arbeitstage",
+          "wo": "Eigene Notiz",
+          "ziffer": "11.1",
+          "ziffer_text": "Berufsauslagen, Formular Berufsauslagen"
+        },
+        {
+          "id": "weiterbildung",
+          "text": "Kosten Ausbildung WISS (Schulgeld, Kurse, Material), selbst bezahlt",
+          "wo": "Rechnungen der Schule und Zahlungsbelege. Abziehbar, weil bereits ein erster Abschluss vorliegt (Logistiker EFZ). Hilfsblatt Formular 367.",
+          "ziffer": "16.2",
+          "ziffer_text": "Aus- und Weiterbildungskosten, mit Hilfsblatt"
+        },
+        {
+          "id": "krankheitskosten",
+          "text": "Selbst bezahlte Krankheits- und Zahnarztkosten",
+          "wo": "Rechnungen, Abrechnungen der Krankenkasse",
+          "ziffer": "22.1",
+          "ziffer_text": "Krankheits- und Unfallkosten, mit Hilfsblatt"
+        },
+        {
+          "id": "spenden",
+          "text": "Spenden an gemeinnützige Organisationen",
+          "wo": "Spendenbestätigungen",
+          "ziffer": "22.2",
+          "ziffer_text": "Gemeinnützige Zuwendungen, mit Aufstellung"
+        },
+        {
+          "id": "schuldzinsen",
+          "text": "Schuldzinsen (z.B. Ausbildungsdarlehen, Kredite; Leasing ist nicht dasselbe)",
+          "wo": "Darlehensgeber: Bestätigung der im Jahr fälligen bzw. bezahlten Zinsen, im Januar anfragen",
+          "ziffer": "12",
+          "ziffer_text": "Schuldzinsen, aus dem Schuldenverzeichnis"
+        }
+      ]
+    },
+    {
+      "name": "Vermögen und Schulden (Stand 31.12.)",
+      "punkte": [
+        {
+          "id": "kontosaldi",
+          "text": "Saldo aller Bank- und Postkonten per 31.12.",
+          "wo": "Bank: Jahresauszug",
+          "ziffer": "30.1",
+          "ziffer_text": "Wertschriften und Guthaben, im Wertschriftenverzeichnis"
+        },
+        {
+          "id": "wertschriften",
+          "text": "Wertschriften, Fonds, Krypto (Bestand per 31.12.)",
+          "wo": "Bank / Broker / Krypto-Börse: Steuerauszug oder Export",
+          "abklaeren": true,
+          "ziffer": "30.1",
+          "ziffer_text": "Wertschriften und Guthaben, im Wertschriftenverzeichnis"
+        },
+        {
+          "id": "schulden",
+          "text": "Schulden per 31.12. (Ausbildungsdarlehen, Kredite usw.)",
+          "wo": "Darlehensgeber: Saldobestätigung per 31.12. Name und Adresse des Gläubigers stehen im Vertrag.",
+          "ziffer": "34",
+          "ziffer_text": "Schulden, aus dem Schuldenverzeichnis"
+        },
+        {
+          "id": "darlehensvertrag",
+          "text": "Darlehensvertrag (Betrag, Zinssatz, Rückzahlung) aufbewahren",
+          "wo": "Eigene Unterlagen. Das Darlehen selbst ist kein Einkommen und nicht abziehbar."
+        }
+      ]
+    },
+    {
+      "name": "Nebenerwerb (selbständig)",
+      "punkte": [
+        {
+          "id": "ne_ausgaben",
+          "text": "Geschäftsausgaben (Material, Werkzeug, Software, Fahrten) mit Belegen",
+          "wo": "Eigene Buchhaltung",
+          "abklaeren": true,
+          "ziffer": "2.2",
+          "ziffer_text": "Selbständiger Nebenerwerb, Ausgaben im Hilfsblatt A"
+        },
+        {
+          "id": "ne_ahv",
+          "text": "AHV als Selbständigerwerbender: Anmeldung/Beiträge",
+          "wo": "SVA Zürich (Ausgleichskasse)",
+          "abklaeren": true
+        },
+        {
+          "id": "ne_formular",
+          "text": "Welche Formulare für den Nebenerwerb nötig sind",
+          "wo": "Steueramt Stadt Zürich fragen",
+          "abklaeren": true
+        }
+      ]
+    },
+    {
+      "name": "Formales",
+      "punkte": [
+        {
+          "id": "zugangscode",
+          "text": "Brief mit Zugangscode für ZHprivateTax",
+          "wo": "Kommt per Post vom Steueramt"
+        },
+        {
+          "id": "agov",
+          "text": "AGOV-Login eingerichtet (App)",
+          "wo": "agov.ch"
+        },
+        {
+          "id": "frist",
+          "text": "Einreichefrist notiert / Fristerstreckung falls nötig",
+          "wo": "Steht im Brief vom Steueramt"
+        },
+        {
+          "id": "vorjahr",
+          "text": "Steuererklärung und Veranlagung vom Vorjahr",
+          "wo": "Person, die sie gemacht hat / ZHprivateTax / Kopie beim Kanton bestellen"
+        }
+      ]
+    }
+  ],
+  "_ziffern": "Ziffern aus dem Formular der Steuererklärung 2025 Kanton Zürich. In ZHprivateTax für 2026 kontrollieren, ob die Nummern gleich geblieben sind."
+}

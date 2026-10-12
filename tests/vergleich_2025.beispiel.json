@@ -1,0 +1,11 @@
+{
+  "einkommen_bund": 0,
+  "einkommen_kanton": 0,
+  "erwartet": {
+    "Einfache Staatssteuer (Basis)": "0.00",
+    "Staatssteuer (98%)": "0.00",
+    "Gemeindesteuer (119%)": "0.00",
+    "Personalsteuer": "24.00",
+    "Direkte Bundessteuer": "0.00"
+  }
+}

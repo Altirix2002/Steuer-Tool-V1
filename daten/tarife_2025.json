@@ -1,0 +1,119 @@
+{
+  "_info": "Steuerdaten fuer das Steuerjahr 2025 (Steuererklaerung wurde 2026 eingereicht). Jeder Wert hat eine Quelle und einen Status. Status: 'verifiziert' = aus amtlicher Quelle uebernommen, 'zu_pruefen' = nur aus nicht-amtlicher Quelle, bitte mit amtlicher Quelle vergleichen, 'fehlt' = noch nicht eingetragen, das Programm rechnet diesen Teil NICHT.",
+  "steuerjahr": 2025,
+  "bund": {
+    "_quelle": "ESTV Rundschreiben 2-210-D-2024-d vom 22.08.2024, Tarif 2025 (Art. 36 DBG). https://www.estv.admin.ch/dam/de/sd-web/zkUbFt0fCQiy/dbst-rs-2-210-d-2024-de.pdf",
+    "status": "verifiziert",
+    "tarif_alleinstehend": {
+      "_hinweis": "Jede Stufe: ab 'ab' Franken betraegt die Steuer 'basis' Franken, plus 'satz_pro_100' fuer je weitere 100 Franken. Ab 'pauschal_ab' gilt 'pauschal_satz' Prozent auf das ganze Einkommen.",
+      "stufen": [
+        {"ab": 15200, "basis": 0, "satz_pro_100": 0.77},
+        {"ab": 33200, "basis": 138.6, "satz_pro_100": 0.88},
+        {"ab": 43500, "basis": 229.2, "satz_pro_100": 2.64},
+        {"ab": 58000, "basis": 612.0, "satz_pro_100": 2.97},
+        {"ab": 76100, "basis": 1149.55, "satz_pro_100": 5.94},
+        {"ab": 82000, "basis": 1500.0, "satz_pro_100": 6.6},
+        {"ab": 108800, "basis": 3268.8, "satz_pro_100": 8.8},
+        {"ab": 141500, "basis": 6146.4, "satz_pro_100": 11.0},
+        {"ab": 184900, "basis": 10920.4, "satz_pro_100": 13.2},
+        {"ab": 793400, "basis": 91241.0, "satz_pro_100": 11.5}
+      ]
+    },
+    "tarif_verheiratet": {
+      "_hinweis": "Gilt fuer Ehepaare und Einelternfamilien (Art. 36 Abs. 2 DBG).",
+      "stufen": [
+        {"ab": 29700, "basis": 0, "satz_pro_100": 1.0},
+        {"ab": 53400, "basis": 237.0, "satz_pro_100": 2.0},
+        {"ab": 61300, "basis": 395.0, "satz_pro_100": 3.0},
+        {"ab": 79100, "basis": 929.0, "satz_pro_100": 4.0},
+        {"ab": 94900, "basis": 1561.0, "satz_pro_100": 5.0},
+        {"ab": 108600, "basis": 2246.0, "satz_pro_100": 6.0},
+        {"ab": 120500, "basis": 2960.0, "satz_pro_100": 7.0},
+        {"ab": 130500, "basis": 3660.0, "satz_pro_100": 8.0},
+        {"ab": 138300, "basis": 4284.0, "satz_pro_100": 9.0},
+        {"ab": 144200, "basis": 4815.0, "satz_pro_100": 10.0},
+        {"ab": 148200, "basis": 5215.0, "satz_pro_100": 11.0},
+        {"ab": 150300, "basis": 5446.0, "satz_pro_100": 12.0},
+        {"ab": 152300, "basis": 5686.0, "satz_pro_100": 13.0},
+        {"ab": 940900, "basis": 108203.5, "satz_pro_100": 11.5}
+      ]
+    },
+    "abzug_pro_kind_vom_steuerbetrag": 263,
+    "mindeststeuer_wird_erhoben_ab": 25,
+    "abzuege": {
+      "status": "fehlt",
+      "_quelle": "Abzuege 2025 noch nicht eingetragen (nur fuer Vergleich mit Steuererklaerung 2025 benutzt)"
+    }
+  },
+  "saeule_3a": {
+    "_quelle": "UBS (ubs.com, Maximalbetrag 2026) und Comparis. Amtliche Quelle (BSV) noch nicht selbst geprueft.",
+    "status": "fehlt",
+    "max_mit_pensionskasse": 7258,
+    "max_ohne_pensionskasse": 36288,
+    "ohne_pensionskasse_prozent_vom_erwerbseinkommen": 20
+  },
+  "kanton_zh": {
+    "steuerfuss_staat": {
+      "wert_prozent": 98,
+      "status": "verifiziert",
+      "_quelle": "zh.ch/steuerfuesse: 2024 und 2025 = 98%"
+    },
+    "steuerfuss_gemeinde": {
+      "gemeinde": "Zuerich (Stadt)",
+      "wert_prozent": 119,
+      "status": "verifiziert",
+      "_quelle": "zh.ch/steuerfuesse (Veraenderung 2026 zu 2025: 0) und Steuerberechnung 2025: 119%"
+    },
+    "steuerfuss_kirche": {
+      "_hinweis": "Nur wenn du Mitglied einer Landeskirche bist. Sonst 'keine' waehlen.",
+      "reformiert": 10,
+      "roemisch_katholisch": 10,
+      "christkatholisch": 14,
+      "status": "verifiziert",
+      "_quelle": "zh.ch/steuerfuesse (Veraenderung 2026 zu 2025: 0)"
+    },
+    "personalsteuer": {
+      "wert": 24,
+      "status": "verifiziert",
+      "_quelle": "Steuergesetz ZH LS 631.1, Paragraph 200 (Nachtrag 132). Ehegatten je CHF 24 (Paragraph 199 Abs. 2)."
+    },
+    "einkommenssteuer_grundtarif": {
+      "status": "zu_pruefen",
+      "_quelle": "Regierungsrat ZH, Antwort Anfrage 'Warme Progression', Tabelle bisheriger Grundtarif (parlzhcdws.cmicloud.ch). Bestaetigt: stimmt mit einer echten Steuerberechnung 2025 ueberein (privater Test, nicht im Repository). Noch mit StG Nachtrag 127 (Paragraph 35) vergleichen.",
+      "stufen": [
+        {"satz_prozent": 0, "betrag": 6900},
+        {"satz_prozent": 2, "betrag": 4900},
+        {"satz_prozent": 3, "betrag": 4800},
+        {"satz_prozent": 4, "betrag": 7900},
+        {"satz_prozent": 5, "betrag": 9600},
+        {"satz_prozent": 6, "betrag": 11000},
+        {"satz_prozent": 7, "betrag": 12900},
+        {"satz_prozent": 8, "betrag": 17400},
+        {"satz_prozent": 9, "betrag": 33600},
+        {"satz_prozent": 10, "betrag": 33200},
+        {"satz_prozent": 11, "betrag": 52700},
+        {"satz_prozent": 12, "betrag": 68400},
+        {"satz_prozent": 13, "betrag": null}
+      ]
+    },
+    "einkommenssteuer_verheiratetentarif": {
+      "status": "fehlt",
+      "_wo_holen": "Steuergesetz ZH LS 631.1, Nachtrag 127 (gueltig 2025)",
+      "stufen": []
+    },
+    "vermoegenssteuer_grundtarif": {
+      "status": "fehlt",
+      "_wo_holen": "Steuergesetz ZH LS 631.1, Nachtrag 127 (gueltig 2025)",
+      "stufen": []
+    },
+    "vermoegenssteuer_verheiratetentarif": {
+      "status": "fehlt",
+      "_wo_holen": "Steuergesetz ZH LS 631.1, Nachtrag 127 (gueltig 2025)",
+      "stufen": []
+    },
+    "abzuege": {
+      "status": "fehlt",
+      "_quelle": "Abzuege Kanton 2025 nicht eingetragen (nur Vergleichsjahr)"
+    }
+  }
+}
